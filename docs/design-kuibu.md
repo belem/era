@@ -187,6 +187,16 @@ Directly from the PRD (all tables confirmed):
 - Public library: per-character rows in `poem_pinyin` table with AUTO/CONFIRMED/DISPUTED status
 - Custom poems: lightweight `pinyin_json` object
 - Frontend: `<ruby>/<rt>` tags with CSS variable `--pinyin-display` toggle
+
+**Pinyin Visibility — two layers of control:**
+
+Students have different abilities. Some no longer need pinyin by 2nd grade, others still rely on it in 5th grade. The design respects this with two complementary controls:
+
+1. **Per-student default (Settings):** "Show pinyin" toggle (On/Off), stored in `students.settings_json`. The parent or primary guardian sets this based on the child's ability. This value initializes `--pinyin-display` to `block` or `none` on every session start.
+
+2. **Quick session toggle (Poem display):** A small, unobtrusive eye icon in the poem header. One tap flips pinyin visibility instantly for the current session via the CSS variable — no re-render, no API call. This is a session-only override; it does not change the saved setting. Next session reverts to the default. This lets a confident student hide pinyin to test themselves, or a struggling student peek at pinyin on a hard poem, without touching settings.
+
+The CSS variable approach means the toggle is instant across all visible poem text, pinyin in the Living Scroll, and pinyin in the Ear Training screen's "now playing" display (if the student glances at it). One variable, every `<rt>` tag responds.
 - Long-press character: "Report Error" (system poems) or "Edit Pinyin" (custom poems)
 
 **Custom Poem Autocomplete (paid tier: Pro/Max):**
