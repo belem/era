@@ -14,9 +14,9 @@ Classical Chinese poetry memorization is a core part of primary and middle schoo
 
 The intersection of three things no one is combining well:
 
-1. **Traditional Chinese aesthetics as a first-class design principle** — The app should feel like stepping into a scholar's study (书房), not opening a flashcard deck. Every design choice draws from centuries of Chinese visual culture, but filtered through modern restraint.
+1. **Modern minimalism + cultural punctuation** — The app is clean, quiet, contemporary. Not a theme park recreation of ancient China. Cultural identity comes through typography (LXGW WenKai), the vermillion chop stamp, and the Living Scroll interaction, not through surface decoration. The design should feel like a well-made notebook, not a museum exhibit.
 
-   **Color philosophy — the five ink tones (墨分五色):** Chinese painting teaches that ink alone contains five colors: burnt (焦), concentrated (浓), heavy (重), light (淡), and clear (清). The palette follows this principle. The primary surface is not flat white but a warm, living tone — think aged Xuan paper that has yellowed slightly with time, somewhere between raw silk and morning fog. Text is never pure black (#000) but ink-black with warmth, the color of fresh ink ground on a stone with a few drops of water. Accent colors are drawn from traditional mineral pigments, not digital primaries: vermillion (朱砂红) for primary actions and celebration moments, stone blue (石青) for navigation and structural elements, and a muted gold (赭石) that appears only on earned achievements — the color of imperial seals. The overall effect should feel like a Song dynasty painting: restrained, with vast breathing room, where a single stroke of red carries enormous weight precisely because everything else is quiet.
+   **Color philosophy — grayscale + vermillion only:** The palette is deliberately restrained to grayscale plus a single accent color. No stone blue, no gold, no teal. Surfaces are pure white (#FFFFFF light, #111111 dark), not tinted or textured. Text uses a near-black (#1A1A1A) with secondary (#666666) and tertiary (#999999) levels for hierarchy. The only color in the entire system is vermillion (#C04A35 light, #D4605A dark), reserved for primary actions, the chop stamp, and moments of celebration. Because everything else is achromatic, the vermillion carries enormous weight. A single red button on a grayscale page is more striking than a full palette of traditional colors competing for attention.
 
    **Typography — three voices, carefully paired:**
 
@@ -26,15 +26,15 @@ The intersection of three things no one is combining well:
 
    **Voice 2 — Headings and structure: Noto Serif SC** (思源宋体), loaded from Google Fonts. Song/Ming style (宋体) carries the authority of printed books. It's what you see on the title page of a classical collection, the spine of a thread-bound volume (线装书). The vertical strokes are thin, the horizontal strokes have weight, and the serifs (顿笔) give each character a sense of being placed, not typed. Use SemiBold (600) for page titles and section headers, Regular (400) for secondary headings like dynasty/author labels. The contrast between Kai (handwritten warmth) for poetry and Song (printed authority) for structure creates a natural visual hierarchy without needing size differences alone. This pairing has centuries of precedent in Chinese book design, where the cover is Song and the interior is Kai.
 
-   **Voice 3 — UI and pinyin: system sans-serif + Inter.** Buttons, navigation, labels, timestamps, and all functional text use the system's native sans-serif stack: `"PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif`. This is intentionally invisible typography. It loads instantly (no web font download), it's what users read every day on their devices, and it signals "this is the app talking to you" as distinct from "this is the poetry." For pinyin annotations above characters and any Latin text (email addresses, URLs, version numbers), use Inter (Google Fonts) — its x-height and letter spacing are optimized for small sizes and it pairs cleanly with both LXGW WenKai and Noto Serif. Pinyin renders at roughly 45% of the character's font size, in a lighter color (not the same ink-black as the character itself), sitting above like a teacher's pencil note — present when you need it, easy to ignore when you don't.
+   **Voice 3 — UI and pinyin: system sans-serif + Inter.** Buttons, navigation, labels, timestamps, and all functional text use the system's native sans-serif stack: `"PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif`. This is intentionally invisible typography. It loads instantly (no web font download), it's what users read every day on their devices, and it signals "this is the app talking to you" as distinct from "this is the poetry." For pinyin annotations above characters and any Latin text (email addresses, URLs, version numbers), use Inter (Google Fonts) — its x-height and letter spacing are optimized for small sizes and it pairs cleanly with both LXGW WenKai and Noto Serif. Pinyin renders at roughly 45% of the character's font size, in a lighter color (not the same ink-black as the character itself), sitting above like a teacher's pencil note — present when you need it, easy to ignore when you don't. The `heti--annotation` container handles interlinear grid alignment so `<ruby>/<rt>` stacks consistently without fighting browser defaults — every character gets equal vertical clearance regardless of whether its pinyin ascends (ā, á) or descends (à).
 
    **Font loading strategy:** LXGW WenKai is the largest download (~4-6MB for SC Regular). Use `font-display: swap` with a system Kai fallback (`"KaiTi", "STKaiti", "AR PL UKai"`) so the page is readable immediately and switches to the web font when loaded. Noto Serif SC is lighter (~2MB subset for common characters). Inter is tiny (~100KB variable). Preload LXGW WenKai Regular in the document `<head>` since it's critical for the first meaningful paint of any poetry page. Consider subsetting to the ~3,000 most common characters for initial load, with the full set loaded lazily.
 
    **Space — the art of leaving blank (留白):** Classical Chinese composition prizes negative space as much as the mark. A poem of twenty characters should feel like it's floating in open air, not crammed into a card. Generous margins. Vertical rhythm that lets each line breathe. The screen should never feel full. When in doubt, remove, don't add. This is the hardest design discipline and the one that will most distinguish Kuibu from every other education app.
 
-   **Texture and material — felt, not seen:** Subtle paper grain on primary surfaces, visible only at certain angles or on close inspection — not a loud skeuomorphic texture slapped over the UI, but a quiet physical quality that makes the screen feel less like glass. Soft shadows that suggest layered paper rather than floating cards. Transitions that feel like pages turning or scrolls unrolling, with the slight resistance of real paper, not the frictionless sliding of generic app animations.
+   **Surfaces — clean, not textured:** No paper grain, no warm tinting, no skeuomorphic textures. Backgrounds are flat solid colors. Visual depth comes from subtle borders (1px, #E5E5E5 light / #2A2A2A dark), not shadows. Cards and sections are defined by background-color shifts between --bg, --bg-subtle (#F7F7F7 / #1A1A1A), and --bg-muted (#EFEFEF / #222222). The effect is architecturally minimal, like a white-walled gallery where the art (the poetry) is the focus.
 
-   **Light and mood — the study lamp:** The overall atmosphere is a warm evening study session. Soft, amber-tinted warmth rather than the cold blue light of most apps. Dark mode, when implemented, should feel like reading by candlelight or moonlight — the classic poetry scenario — not like a generic dark theme. The palette shifts to deep indigo and warm ivory, the colors of a moonlit window with rice paper screens.
+   **Light and dark — both neutral, both intentional:** Light mode is pure white and grayscale, not warm or amber-tinted. Dark mode is true dark (#111111), not indigo or blue-shifted. Both themes use the same structural logic, just inverted. The dark theme is not "candlelight" or "moonlight," it's a clean dark surface that reduces eye strain. Vermillion adjusts slightly for contrast (light: #C04A35, dark: #D4605A) but remains the only color in both modes.
 
    **Interaction feel — unhurried:** Every animation runs slightly slower than a typical app. Not sluggish, but deliberate. The brush strokes in Living Scroll mode take the time a real brush would take. Page transitions have the weight of turning thick paper. The rating buttons after a review don't bounce or flash — they respond with the quiet confidence of a well-made physical button. The entire tempo communicates: this is not a game you rush through. This is practice. Practice has its own pace.
 
@@ -50,6 +50,9 @@ The intersection of three things no one is combining well:
 - Poetry library is curated (~200-300 poems from PEP/HJ/SJ textbooks), not the full 55k+ corpus
 - Polyphonic character handling is a core accuracy requirement — context-aware pinyin disambiguation via pypinyin
 - Three-tier subscription model (Free / Pro / Max) — feature-to-tier mapping is flexible and decided per feature as they ship
+- No Chinese social logins (WeChat, Alipay, QQ, Douyin) — all require 域名备案 (ICP filing)
+- UI is multilingual (zh-CN, zh-TW, en, ja); classical Chinese poetry content is never translated
+- Light and dark themes from day one
 - Future: client-side AI inference via Transformers.js / ONNX Runtime Web (WebGPU/WebNN)
 - Future: native mobile apps (React Native or native) with platform-specific ML runtimes
 - Desktop: browser-only (no Tauri — WKWebView lacks WebNN support on macOS)
@@ -61,7 +64,7 @@ All confirmed by the user:
 1. The curated ~200-300 poem library (not the full chinese-poetry corpus) is v1 scope
 2. All three algorithms (SM-2, Leitner, FSRS) ship at launch
 3. Full parent/guardian/student permission model with invitations at launch
-4. Fragment module (general flashcards) ships in v1 alongside poetry
+4. 集雅 (Fragment) module (general flashcards) ships in v1 alongside poetry
 5. Per-character pinyin storage (poem_pinyin table) for the curated public library
 6. Audio/TTS for poem recitation — client-side inference via Transformers.js (WebGPU/WebNN), no cloud AI services
 7. Quiet gamification (streaks, scroll gallery, badges) — rewards consistency without interrupting learning flow
@@ -102,14 +105,18 @@ Rejected as over-scoped for a fun/learning project. Electron adds 100MB+ for wha
 |-------|-----------|-----------|
 | Framework | Next.js 16+ (App Router) | Server components for read-heavy pages, client components for interactive learning, API routes for backend logic |
 | Database/Auth | Supabase (Postgres + Auth + RLS) | Row-level security maps to guardian permission model; auth handles parent login |
-| Styling | Tailwind CSS + CSS variables | `--pinyin-display` for pinyin toggle; Xuan paper texture; responsive mobile-first |
+| Styling | Tailwind CSS + CSS variables | `--pinyin-display` for pinyin toggle; grayscale + vermillion palette; responsive mobile-first |
 | Font System | Three-register stack (see typography detail below) | Poetry: LXGW WenKai. Headings: Noto Serif SC. UI/Pinyin: system sans + Inter |
 | SRS Algorithms | SM-2 (custom ~40 LOC), Leitner (custom ~30 LOC), FSRS (ts-fsrs npm) | All three at launch per premises |
 | Pinyin Generation | pypinyin (Python, called via Next.js API route or batch script) | Context-aware polyphonic disambiguation |
 | Stroke Animation | hanzi-writer (MIT, JS) | Living Scroll character reveal with brush-stroke animation |
-| Pinyin Rendering | HTML `<ruby>` / `<rt>` tags | CSS variable controls show/hide globally |
+| Poetry Rendering | heti (npm) | Classical Chinese typesetting: `heti--ancient` for verse layout + hanging punctuation, `heti--annotation` for grid-aligned ruby/pinyin, `heti--vertical` for Living Scroll/Gallery top-to-bottom mode, CJK punctuation compression |
 | Poetry Data | chinese-poetry (GitHub, MIT) | Filtered to ~200-300 curated poems; pinyin generated and manually verified |
 | Audio/TTS | Transformers.js with speech model (WebGPU/WebNN) | Client-side inference, no cloud dependency. Fallback: Web Speech API for browsers without WebGPU |
+| Auth Providers | Supabase Auth (Email + Google + Apple + GitHub + Microsoft) | All free, all native to Supabase. Phone SMS deferred. No Chinese social logins (require ICP filing) |
+| Transactional Email | Resend (custom SMTP) | 3,000 emails/month free. Handles password reset, email confirmation, magic links |
+| i18n | next-intl | UI strings in zh-CN, zh-TW, en, ja. Browser locale detection + user preference override. Poetry content stays in original Chinese |
+| Theming | Tailwind `darkMode: 'class'` + CSS variables + next-themes | Light (white/grayscale) and dark (#111111/grayscale) themes. Vermillion as sole accent. Respects system preference, user override in settings |
 | Deployment | Vercel | Native Next.js deployment; edge functions for API routes |
 | AI Runtime | Transformers.js / ONNX Runtime Web | Client-side inference via WebGPU/WebNN. First use: TTS. Future: pronunciation scoring, smart hints |
 
@@ -124,7 +131,7 @@ Rejected as over-scoped for a fun/learning project. Electron adds 100MB+ for wha
 │  ├─ Admin Dashboard         ├─ Living Scroll         │
 │  ├─ Analytics/Reports       ├─ Card Review UI        │
 │  ├─ Parent Settings         ├─ Pinyin Editor         │
-│  └─ Fragment Browser        ├─ Session Summary        │
+│  └─ 集雅 (Fragments)       ├─ Session Summary        │
 │                             ├─ Ear Training Player   │
 │                             └─ WebGPU AI (TTS, etc.) │
 │                                                      │
@@ -135,7 +142,7 @@ Rejected as over-scoped for a fun/learning project. Electron adds 100MB+ for wha
 │                                                      │
 ├─────────────────────────────────────────────────────┤
 │  Supabase                                            │
-│  ├─ Auth (parent login, session management)          │
+│  ├─ Auth (Email + Google + Apple + GitHub + MS)      │
 │  ├─ Postgres (poems, poem_pinyin, students,          │
 │  │   users, student_guardians, poem_reviews,         │
 │  │   fragments, fragment_reviews, custom_poems,      │
@@ -147,6 +154,7 @@ Rejected as over-scoped for a fun/learning project. Electron adds 100MB+ for wha
 ### Data Model
 
 Directly from the PRD (all tables confirmed):
+- `profiles` (id FK to auth.users, username, display_name, locale, theme_preference, onboarding_completed — decoupled from auth provider)
 - `users` (GUARDIAN, ADMIN roles)
 - `students` (owned by guardians, algorithm preference, settings_json)
 - `student_guardians` (many-to-many with invitation flow)
@@ -159,8 +167,33 @@ Directly from the PRD (all tables confirmed):
 
 ### Key Implementation Details
 
+**Authentication:**
+- Five OAuth providers at launch: Google, Apple, GitHub, Microsoft — all free and native to Supabase. Plus email/password as universal fallback
+- No Chinese social logins (WeChat, Alipay, QQ, Douyin). All require 域名备案 (ICP domain filing) which ties you to mainland China hosting. Not worth the bureaucratic overhead
+- Phone SMS login deferred. Twilio (Supabase default) charges ~$0.05-0.08/msg to China. Domestic providers (Alibaba Cloud SMS, Tencent Cloud SMS) are ~¥0.04/msg but require custom SMS hook integration. Add only if users request it
+- Transactional email (password reset, confirmation) via Resend as custom SMTP provider. 3,000 emails/month free tier, more than enough at launch. Configured in Supabase dashboard, no code changes
+- Username/display name set during onboarding, stored in `profiles` table (decoupled from `auth.users`). Changeable in settings
+- Profile schema: `profiles` table with `id` (FK to auth.users), `username` (unique), `display_name`, `locale`, `theme_preference`, `onboarding_completed`
+
+**Internationalization (i18n):**
+- UI language support: Simplified Chinese (zh-CN), Traditional Chinese (zh-TW), English (en), Japanese (ja) as the starting set. Additional locales can be added by dropping in a new translation file
+- Uses `next-intl` with App Router integration (supports SSR, server components, middleware-based locale detection)
+- Locale files per language in `messages/` directory (e.g., `messages/zh-CN.json`, `messages/en.json`)
+- Detection priority: user preference in profile (if logged in) → browser `Accept-Language` → default to zh-CN
+- What is NOT translated: poem text, pinyin, poet names, dynasty labels, classical Chinese annotations. These are the content, not the chrome
+- What IS translated: menus, settings, onboarding flows, error messages, button labels, tooltips, empty states, notification copy, session summaries, analytics labels
+
+**Theming (Light + Dark):**
+- Light theme: pure white (#FFFFFF) surfaces, near-black (#1A1A1A) text, grayscale hierarchy, vermillion (#C04A35) as sole accent. Clean and neutral, not warm or tinted
+- Dark theme: true dark (#111111) surfaces, light gray (#EBEBEB) text, same grayscale structure inverted, vermillion (#D4605A) adjusted for contrast
+- Semantic color tokens: `--bg`, `--bg-subtle`, `--bg-muted`, `--text`, `--text-secondary`, `--text-tertiary`, `--border`, `--vermillion`, `--vermillion-hover`, `--vermillion-soft`
+- Implementation: Tailwind `darkMode: 'class'` + CSS variables + `next-themes` for toggle and persistence
+- System preference respected by default via `prefers-color-scheme`. User override stored in profile (`theme_preference`: system / light / dark)
+- Toggle in settings. Also accessible from a quick toggle in the app header (sun/moon icon)
+- All color references in the app use CSS variables, never hardcoded hex values
+
 **Onboarding Flow:**
-1. Parent creates account (email + password via Supabase Auth)
+1. Parent creates account (email/password or OAuth via Supabase Auth)
 2. Welcome screen: "Create your first student profile" — name, grade, textbook edition
 3. Algorithm selection with visual explanation: Leitner (simple boxes, recommended for younger kids), SM-2 (classic, recommended default), FSRS (advanced, paid tier)
 4. Quick intro to Living Scroll mode (3-second animation demo)
@@ -170,7 +203,7 @@ Directly from the PRD (all tables confirmed):
 - Header dropdown shows current student name + avatar
 - Tap to expand list of all student profiles under this guardian
 - Visual indicator (colored border) shows active student at all times
-- Switching student reloads `currentStudentId` context and refreshes "Today's Tasks"
+- Switching student reloads `currentStudentId` context and refreshes "晨光" (Today's Tasks)
 - Settings changes are student-scoped; only the primary guardian (owner) can modify
 
 **Living Scroll Mode:**
@@ -182,11 +215,13 @@ Directly from the PRD (all tables confirmed):
 - Scrolls save to a personal gallery (the gamification collection layer)
 - After completion, student rates difficulty (Forgot/Hard/Good/Easy) for SRS scheduling
 - **Performance strategy:** Lazy-load hanzi-writer only for the active character, preload next 3 characters in background, cache stroke data in IndexedDB after first render, provide "skip animation" fast-path for repeat reviews
+- **Typography:** Use `heti heti--ancient heti--vertical` on the scroll container for authentic top-to-bottom, right-to-left text flow. In vertical mode, line breaks between verse lines are replaced with spaces — heti flows them as columns naturally. Pinyin appears to the left of each character (inline with the vertical flow), consistent with vertical ruby conventions.
 
 **Pinyin System:**
 - Public library: per-character rows in `poem_pinyin` table with AUTO/CONFIRMED/DISPUTED status
 - Custom poems: lightweight `pinyin_json` object
-- Frontend: `<ruby>/<rt>` tags with CSS variable `--pinyin-display` toggle
+- Frontend: `<ruby>/<rt>` tags inside a `heti heti--annotation` container; pinyin toggle via `.pinyin-hidden rt { display: none }` class on `<html>` — never set `display: block` on `<rt>` as it breaks the native `ruby-text` display value and renders pinyin beside the character instead of above it
+- Polyphonic characters marked with `data-polyphone="true"` on the `<ruby>` element so the editor can surface them for manual review
 
 **Pinyin Visibility — two layers of control:**
 
@@ -199,7 +234,191 @@ Students have different abilities. Some no longer need pinyin by 2nd grade, othe
 The CSS variable approach means the toggle is instant across all visible poem text, pinyin in the Living Scroll, and pinyin in the Ear Training screen's "now playing" display (if the student glances at it). One variable, every `<rt>` tag responds.
 - Long-press character: "Report Error" (system poems) or "Edit Pinyin" (custom poems)
 
-**Custom Poem Autocomplete (paid tier: Pro/Max):**
+**Poetry Rendering — Heti Integration:**
+
+Heti (`npm install heti`) is purpose-built CSS for Chinese typesetting. It replaces a pile of custom CSS hacks with a composable class system:
+
+- `heti--ancient` — centered verse lines, full-width punctuation compressed to proper optical width, dynasty/author metadata styling via `heti-meta`
+- `heti--annotation` — grid-aligned interlinear ruby so `<rt>` sits at consistent height above every base character, no browser-default misalignment
+- `heti-hang` — hanging punctuation: sentence-ending marks (，。！？) sit outside the text block, matching classical print convention
+- `heti--vertical` — top-to-bottom text flow for Living Scroll and Scroll Gallery; columns run right-to-left
+
+**Next.js integration:**
+
+```bash
+npm install heti
+```
+
+```tsx
+// app/layout.tsx
+import 'heti/umd/heti.min.css'
+```
+
+```tsx
+// components/PoemViewer.tsx — client component
+'use client'
+import { useEffect, useRef } from 'react'
+
+export function PoemViewer({ children }: { children: React.ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    // autoSpacing() adds thin spaces between CJK and Latin/digits
+    import('heti/umd/heti-addon.min.js').then(({ default: Heti }) => {
+      new Heti('.heti').autoSpacing()
+    })
+  }, [])
+  return <div ref={ref}>{children}</div>
+}
+```
+
+**Pinyin toggle — class-based, not display:**
+
+```css
+/* globals.css */
+
+/* IMPORTANT: never set display on rt — browser must keep native
+   display:ruby-text so <rt> renders above the character, not beside it.
+   display:block or display:var(..., block) breaks ruby positioning. */
+
+.pinyin-hidden rt {
+  display: none;
+}
+```
+
+```ts
+// One classList toggle, all <rt> elements across the page respond —
+// no React state, no re-render, no layout shift on reveal
+document.documentElement.classList.toggle('pinyin-hidden', !showPinyin)
+```
+
+Setting `display: block` (or any non-`ruby-text` value) on `<rt>` collapses the annotation inline beside the character instead of above it. The class-based toggle avoids touching the display property at all when pinyin is visible; `display: none` when hidden is safe because the ruby container collapses cleanly.
+
+---
+
+**Poem examples — heti markup with pinyin**
+
+Each poem below uses `data-polyphone="true"` on `<ruby>` elements where pypinyin required context-aware disambiguation. These are the characters that need manual verification in the `poem_pinyin` table.
+
+**Grade 1 — 静夜思（李白）**
+
+```html
+<div class="heti heti--ancient">
+  <h2 class="heti-title">
+    静夜思
+    <span class="heti-meta heti-small">［唐］李白</span>
+  </h2>
+  <p class="heti-verse heti-x-large">
+    <ruby>床<rt>chuáng</rt></ruby><ruby>前<rt>qián</rt></ruby><ruby>明<rt>míng</rt></ruby><ruby>月<rt>yuè</rt></ruby><ruby>光<rt>guāng</rt></ruby><span class="heti-hang">，</span><br>
+    <ruby>疑<rt>yí</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>地<rt>dì</rt></ruby><ruby>上<rt>shàng</rt></ruby><ruby>霜<rt>shuāng</rt></ruby><span class="heti-hang">。</span><br>
+    <ruby>举<rt>jǔ</rt></ruby><ruby>头<rt>tóu</rt></ruby><ruby>望<rt>wàng</rt></ruby><ruby>明<rt>míng</rt></ruby><ruby>月<rt>yuè</rt></ruby><span class="heti-hang">，</span><br>
+    <ruby>低<rt>dī</rt></ruby><ruby>头<rt>tóu</rt></ruby><ruby>思<rt>sī</rt></ruby><ruby>故<rt>gù</rt></ruby><ruby>乡<rt>xiāng</rt></ruby><span class="heti-hang">。</span>
+  </p>
+</div>
+```
+
+**Grade 1 — 春晓（孟浩然）** — polyphonic: 处 → chù (location, not chǔ "to deal with")
+
+```html
+<div class="heti heti--ancient">
+  <h2 class="heti-title">
+    春晓
+    <span class="heti-meta heti-small">［唐］孟浩然</span>
+  </h2>
+  <p class="heti-verse heti-x-large">
+    <ruby>春<rt>chūn</rt></ruby><ruby>眠<rt>mián</rt></ruby><ruby>不<rt>bù</rt></ruby><ruby>觉<rt>jué</rt></ruby><ruby>晓<rt>xiǎo</rt></ruby><span class="heti-hang">，</span><br>
+    <ruby data-polyphone="true">处<rt>chù</rt></ruby><ruby data-polyphone="true">处<rt>chù</rt></ruby><ruby>闻<rt>wén</rt></ruby><ruby>啼<rt>tí</rt></ruby><ruby>鸟<rt>niǎo</rt></ruby><span class="heti-hang">。</span><br>
+    <ruby>夜<rt>yè</rt></ruby><ruby>来<rt>lái</rt></ruby><ruby>风<rt>fēng</rt></ruby><ruby>雨<rt>yǔ</rt></ruby><ruby>声<rt>shēng</rt></ruby><span class="heti-hang">，</span><br>
+    <ruby>花<rt>huā</rt></ruby><ruby>落<rt>luò</rt></ruby><ruby>知<rt>zhī</rt></ruby><ruby>多<rt>duō</rt></ruby><ruby>少<rt>shǎo</rt></ruby><span class="heti-hang">。</span>
+  </p>
+</div>
+```
+
+**Grade 2 — 登鹳雀楼（王之涣）** — polyphonic: 更 → gèng ("even more", not gēng "to change")
+
+```html
+<div class="heti heti--ancient">
+  <h2 class="heti-title">
+    登鹳雀楼
+    <span class="heti-meta heti-small">［唐］王之涣</span>
+  </h2>
+  <p class="heti-verse heti-x-large">
+    <ruby>白<rt>bái</rt></ruby><ruby>日<rt>rì</rt></ruby><ruby>依<rt>yī</rt></ruby><ruby>山<rt>shān</rt></ruby><ruby>尽<rt>jìn</rt></ruby><span class="heti-hang">，</span><br>
+    <ruby>黄<rt>huáng</rt></ruby><ruby>河<rt>hé</rt></ruby><ruby>入<rt>rù</rt></ruby><ruby>海<rt>hǎi</rt></ruby><ruby>流<rt>liú</rt></ruby><span class="heti-hang">。</span><br>
+    <ruby>欲<rt>yù</rt></ruby><ruby>穷<rt>qióng</rt></ruby><ruby>千<rt>qiān</rt></ruby><ruby>里<rt>lǐ</rt></ruby><ruby>目<rt>mù</rt></ruby><span class="heti-hang">，</span><br>
+    <ruby data-polyphone="true">更<rt>gèng</rt></ruby><ruby>上<rt>shàng</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>层<rt>céng</rt></ruby><ruby>楼<rt>lóu</rt></ruby><span class="heti-hang">。</span>
+  </p>
+</div>
+```
+
+**Grade 2 — 悯农·其二（李绅）**
+
+```html
+<div class="heti heti--ancient">
+  <h2 class="heti-title">
+    悯农·其二
+    <span class="heti-meta heti-small">［唐］李绅</span>
+  </h2>
+  <p class="heti-verse heti-x-large">
+    <ruby>锄<rt>chú</rt></ruby><ruby>禾<rt>hé</rt></ruby><ruby>日<rt>rì</rt></ruby><ruby>当<rt>dāng</rt></ruby><ruby>午<rt>wǔ</rt></ruby><span class="heti-hang">，</span><br>
+    <ruby>汗<rt>hàn</rt></ruby><ruby>滴<rt>dī</rt></ruby><ruby>禾<rt>hé</rt></ruby><ruby>下<rt>xià</rt></ruby><ruby>土<rt>tǔ</rt></ruby><span class="heti-hang">。</span><br>
+    <ruby>谁<rt>shuí</rt></ruby><ruby>知<rt>zhī</rt></ruby><ruby>盘<rt>pán</rt></ruby><ruby>中<rt>zhōng</rt></ruby><ruby>餐<rt>cān</rt></ruby><span class="heti-hang">，</span><br>
+    <ruby>粒<rt>lì</rt></ruby><ruby>粒<rt>lì</rt></ruby><ruby>皆<rt>jiē</rt></ruby><ruby>辛<rt>xīn</rt></ruby><ruby>苦<rt>kǔ</rt></ruby><span class="heti-hang">。</span>
+  </p>
+</div>
+```
+
+**Grade 3 — 江雪（柳宗元）** — stark 5-char lines, zero polyphonic complications, good test for baseline rendering
+
+```html
+<div class="heti heti--ancient">
+  <h2 class="heti-title">
+    江雪
+    <span class="heti-meta heti-small">［唐］柳宗元</span>
+  </h2>
+  <p class="heti-verse heti-x-large">
+    <ruby>千<rt>qiān</rt></ruby><ruby>山<rt>shān</rt></ruby><ruby>鸟<rt>niǎo</rt></ruby><ruby>飞<rt>fēi</rt></ruby><ruby>绝<rt>jué</rt></ruby><span class="heti-hang">，</span><br>
+    <ruby>万<rt>wàn</rt></ruby><ruby>径<rt>jìng</rt></ruby><ruby>人<rt>rén</rt></ruby><ruby>踪<rt>zōng</rt></ruby><ruby>灭<rt>miè</rt></ruby><span class="heti-hang">。</span><br>
+    <ruby>孤<rt>gū</rt></ruby><ruby>舟<rt>zhōu</rt></ruby><ruby>蓑<rt>suō</rt></ruby><ruby>笠<rt>lì</rt></ruby><ruby>翁<rt>wēng</rt></ruby><span class="heti-hang">，</span><br>
+    <ruby>独<rt>dú</rt></ruby><ruby>钓<rt>diào</rt></ruby><ruby>寒<rt>hán</rt></ruby><ruby>江<rt>jiāng</rt></ruby><ruby>雪<rt>xuě</rt></ruby><span class="heti-hang">。</span>
+  </p>
+</div>
+```
+
+**Grade 3 — 游子吟（孟郊）** — 6 lines, two polyphonics: 行 → xíng (travel, not háng "row"), 缝 → féng (to sew, not fèng "a seam")
+
+```html
+<div class="heti heti--ancient">
+  <h2 class="heti-title">
+    游子吟
+    <span class="heti-meta heti-small">［唐］孟郊</span>
+  </h2>
+  <p class="heti-verse heti-x-large">
+    <ruby>慈<rt>cí</rt></ruby><ruby>母<rt>mǔ</rt></ruby><ruby>手<rt>shǒu</rt></ruby><ruby>中<rt>zhōng</rt></ruby><ruby>线<rt>xiàn</rt></ruby><span class="heti-hang">，</span><br>
+    <ruby>游<rt>yóu</rt></ruby><ruby>子<rt>zǐ</rt></ruby><ruby>身<rt>shēn</rt></ruby><ruby>上<rt>shàng</rt></ruby><ruby>衣<rt>yī</rt></ruby><span class="heti-hang">。</span><br>
+    <ruby>临<rt>lín</rt></ruby><ruby data-polyphone="true">行<rt>xíng</rt></ruby><ruby>密<rt>mì</rt></ruby><ruby>密<rt>mì</rt></ruby><ruby data-polyphone="true">缝<rt>féng</rt></ruby><span class="heti-hang">，</span><br>
+    <ruby>意<rt>yì</rt></ruby><ruby>恐<rt>kǒng</rt></ruby><ruby>迟<rt>chí</rt></ruby><ruby>迟<rt>chí</rt></ruby><ruby>归<rt>guī</rt></ruby><span class="heti-hang">。</span><br>
+    <ruby>谁<rt>shuí</rt></ruby><ruby>言<rt>yán</rt></ruby><ruby>寸<rt>cùn</rt></ruby><ruby>草<rt>cǎo</rt></ruby><ruby>心<rt>xīn</rt></ruby><span class="heti-hang">，</span><br>
+    <ruby>报<rt>bào</rt></ruby><ruby>得<rt>de</rt></ruby><ruby>三<rt>sān</rt></ruby><ruby>春<rt>chūn</rt></ruby><ruby>晖<rt>huī</rt></ruby><span class="heti-hang">。</span>
+  </p>
+</div>
+```
+
+**Vertical mode — Living Scroll / Scroll Gallery:**
+
+In vertical mode, replace `<br>` with a space between lines and add `writing-mode: vertical-rl` via `heti--vertical`. Heti flows characters as right-to-left columns automatically. Pinyin renders to the left of its character, matching vertical ruby conventions.
+
+```html
+<div class="heti heti--ancient heti--vertical">
+  <p class="heti-verse heti-x-large">
+    <ruby>床<rt>chuáng</rt></ruby><ruby>前<rt>qián</rt></ruby><ruby>明<rt>míng</rt></ruby><ruby>月<rt>yuè</rt></ruby><ruby>光<rt>guāng</rt></ruby><span class="heti-hang">，</span>
+    <ruby>疑<rt>yí</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>地<rt>dì</rt></ruby><ruby>上<rt>shàng</rt></ruby><ruby>霜<rt>shuāng</rt></ruby><span class="heti-hang">。</span>
+    <ruby>举<rt>jǔ</rt></ruby><ruby>头<rt>tóu</rt></ruby><ruby>望<rt>wàng</rt></ruby><ruby>明<rt>míng</rt></ruby><ruby>月<rt>yuè</rt></ruby><span class="heti-hang">，</span>
+    <ruby>低<rt>dī</rt></ruby><ruby>头<rt>tóu</rt></ruby><ruby>思<rt>sī</rt></ruby><ruby>故<rt>gù</rt></ruby><ruby>乡<rt>xiāng</rt></ruby><span class="heti-hang">。</span>
+  </p>
+</div>
+```
+
+**诗心 — Custom Poem Autocomplete (paid tier: Pro/Max):**
 
 When a paid-tier parent creates a custom poem, they shouldn't have to manually type dynasty, author, and full text for well-known poems. The title field has intelligent autocomplete powered by the full `chinese-poetry` dataset (55,000+ Tang poems, 260,000+ Song poems, 21,000+ Song ci).
 
@@ -313,16 +532,16 @@ This feature lets students learn and review poems by voice alone, without lookin
 
 **Phase 1: Core Experience (make a child want to open it)**
 
-1. **Aesthetic foundation + Living Scroll prototype** — Next.js scaffold, Tailwind config, LXGW WenKai font, Xuan paper background, color palette, responsive layout shell. Immediately build Living Scroll with 5 hardcoded poems and `hanzi-writer`. This is the "show a friend" moment. Get the feel right before anything else.
+1. **Aesthetic foundation + Living Scroll prototype** — Next.js scaffold, Tailwind config with light/dark theme (CSS variables + `next-themes`), LXGW WenKai + Noto Serif SC + Inter font stack, grayscale + vermillion color tokens, responsive layout shell, `next-intl` setup with zh-CN/en locale files. Install heti (`npm install heti`), import CSS in `layout.tsx`, wire up `autoSpacing()` in `PoemViewer` client component. Immediately build Living Scroll with 5 hardcoded poems and `hanzi-writer` — use `heti--vertical` for the scroll container. This is the "show a friend" moment. Get the feel right before anything else.
 2. **Poetry data pipeline** — Batch script: filter chinese-poetry, run pypinyin, manually verify 50 pilot poems (launch set). Automated flagging of polyphonic characters for remaining poems.
-3. **Supabase schema + Auth** — All tables from PRD, RLS policies, parent login, student profile creation and switching
-4. **Core review loop** — Card display with ruby pinyin, rating buttons, SM-2 scheduling, "Today's Tasks" home screen, Living Scroll as alternative review mode
+3. **Supabase schema + Auth** — All tables from PRD (including `profiles` table), RLS policies, Supabase Auth with Email + Google + Apple + GitHub + Microsoft OAuth, Resend as custom SMTP, student profile creation and switching
+4. **Core review loop** — Card display with ruby pinyin, rating buttons, SM-2 scheduling, "晨光" home screen, Living Scroll as alternative review mode
 
 **Phase 2: Full Feature Set (v1.0)**
 
 5. **Leitner + FSRS** — Additional algorithm implementations, algorithm factory, migration logic
 6. **Quiet gamification** — Scroll gallery, streak counter (home screen only), discoverable badges. No points system. No mid-session interruptions
-7. **Fragment module** — General flashcard CRUD, shared SRS scheduling
+7. **集雅 (Fragment) module** — General flashcard CRUD, shared SRS scheduling
 8. **Parent analytics** — Dashboard with charts, retention curves, heatmaps
 9. **Audio/TTS** — Client-side speech synthesis via Transformers.js (WebGPU/WebNN). First real use of the AI inference pipeline. Fallback to Web Speech API
 10. **Ear Training: Passive Listening** — SRS-weighted playlist loop, background audio, Media Session API lock screen controls, Wake Lock API
@@ -331,7 +550,7 @@ This feature lets students learn and review poems by voice alone, without lookin
 
 **Phase 3: Paid Features + Polish**
 
-11. **Custom poems (paid tier)** — CRUD with autocomplete from chinese-poetry dataset (flexsearch index, lazy-loaded), pinyin editor with pypinyin API route, quota enforcement (tier limits TBD)
+11. **诗心 (Custom poems, paid tier)** — CRUD with autocomplete from chinese-poetry dataset (flexsearch index, lazy-loaded), pinyin editor with pypinyin API route, quota enforcement (tier limits TBD)
 12. **PWA** — Service worker, cached static assets, install prompt
 13. **Expand poetry library** — Verify and add remaining poems to reach 200-300, crowdsource corrections via error_reports
 
@@ -355,6 +574,34 @@ This feature lets students learn and review poems by voice alone, without lookin
 
 6. **Tier config approach:** A single `tierConfig` object maps feature keys to minimum required plan. For example: `{ fsrs: 'PRO', customPoems: 'PRO', advancedAnalytics: 'MAX', maxStudents: { FREE: 2, PRO: 8, MAX: 120 } }`. This config is shared between frontend (UI gating, upgrade prompts) and backend (middleware enforcement). Changing which tier unlocks a feature is a one-line config change, not a code change.
 
+7. **Auth: no Chinese social logins, no ICP filing.** WeChat/Alipay/QQ/Douyin all require 域名备案 (ICP domain filing) which ties the app to mainland China hosting and bureaucratic overhead. Not worth it. Email + Google + Apple + GitHub + Microsoft covers the audience. Phone SMS deferred due to cost ($0.05-0.08/msg via Twilio to China; domestic providers cheaper but require custom integration).
+
+8. **i18n from day one, content stays Chinese.** UI supports zh-CN, zh-TW, en, ja via `next-intl`. Poetry text, pinyin, poet names, and dynasty labels are never translated. Retrofitting i18n later is painful; the string extraction cost at day one is near-zero.
+
+9. **Light + dark theme from day one.** CSS variables + `next-themes` + Tailwind `darkMode: 'class'`. Light = white/grayscale, dark = #111111/grayscale, vermillion as sole accent in both. Retrofitting dark mode into an existing color system is one of the worst kinds of tech debt. Setting it up at scaffold time is free.
+
+10. **Resend for transactional email.** Supabase's built-in email is rate-limited (2/hr free, 100/hr Pro). Resend gives 3,000 emails/month free, which covers password reset and confirmation at launch scale. Dashboard-only config, no code changes.
+
+## Feature Names (Chinese)
+
+The app uses culturally resonant Chinese names for features, not generic translations:
+
+| Feature | Chinese Name | Literal Meaning | English Fallback |
+|---------|-------------|-----------------|------------------|
+| Home / Today's Tasks | 晨光 | Don't waste the morning light | Today's Review |
+| Card Review | 诗词复习 — 卡片模式 | Poetry Review — Card Mode | Card Review |
+| Living Scroll | 诗词复习 — 活字卷轴模式 | Poetry Review — Living Scroll Mode | Living Scroll |
+| Poetry Library | 诗库 | Poetry Repository | Library |
+| Poem Detail | 诗词详情 | Poetry Detail | Poem Detail |
+| Scroll Gallery | 卷轴馆 | Scroll Gallery | My Scrolls |
+| Passive Listening | 沉浸听诵 | Immersive Listening | Passive Listening |
+| Active Listening | 听诵复习 | Listening Review | Active Listening |
+| Fragment Module | 集雅 | Collecting Elegance | Flashcards |
+| Custom Poems | 诗心 | Embracing the Poetic Heart | Add Poems |
+| Ear Training | 听诵 | Listen & Recite | Ear Training |
+
+Note: "诗词" (poetry, covering both 诗 and 词) is used throughout instead of "诗歌" — it's the broader, more accurate term for classical Chinese verse.
+
 ## Open Questions
 
 1. **Pinyin verification scale**: The 20-poem pilot is manually verified. For the remaining 180-280 poems, what's the verification pipeline? Proposed: automated flagging of low-confidence pypinyin outputs (polyphonic characters) + crowdsourced correction via error_reports during beta + progressive library expansion (launch with 50 verified poems, expand monthly).
@@ -364,7 +611,7 @@ This feature lets students learn and review poems by voice alone, without lookin
 - A child can open the app, see today's poems, and complete a review session with the living scroll
 - A parent can log in, switch to their child's profile, and see learning progress
 - Pinyin is accurate for all polyphonic characters in the curated library
-- The aesthetic feels like classical Chinese art, not a generic flashcard app
+- The aesthetic is clean and minimal with cultural identity expressed through typography and the vermillion chop stamp, not surface decoration
 - The app runs smoothly on mobile Chrome (responsive, touch-friendly)
 - All three SRS algorithms produce correct scheduling intervals
 
@@ -377,7 +624,7 @@ This feature lets students learn and review poems by voice alone, without lookin
 
 ## Next Steps
 
-1. Scaffold Next.js project with Tailwind, configure LXGW WenKai font and Xuan paper aesthetic
+1. Scaffold Next.js project with Tailwind, configure font stack (LXGW WenKai + Noto Serif SC + Inter) and grayscale + vermillion color tokens
 2. Set up Supabase project and implement the database schema
 3. Build the poetry data pipeline (filter + pinyin generation + manual verification for 20 pilot poems)
 4. Implement the core review loop with SM-2
