@@ -14,9 +14,9 @@ Classical Chinese poetry memorization is a core part of primary and middle schoo
 
 The intersection of three things no one is combining well:
 
-1. **Modern minimalism + cultural punctuation** — The app is clean, quiet, contemporary. Not a theme park recreation of ancient China. Cultural identity comes through typography (LXGW WenKai), the vermillion chop stamp, and the Living Scroll interaction, not through surface decoration. The design should feel like a well-made notebook, not a museum exhibit.
+1. **Modern minimalism + cultural punctuation** — The app is clean, quiet, contemporary. Not a theme park recreation of ancient China. Cultural identity comes through typography (LXGW WenKai), the pine-ink chop stamp, and the Living Scroll interaction, not through surface decoration. The design should feel like a well-made notebook, not a museum exhibit.
 
-   **Color philosophy — grayscale + vermillion only:** The palette is deliberately restrained to grayscale plus a single accent color. No stone blue, no gold, no teal. Surfaces are pure white (#FFFFFF light, #111111 dark), not tinted or textured. Text uses a near-black (#1A1A1A) with secondary (#666666) and tertiary (#999999) levels for hierarchy. The only color in the entire system is vermillion (#C04A35 light, #D4605A dark), reserved for primary actions, the chop stamp, and moments of celebration. Because everything else is achromatic, the vermillion carries enormous weight. A single red button on a grayscale page is more striking than a full palette of traditional colors competing for attention.
+   **Color philosophy — traditional Chinese pigments:** The palette draws entirely from classical Chinese colors, each carrying centuries of cultural meaning. Surfaces are clean white (#FFFFFF light, pine-tinted dark #1a2120). Text uses pine-ink (#1c3532) with faded pine (#4a6b66) and mist (#8a9e9a) for hierarchy. The primary action color is pine green (#007d62), the darkest and most commanding hue, used for CTAs, the chop stamp, and active states. In dark mode, jade (#7bcfa6) takes over as primary. Crabapple pink (#f091a0) provides warmth for accents and highlights. The full palette of 14 traditional colors — jade (#7bcfa6), sky blue (#66a9c9), willow (#a8bf8f), peach (#f3a694), frost (#e3f9fd), celadon (#93d5dc), crabapple (#f091a0), wave (#a0d2e2), wisteria (#a4abd6), bamboo (#a5d1b5), pine (#007d62), plum (#d1c2d3), blossom (#f1939c), and rice paper (#f5f2e9) — is available for semantic contexts: badge tiers (peach → sky → jade → pine), heatmap gradients (bamboo → jade → pine), polyphonic character markers (crabapple), and success states (jade). The colors never compete because each has a defined role.
 
    **Typography — three voices, carefully paired:**
 
@@ -32,13 +32,13 @@ The intersection of three things no one is combining well:
 
    **Space — the art of leaving blank (留白):** Classical Chinese composition prizes negative space as much as the mark. A poem of twenty characters should feel like it's floating in open air, not crammed into a card. Generous margins. Vertical rhythm that lets each line breathe. The screen should never feel full. When in doubt, remove, don't add. This is the hardest design discipline and the one that will most distinguish Kuibu from every other education app.
 
-   **Surfaces — clean, not textured:** No paper grain, no warm tinting, no skeuomorphic textures. Backgrounds are flat solid colors. Visual depth comes from subtle borders (1px, #E5E5E5 light / #2A2A2A dark), not shadows. Cards and sections are defined by background-color shifts between --bg, --bg-subtle (#F7F7F7 / #1A1A1A), and --bg-muted (#EFEFEF / #222222). The effect is architecturally minimal, like a white-walled gallery where the art (the poetry) is the focus.
+   **Surfaces — clean, not textured:** No paper grain, no warm tinting, no skeuomorphic textures. Backgrounds are flat solid colors. Visual depth comes from subtle borders (1px, plum mist #d1c2d3 light / #3a4a47 dark), not shadows. Cards and sections are defined by background-color shifts between --bg (#FFFFFF / #1a2120), --bg-subtle (#FAFAFA / #222d2b), and --bg-muted (#EFEFEF / #2a3634). Card surfaces can use frost (#e3f9fd) for cool contrast. The effect is architecturally minimal, like a white-walled gallery where the art (the poetry) is the focus.
 
-   **Light and dark — both neutral, both intentional:** Light mode is pure white and grayscale, not warm or amber-tinted. Dark mode is true dark (#111111), not indigo or blue-shifted. Both themes use the same structural logic, just inverted. The dark theme is not "candlelight" or "moonlight," it's a clean dark surface that reduces eye strain. Vermillion adjusts slightly for contrast (light: #C04A35, dark: #D4605A) but remains the only color in both modes.
+   **Light and dark — both intentional:** Light mode is clean white with the traditional Chinese palette providing all color. Dark mode uses pine-tinted darks (#1a2120 base) that feel warm rather than generic gray. Both themes use the same structural logic. In dark mode, jade (#7bcfa6) replaces pine (#007d62) as the primary action color for better contrast against dark surfaces. The full traditional palette is available in both modes with appropriate adjustments.
 
    **Interaction feel — unhurried:** Every animation runs slightly slower than a typical app. Not sluggish, but deliberate. The brush strokes in Living Scroll mode take the time a real brush would take. Page transitions have the weight of turning thick paper. The rating buttons after a review don't bounce or flash — they respond with the quiet confidence of a well-made physical button. The entire tempo communicates: this is not a game you rush through. This is practice. Practice has its own pace.
 
-2. **The "Living Scroll" interaction** — Instead of a binary flashcard flip, students reveal characters one by one on a virtual scroll with brush-stroke animations (via `hanzi-writer`). Completed scrolls are sealed with a vermillion chop stamp and saved to a personal gallery. Kids collect scrolls like trophies. This turns memorization into a calligraphy performance.
+2. **The "Living Scroll" interaction** — Instead of a binary flashcard flip, students reveal characters one by one on a virtual scroll with brush-stroke animations (via `hanzi-writer`). Completed scrolls are sealed with a pine-ink chop stamp and saved to a personal gallery. Kids collect scrolls like trophies. This turns memorization into a calligraphy performance.
 
 3. **Scientifically-backed spaced repetition with parent management** — Three algorithms (SM-2, Leitner, FSRS) with a parent-managed account model designed for young children who don't hold independent credentials.
 
@@ -105,7 +105,7 @@ Rejected as over-scoped for a fun/learning project. Electron adds 100MB+ for wha
 |-------|-----------|-----------|
 | Framework | Next.js 16+ (App Router) | Server components for read-heavy pages, client components for interactive learning, API routes for backend logic |
 | Database/Auth | Supabase (Postgres + Auth + RLS) | Row-level security maps to guardian permission model; auth handles parent login |
-| Styling | Tailwind CSS + CSS variables | `--pinyin-display` for pinyin toggle; grayscale + vermillion palette; responsive mobile-first |
+| Styling | Tailwind CSS + CSS variables | Traditional Chinese color palette (14 pigments); `--primary`/`--accent` semantic tokens; responsive mobile-first |
 | Font System | Three-register stack (see typography detail below) | Poetry: LXGW WenKai. Headings: Noto Serif SC. UI/Pinyin: system sans + Inter |
 | SRS Algorithms | SM-2 (custom ~40 LOC), Leitner (custom ~30 LOC), FSRS (ts-fsrs npm) | All three at launch per premises |
 | Pinyin Generation | pypinyin (Python, called via Next.js API route or batch script) | Context-aware polyphonic disambiguation |
@@ -116,7 +116,7 @@ Rejected as over-scoped for a fun/learning project. Electron adds 100MB+ for wha
 | Auth Providers | Supabase Auth (Email + Google + Apple + GitHub + Microsoft) | All free, all native to Supabase. Phone SMS deferred. No Chinese social logins (require ICP filing) |
 | Transactional Email | Resend (custom SMTP) | 3,000 emails/month free. Handles password reset, email confirmation, magic links |
 | i18n | next-intl | UI strings in zh-CN, zh-TW, en, ja. Browser locale detection + user preference override. Poetry content stays in original Chinese |
-| Theming | Tailwind `darkMode: 'class'` + CSS variables + next-themes | Light (white/grayscale) and dark (#111111/grayscale) themes. Vermillion as sole accent. Respects system preference, user override in settings |
+| Theming | Tailwind `darkMode: 'class'` + CSS variables + next-themes | Light (white + traditional Chinese palette) and dark (pine-tinted #1a2120) themes. Pine primary, crabapple accent. Respects system preference, user override in settings |
 | Deployment | Vercel | Native Next.js deployment; edge functions for API routes |
 | AI Runtime | Transformers.js / ONNX Runtime Web | Client-side inference via WebGPU/WebNN. First use: TTS. Future: pronunciation scoring, smart hints |
 
@@ -184,9 +184,10 @@ Directly from the PRD (all tables confirmed):
 - What IS translated: menus, settings, onboarding flows, error messages, button labels, tooltips, empty states, notification copy, session summaries, analytics labels
 
 **Theming (Light + Dark):**
-- Light theme: pure white (#FFFFFF) surfaces, near-black (#1A1A1A) text, grayscale hierarchy, vermillion (#C04A35) as sole accent. Clean and neutral, not warm or tinted
-- Dark theme: true dark (#111111) surfaces, light gray (#EBEBEB) text, same grayscale structure inverted, vermillion (#D4605A) adjusted for contrast
-- Semantic color tokens: `--bg`, `--bg-subtle`, `--bg-muted`, `--text`, `--text-secondary`, `--text-tertiary`, `--border`, `--vermillion`, `--vermillion-hover`, `--vermillion-soft`
+- Light theme: white (#FFFFFF) surfaces, pine-ink (#1c3532) text, traditional Chinese color palette. Primary: pine green (#007d62). Accent: crabapple (#f091a0)
+- Dark theme: pine-tinted dark (#1a2120) surfaces, light (#e8ece6) text. Primary flips to jade (#7bcfa6) for contrast. Accent stays crabapple
+- Semantic color tokens: `--bg`, `--bg-subtle`, `--bg-muted`, `--bg-card`, `--text`, `--text-secondary`, `--text-tertiary`, `--border`, `--border-subtle`, `--primary`, `--primary-hover`, `--primary-soft`, `--accent`, `--accent-hover`, `--accent-soft`, `--success` (jade), `--error` (blossom), `--info` (sky), `--warning` (peach)
+- Extended palette tokens: `--jade`, `--sky`, `--willow`, `--peach`, `--frost`, `--celadon`, `--crabapple`, `--wave`, `--wisteria`, `--bamboo`, `--pine`, `--plum`, `--blossom`
 - Implementation: Tailwind `darkMode: 'class'` + CSS variables + `next-themes` for toggle and persistence
 - System preference respected by default via `prefers-color-scheme`. User override stored in profile (`theme_preference`: system / light / dark)
 - Toggle in settings. Also accessible from a quick toggle in the app header (sun/moon icon)
@@ -211,7 +212,7 @@ Directly from the PRD (all tables confirmed):
 - Tapping reveals characters one by one with `hanzi-writer` stroke-order animation
 - Correct reveals paint ink on rice paper (Canvas/SVG effect)
 - Incorrect attempts show a red circle (traditional teacher correction mark)
-- Completed scroll seals with a vermillion chop stamp bearing the student's name
+- Completed scroll seals with a pine-ink chop stamp (pine green #007d62 light / jade #7bcfa6 dark) bearing the student's name
 - Scrolls save to a personal gallery (the gamification collection layer)
 - After completion, student rates difficulty (Forgot/Hard/Good/Easy) for SRS scheduling
 - **Performance strategy:** Lazy-load hanzi-writer only for the active character, preload next 3 characters in background, cache stroke data in IndexedDB after first render, provide "skip animation" fast-path for repeat reviews
@@ -220,8 +221,10 @@ Directly from the PRD (all tables confirmed):
 **Pinyin System:**
 - Public library: per-character rows in `poem_pinyin` table with AUTO/CONFIRMED/DISPUTED status
 - Custom poems: lightweight `pinyin_json` object
-- Frontend: `<ruby>/<rt>` tags inside a `heti heti--annotation` container; pinyin toggle via `.pinyin-hidden rt { display: none }` class on `<html>` — never set `display: block` on `<rt>` as it breaks the native `ruby-text` display value and renders pinyin beside the character instead of above it
-- Polyphonic characters marked with `data-polyphone="true"` on the `<ruby>` element so the editor can surface them for manual review
+- Frontend: `<ruby><rb>字</rb><rp>(</rp><rt lang="zh-Latn">pinyin</rt><rp>)</rp></ruby>` inside a `heti heti--annotation` container. This is heti's official markup pattern: `<rb>` wraps the base character, `<rp>` provides fallback parentheses, `lang="zh-Latn"` on `<rt>` triggers correct font selection for pinyin. Zero whitespace between tags (whitespace creates text nodes that break ruby alignment). Pinyin toggle via `.pinyin-hidden rt { display: none }` class on `<html>`
+- Equal-width character spacing: poetry containers use `display: inline-flex; flex-direction: column-reverse; width: 1.8em` on `ruby` elements so every character occupies the same horizontal space regardless of pinyin length. `<rp>` is `display: none`, `<rb>` and `<rt>` are `display: block`. Long pinyin overflows visually without pushing characters apart (standard CJK typesetting approach)
+- Vertical mode (`heti--vertical`): same flex approach with fixed `height: 1.8em` instead of width. `flex-direction: column-reverse` puts pinyin to the right of each character
+- Polyphonic characters marked with `data-polyphone="true"` on the `<ruby>` element so the editor can surface them for manual review. Polyphonic pinyin renders in crabapple (#f091a0) accent color
 
 **Pinyin Visibility — two layers of control:**
 
@@ -308,10 +311,10 @@ Each poem below uses `data-polyphone="true"` on `<ruby>` elements where pypinyin
     <span class="heti-meta heti-small">［唐］李白</span>
   </h2>
   <p class="heti-verse heti-x-large">
-    <ruby>床<rt>chuáng</rt></ruby><ruby>前<rt>qián</rt></ruby><ruby>明<rt>míng</rt></ruby><ruby>月<rt>yuè</rt></ruby><ruby>光<rt>guāng</rt></ruby><span class="heti-hang">，</span><br>
-    <ruby>疑<rt>yí</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>地<rt>dì</rt></ruby><ruby>上<rt>shàng</rt></ruby><ruby>霜<rt>shuāng</rt></ruby><span class="heti-hang">。</span><br>
-    <ruby>举<rt>jǔ</rt></ruby><ruby>头<rt>tóu</rt></ruby><ruby>望<rt>wàng</rt></ruby><ruby>明<rt>míng</rt></ruby><ruby>月<rt>yuè</rt></ruby><span class="heti-hang">，</span><br>
-    <ruby>低<rt>dī</rt></ruby><ruby>头<rt>tóu</rt></ruby><ruby>思<rt>sī</rt></ruby><ruby>故<rt>gù</rt></ruby><ruby>乡<rt>xiāng</rt></ruby><span class="heti-hang">。</span>
+    <ruby><rb>床</rb><rp>(</rp><rt lang="zh-Latn">chuáng</rt><rp>)</rp></ruby><ruby><rb>前</rb><rp>(</rp><rt lang="zh-Latn">qián</rt><rp>)</rp></ruby><ruby><rb>明</rb><rp>(</rp><rt lang="zh-Latn">míng</rt><rp>)</rp></ruby><ruby><rb>月</rb><rp>(</rp><rt lang="zh-Latn">yuè</rt><rp>)</rp></ruby><ruby><rb>光</rb><rp>(</rp><rt lang="zh-Latn">guāng</rt><rp>)</rp></ruby><span class="heti-hang">，</span><br>
+    <ruby><rb>疑</rb><rp>(</rp><rt lang="zh-Latn">yí</rt><rp>)</rp></ruby><ruby><rb>是</rb><rp>(</rp><rt lang="zh-Latn">shì</rt><rp>)</rp></ruby><ruby><rb>地</rb><rp>(</rp><rt lang="zh-Latn">dì</rt><rp>)</rp></ruby><ruby><rb>上</rb><rp>(</rp><rt lang="zh-Latn">shàng</rt><rp>)</rp></ruby><ruby><rb>霜</rb><rp>(</rp><rt lang="zh-Latn">shuāng</rt><rp>)</rp></ruby><span class="heti-hang">。</span><br>
+    <ruby><rb>举</rb><rp>(</rp><rt lang="zh-Latn">jǔ</rt><rp>)</rp></ruby><ruby><rb>头</rb><rp>(</rp><rt lang="zh-Latn">tóu</rt><rp>)</rp></ruby><ruby><rb>望</rb><rp>(</rp><rt lang="zh-Latn">wàng</rt><rp>)</rp></ruby><ruby><rb>明</rb><rp>(</rp><rt lang="zh-Latn">míng</rt><rp>)</rp></ruby><ruby><rb>月</rb><rp>(</rp><rt lang="zh-Latn">yuè</rt><rp>)</rp></ruby><span class="heti-hang">，</span><br>
+    <ruby><rb>低</rb><rp>(</rp><rt lang="zh-Latn">dī</rt><rp>)</rp></ruby><ruby><rb>头</rb><rp>(</rp><rt lang="zh-Latn">tóu</rt><rp>)</rp></ruby><ruby><rb>思</rb><rp>(</rp><rt lang="zh-Latn">sī</rt><rp>)</rp></ruby><ruby><rb>故</rb><rp>(</rp><rt lang="zh-Latn">gù</rt><rp>)</rp></ruby><ruby><rb>乡</rb><rp>(</rp><rt lang="zh-Latn">xiāng</rt><rp>)</rp></ruby><span class="heti-hang">。</span>
   </p>
 </div>
 ```
@@ -325,10 +328,10 @@ Each poem below uses `data-polyphone="true"` on `<ruby>` elements where pypinyin
     <span class="heti-meta heti-small">［唐］孟浩然</span>
   </h2>
   <p class="heti-verse heti-x-large">
-    <ruby>春<rt>chūn</rt></ruby><ruby>眠<rt>mián</rt></ruby><ruby>不<rt>bù</rt></ruby><ruby>觉<rt>jué</rt></ruby><ruby>晓<rt>xiǎo</rt></ruby><span class="heti-hang">，</span><br>
-    <ruby data-polyphone="true">处<rt>chù</rt></ruby><ruby data-polyphone="true">处<rt>chù</rt></ruby><ruby>闻<rt>wén</rt></ruby><ruby>啼<rt>tí</rt></ruby><ruby>鸟<rt>niǎo</rt></ruby><span class="heti-hang">。</span><br>
-    <ruby>夜<rt>yè</rt></ruby><ruby>来<rt>lái</rt></ruby><ruby>风<rt>fēng</rt></ruby><ruby>雨<rt>yǔ</rt></ruby><ruby>声<rt>shēng</rt></ruby><span class="heti-hang">，</span><br>
-    <ruby>花<rt>huā</rt></ruby><ruby>落<rt>luò</rt></ruby><ruby>知<rt>zhī</rt></ruby><ruby>多<rt>duō</rt></ruby><ruby>少<rt>shǎo</rt></ruby><span class="heti-hang">。</span>
+    <ruby><rb>春</rb><rp>(</rp><rt lang="zh-Latn">chūn</rt><rp>)</rp></ruby><ruby><rb>眠</rb><rp>(</rp><rt lang="zh-Latn">mián</rt><rp>)</rp></ruby><ruby><rb>不</rb><rp>(</rp><rt lang="zh-Latn">bù</rt><rp>)</rp></ruby><ruby><rb>觉</rb><rp>(</rp><rt lang="zh-Latn">jué</rt><rp>)</rp></ruby><ruby><rb>晓</rb><rp>(</rp><rt lang="zh-Latn">xiǎo</rt><rp>)</rp></ruby><span class="heti-hang">，</span><br>
+    <ruby data-polyphone="true"><rb>处</rb><rp>(</rp><rt lang="zh-Latn">chù</rt><rp>)</rp></ruby><ruby data-polyphone="true"><rb>处</rb><rp>(</rp><rt lang="zh-Latn">chù</rt><rp>)</rp></ruby><ruby><rb>闻</rb><rp>(</rp><rt lang="zh-Latn">wén</rt><rp>)</rp></ruby><ruby><rb>啼</rb><rp>(</rp><rt lang="zh-Latn">tí</rt><rp>)</rp></ruby><ruby><rb>鸟</rb><rp>(</rp><rt lang="zh-Latn">niǎo</rt><rp>)</rp></ruby><span class="heti-hang">。</span><br>
+    <ruby><rb>夜</rb><rp>(</rp><rt lang="zh-Latn">yè</rt><rp>)</rp></ruby><ruby><rb>来</rb><rp>(</rp><rt lang="zh-Latn">lái</rt><rp>)</rp></ruby><ruby><rb>风</rb><rp>(</rp><rt lang="zh-Latn">fēng</rt><rp>)</rp></ruby><ruby><rb>雨</rb><rp>(</rp><rt lang="zh-Latn">yǔ</rt><rp>)</rp></ruby><ruby><rb>声</rb><rp>(</rp><rt lang="zh-Latn">shēng</rt><rp>)</rp></ruby><span class="heti-hang">，</span><br>
+    <ruby><rb>花</rb><rp>(</rp><rt lang="zh-Latn">huā</rt><rp>)</rp></ruby><ruby><rb>落</rb><rp>(</rp><rt lang="zh-Latn">luò</rt><rp>)</rp></ruby><ruby><rb>知</rb><rp>(</rp><rt lang="zh-Latn">zhī</rt><rp>)</rp></ruby><ruby><rb>多</rb><rp>(</rp><rt lang="zh-Latn">duō</rt><rp>)</rp></ruby><ruby><rb>少</rb><rp>(</rp><rt lang="zh-Latn">shǎo</rt><rp>)</rp></ruby><span class="heti-hang">。</span>
   </p>
 </div>
 ```
@@ -342,10 +345,10 @@ Each poem below uses `data-polyphone="true"` on `<ruby>` elements where pypinyin
     <span class="heti-meta heti-small">［唐］王之涣</span>
   </h2>
   <p class="heti-verse heti-x-large">
-    <ruby>白<rt>bái</rt></ruby><ruby>日<rt>rì</rt></ruby><ruby>依<rt>yī</rt></ruby><ruby>山<rt>shān</rt></ruby><ruby>尽<rt>jìn</rt></ruby><span class="heti-hang">，</span><br>
-    <ruby>黄<rt>huáng</rt></ruby><ruby>河<rt>hé</rt></ruby><ruby>入<rt>rù</rt></ruby><ruby>海<rt>hǎi</rt></ruby><ruby>流<rt>liú</rt></ruby><span class="heti-hang">。</span><br>
-    <ruby>欲<rt>yù</rt></ruby><ruby>穷<rt>qióng</rt></ruby><ruby>千<rt>qiān</rt></ruby><ruby>里<rt>lǐ</rt></ruby><ruby>目<rt>mù</rt></ruby><span class="heti-hang">，</span><br>
-    <ruby data-polyphone="true">更<rt>gèng</rt></ruby><ruby>上<rt>shàng</rt></ruby><ruby>一<rt>yī</rt></ruby><ruby>层<rt>céng</rt></ruby><ruby>楼<rt>lóu</rt></ruby><span class="heti-hang">。</span>
+    <ruby><rb>白</rb><rp>(</rp><rt lang="zh-Latn">bái</rt><rp>)</rp></ruby><ruby><rb>日</rb><rp>(</rp><rt lang="zh-Latn">rì</rt><rp>)</rp></ruby><ruby><rb>依</rb><rp>(</rp><rt lang="zh-Latn">yī</rt><rp>)</rp></ruby><ruby><rb>山</rb><rp>(</rp><rt lang="zh-Latn">shān</rt><rp>)</rp></ruby><ruby><rb>尽</rb><rp>(</rp><rt lang="zh-Latn">jìn</rt><rp>)</rp></ruby><span class="heti-hang">，</span><br>
+    <ruby><rb>黄</rb><rp>(</rp><rt lang="zh-Latn">huáng</rt><rp>)</rp></ruby><ruby><rb>河</rb><rp>(</rp><rt lang="zh-Latn">hé</rt><rp>)</rp></ruby><ruby><rb>入</rb><rp>(</rp><rt lang="zh-Latn">rù</rt><rp>)</rp></ruby><ruby><rb>海</rb><rp>(</rp><rt lang="zh-Latn">hǎi</rt><rp>)</rp></ruby><ruby><rb>流</rb><rp>(</rp><rt lang="zh-Latn">liú</rt><rp>)</rp></ruby><span class="heti-hang">。</span><br>
+    <ruby><rb>欲</rb><rp>(</rp><rt lang="zh-Latn">yù</rt><rp>)</rp></ruby><ruby><rb>穷</rb><rp>(</rp><rt lang="zh-Latn">qióng</rt><rp>)</rp></ruby><ruby><rb>千</rb><rp>(</rp><rt lang="zh-Latn">qiān</rt><rp>)</rp></ruby><ruby><rb>里</rb><rp>(</rp><rt lang="zh-Latn">lǐ</rt><rp>)</rp></ruby><ruby><rb>目</rb><rp>(</rp><rt lang="zh-Latn">mù</rt><rp>)</rp></ruby><span class="heti-hang">，</span><br>
+    <ruby data-polyphone="true"><rb>更</rb><rp>(</rp><rt lang="zh-Latn">gèng</rt><rp>)</rp></ruby><ruby><rb>上</rb><rp>(</rp><rt lang="zh-Latn">shàng</rt><rp>)</rp></ruby><ruby><rb>一</rb><rp>(</rp><rt lang="zh-Latn">yī</rt><rp>)</rp></ruby><ruby><rb>层</rb><rp>(</rp><rt lang="zh-Latn">céng</rt><rp>)</rp></ruby><ruby><rb>楼</rb><rp>(</rp><rt lang="zh-Latn">lóu</rt><rp>)</rp></ruby><span class="heti-hang">。</span>
   </p>
 </div>
 ```
@@ -359,10 +362,10 @@ Each poem below uses `data-polyphone="true"` on `<ruby>` elements where pypinyin
     <span class="heti-meta heti-small">［唐］李绅</span>
   </h2>
   <p class="heti-verse heti-x-large">
-    <ruby>锄<rt>chú</rt></ruby><ruby>禾<rt>hé</rt></ruby><ruby>日<rt>rì</rt></ruby><ruby>当<rt>dāng</rt></ruby><ruby>午<rt>wǔ</rt></ruby><span class="heti-hang">，</span><br>
-    <ruby>汗<rt>hàn</rt></ruby><ruby>滴<rt>dī</rt></ruby><ruby>禾<rt>hé</rt></ruby><ruby>下<rt>xià</rt></ruby><ruby>土<rt>tǔ</rt></ruby><span class="heti-hang">。</span><br>
-    <ruby>谁<rt>shuí</rt></ruby><ruby>知<rt>zhī</rt></ruby><ruby>盘<rt>pán</rt></ruby><ruby>中<rt>zhōng</rt></ruby><ruby>餐<rt>cān</rt></ruby><span class="heti-hang">，</span><br>
-    <ruby>粒<rt>lì</rt></ruby><ruby>粒<rt>lì</rt></ruby><ruby>皆<rt>jiē</rt></ruby><ruby>辛<rt>xīn</rt></ruby><ruby>苦<rt>kǔ</rt></ruby><span class="heti-hang">。</span>
+    <ruby><rb>锄</rb><rp>(</rp><rt lang="zh-Latn">chú</rt><rp>)</rp></ruby><ruby><rb>禾</rb><rp>(</rp><rt lang="zh-Latn">hé</rt><rp>)</rp></ruby><ruby><rb>日</rb><rp>(</rp><rt lang="zh-Latn">rì</rt><rp>)</rp></ruby><ruby><rb>当</rb><rp>(</rp><rt lang="zh-Latn">dāng</rt><rp>)</rp></ruby><ruby><rb>午</rb><rp>(</rp><rt lang="zh-Latn">wǔ</rt><rp>)</rp></ruby><span class="heti-hang">，</span><br>
+    <ruby><rb>汗</rb><rp>(</rp><rt lang="zh-Latn">hàn</rt><rp>)</rp></ruby><ruby><rb>滴</rb><rp>(</rp><rt lang="zh-Latn">dī</rt><rp>)</rp></ruby><ruby><rb>禾</rb><rp>(</rp><rt lang="zh-Latn">hé</rt><rp>)</rp></ruby><ruby><rb>下</rb><rp>(</rp><rt lang="zh-Latn">xià</rt><rp>)</rp></ruby><ruby><rb>土</rb><rp>(</rp><rt lang="zh-Latn">tǔ</rt><rp>)</rp></ruby><span class="heti-hang">。</span><br>
+    <ruby><rb>谁</rb><rp>(</rp><rt lang="zh-Latn">shuí</rt><rp>)</rp></ruby><ruby><rb>知</rb><rp>(</rp><rt lang="zh-Latn">zhī</rt><rp>)</rp></ruby><ruby><rb>盘</rb><rp>(</rp><rt lang="zh-Latn">pán</rt><rp>)</rp></ruby><ruby><rb>中</rb><rp>(</rp><rt lang="zh-Latn">zhōng</rt><rp>)</rp></ruby><ruby><rb>餐</rb><rp>(</rp><rt lang="zh-Latn">cān</rt><rp>)</rp></ruby><span class="heti-hang">，</span><br>
+    <ruby><rb>粒</rb><rp>(</rp><rt lang="zh-Latn">lì</rt><rp>)</rp></ruby><ruby><rb>粒</rb><rp>(</rp><rt lang="zh-Latn">lì</rt><rp>)</rp></ruby><ruby><rb>皆</rb><rp>(</rp><rt lang="zh-Latn">jiē</rt><rp>)</rp></ruby><ruby><rb>辛</rb><rp>(</rp><rt lang="zh-Latn">xīn</rt><rp>)</rp></ruby><ruby><rb>苦</rb><rp>(</rp><rt lang="zh-Latn">kǔ</rt><rp>)</rp></ruby><span class="heti-hang">。</span>
   </p>
 </div>
 ```
@@ -376,10 +379,10 @@ Each poem below uses `data-polyphone="true"` on `<ruby>` elements where pypinyin
     <span class="heti-meta heti-small">［唐］柳宗元</span>
   </h2>
   <p class="heti-verse heti-x-large">
-    <ruby>千<rt>qiān</rt></ruby><ruby>山<rt>shān</rt></ruby><ruby>鸟<rt>niǎo</rt></ruby><ruby>飞<rt>fēi</rt></ruby><ruby>绝<rt>jué</rt></ruby><span class="heti-hang">，</span><br>
-    <ruby>万<rt>wàn</rt></ruby><ruby>径<rt>jìng</rt></ruby><ruby>人<rt>rén</rt></ruby><ruby>踪<rt>zōng</rt></ruby><ruby>灭<rt>miè</rt></ruby><span class="heti-hang">。</span><br>
-    <ruby>孤<rt>gū</rt></ruby><ruby>舟<rt>zhōu</rt></ruby><ruby>蓑<rt>suō</rt></ruby><ruby>笠<rt>lì</rt></ruby><ruby>翁<rt>wēng</rt></ruby><span class="heti-hang">，</span><br>
-    <ruby>独<rt>dú</rt></ruby><ruby>钓<rt>diào</rt></ruby><ruby>寒<rt>hán</rt></ruby><ruby>江<rt>jiāng</rt></ruby><ruby>雪<rt>xuě</rt></ruby><span class="heti-hang">。</span>
+    <ruby><rb>千</rb><rp>(</rp><rt lang="zh-Latn">qiān</rt><rp>)</rp></ruby><ruby><rb>山</rb><rp>(</rp><rt lang="zh-Latn">shān</rt><rp>)</rp></ruby><ruby><rb>鸟</rb><rp>(</rp><rt lang="zh-Latn">niǎo</rt><rp>)</rp></ruby><ruby><rb>飞</rb><rp>(</rp><rt lang="zh-Latn">fēi</rt><rp>)</rp></ruby><ruby><rb>绝</rb><rp>(</rp><rt lang="zh-Latn">jué</rt><rp>)</rp></ruby><span class="heti-hang">，</span><br>
+    <ruby><rb>万</rb><rp>(</rp><rt lang="zh-Latn">wàn</rt><rp>)</rp></ruby><ruby><rb>径</rb><rp>(</rp><rt lang="zh-Latn">jìng</rt><rp>)</rp></ruby><ruby><rb>人</rb><rp>(</rp><rt lang="zh-Latn">rén</rt><rp>)</rp></ruby><ruby><rb>踪</rb><rp>(</rp><rt lang="zh-Latn">zōng</rt><rp>)</rp></ruby><ruby><rb>灭</rb><rp>(</rp><rt lang="zh-Latn">miè</rt><rp>)</rp></ruby><span class="heti-hang">。</span><br>
+    <ruby><rb>孤</rb><rp>(</rp><rt lang="zh-Latn">gū</rt><rp>)</rp></ruby><ruby><rb>舟</rb><rp>(</rp><rt lang="zh-Latn">zhōu</rt><rp>)</rp></ruby><ruby><rb>蓑</rb><rp>(</rp><rt lang="zh-Latn">suō</rt><rp>)</rp></ruby><ruby><rb>笠</rb><rp>(</rp><rt lang="zh-Latn">lì</rt><rp>)</rp></ruby><ruby><rb>翁</rb><rp>(</rp><rt lang="zh-Latn">wēng</rt><rp>)</rp></ruby><span class="heti-hang">，</span><br>
+    <ruby><rb>独</rb><rp>(</rp><rt lang="zh-Latn">dú</rt><rp>)</rp></ruby><ruby><rb>钓</rb><rp>(</rp><rt lang="zh-Latn">diào</rt><rp>)</rp></ruby><ruby><rb>寒</rb><rp>(</rp><rt lang="zh-Latn">hán</rt><rp>)</rp></ruby><ruby><rb>江</rb><rp>(</rp><rt lang="zh-Latn">jiāng</rt><rp>)</rp></ruby><ruby><rb>雪</rb><rp>(</rp><rt lang="zh-Latn">xuě</rt><rp>)</rp></ruby><span class="heti-hang">。</span>
   </p>
 </div>
 ```
@@ -393,12 +396,12 @@ Each poem below uses `data-polyphone="true"` on `<ruby>` elements where pypinyin
     <span class="heti-meta heti-small">［唐］孟郊</span>
   </h2>
   <p class="heti-verse heti-x-large">
-    <ruby>慈<rt>cí</rt></ruby><ruby>母<rt>mǔ</rt></ruby><ruby>手<rt>shǒu</rt></ruby><ruby>中<rt>zhōng</rt></ruby><ruby>线<rt>xiàn</rt></ruby><span class="heti-hang">，</span><br>
-    <ruby>游<rt>yóu</rt></ruby><ruby>子<rt>zǐ</rt></ruby><ruby>身<rt>shēn</rt></ruby><ruby>上<rt>shàng</rt></ruby><ruby>衣<rt>yī</rt></ruby><span class="heti-hang">。</span><br>
-    <ruby>临<rt>lín</rt></ruby><ruby data-polyphone="true">行<rt>xíng</rt></ruby><ruby>密<rt>mì</rt></ruby><ruby>密<rt>mì</rt></ruby><ruby data-polyphone="true">缝<rt>féng</rt></ruby><span class="heti-hang">，</span><br>
-    <ruby>意<rt>yì</rt></ruby><ruby>恐<rt>kǒng</rt></ruby><ruby>迟<rt>chí</rt></ruby><ruby>迟<rt>chí</rt></ruby><ruby>归<rt>guī</rt></ruby><span class="heti-hang">。</span><br>
-    <ruby>谁<rt>shuí</rt></ruby><ruby>言<rt>yán</rt></ruby><ruby>寸<rt>cùn</rt></ruby><ruby>草<rt>cǎo</rt></ruby><ruby>心<rt>xīn</rt></ruby><span class="heti-hang">，</span><br>
-    <ruby>报<rt>bào</rt></ruby><ruby>得<rt>de</rt></ruby><ruby>三<rt>sān</rt></ruby><ruby>春<rt>chūn</rt></ruby><ruby>晖<rt>huī</rt></ruby><span class="heti-hang">。</span>
+    <ruby><rb>慈</rb><rp>(</rp><rt lang="zh-Latn">cí</rt><rp>)</rp></ruby><ruby><rb>母</rb><rp>(</rp><rt lang="zh-Latn">mǔ</rt><rp>)</rp></ruby><ruby><rb>手</rb><rp>(</rp><rt lang="zh-Latn">shǒu</rt><rp>)</rp></ruby><ruby><rb>中</rb><rp>(</rp><rt lang="zh-Latn">zhōng</rt><rp>)</rp></ruby><ruby><rb>线</rb><rp>(</rp><rt lang="zh-Latn">xiàn</rt><rp>)</rp></ruby><span class="heti-hang">，</span><br>
+    <ruby><rb>游</rb><rp>(</rp><rt lang="zh-Latn">yóu</rt><rp>)</rp></ruby><ruby><rb>子</rb><rp>(</rp><rt lang="zh-Latn">zǐ</rt><rp>)</rp></ruby><ruby><rb>身</rb><rp>(</rp><rt lang="zh-Latn">shēn</rt><rp>)</rp></ruby><ruby><rb>上</rb><rp>(</rp><rt lang="zh-Latn">shàng</rt><rp>)</rp></ruby><ruby><rb>衣</rb><rp>(</rp><rt lang="zh-Latn">yī</rt><rp>)</rp></ruby><span class="heti-hang">。</span><br>
+    <ruby><rb>临</rb><rp>(</rp><rt lang="zh-Latn">lín</rt><rp>)</rp></ruby><ruby data-polyphone="true"><rb>行</rb><rp>(</rp><rt lang="zh-Latn">xíng</rt><rp>)</rp></ruby><ruby><rb>密</rb><rp>(</rp><rt lang="zh-Latn">mì</rt><rp>)</rp></ruby><ruby><rb>密</rb><rp>(</rp><rt lang="zh-Latn">mì</rt><rp>)</rp></ruby><ruby data-polyphone="true"><rb>缝</rb><rp>(</rp><rt lang="zh-Latn">féng</rt><rp>)</rp></ruby><span class="heti-hang">，</span><br>
+    <ruby><rb>意</rb><rp>(</rp><rt lang="zh-Latn">yì</rt><rp>)</rp></ruby><ruby><rb>恐</rb><rp>(</rp><rt lang="zh-Latn">kǒng</rt><rp>)</rp></ruby><ruby><rb>迟</rb><rp>(</rp><rt lang="zh-Latn">chí</rt><rp>)</rp></ruby><ruby><rb>迟</rb><rp>(</rp><rt lang="zh-Latn">chí</rt><rp>)</rp></ruby><ruby><rb>归</rb><rp>(</rp><rt lang="zh-Latn">guī</rt><rp>)</rp></ruby><span class="heti-hang">。</span><br>
+    <ruby><rb>谁</rb><rp>(</rp><rt lang="zh-Latn">shuí</rt><rp>)</rp></ruby><ruby><rb>言</rb><rp>(</rp><rt lang="zh-Latn">yán</rt><rp>)</rp></ruby><ruby><rb>寸</rb><rp>(</rp><rt lang="zh-Latn">cùn</rt><rp>)</rp></ruby><ruby><rb>草</rb><rp>(</rp><rt lang="zh-Latn">cǎo</rt><rp>)</rp></ruby><ruby><rb>心</rb><rp>(</rp><rt lang="zh-Latn">xīn</rt><rp>)</rp></ruby><span class="heti-hang">，</span><br>
+    <ruby><rb>报</rb><rp>(</rp><rt lang="zh-Latn">bào</rt><rp>)</rp></ruby><ruby><rb>得</rb><rp>(</rp><rt lang="zh-Latn">de</rt><rp>)</rp></ruby><ruby><rb>三</rb><rp>(</rp><rt lang="zh-Latn">sān</rt><rp>)</rp></ruby><ruby><rb>春</rb><rp>(</rp><rt lang="zh-Latn">chūn</rt><rp>)</rp></ruby><ruby><rb>晖</rb><rp>(</rp><rt lang="zh-Latn">huī</rt><rp>)</rp></ruby><span class="heti-hang">。</span>
   </p>
 </div>
 ```
@@ -410,10 +413,10 @@ In vertical mode, replace `<br>` with a space between lines and add `writing-mod
 ```html
 <div class="heti heti--ancient heti--vertical">
   <p class="heti-verse heti-x-large">
-    <ruby>床<rt>chuáng</rt></ruby><ruby>前<rt>qián</rt></ruby><ruby>明<rt>míng</rt></ruby><ruby>月<rt>yuè</rt></ruby><ruby>光<rt>guāng</rt></ruby><span class="heti-hang">，</span>
-    <ruby>疑<rt>yí</rt></ruby><ruby>是<rt>shì</rt></ruby><ruby>地<rt>dì</rt></ruby><ruby>上<rt>shàng</rt></ruby><ruby>霜<rt>shuāng</rt></ruby><span class="heti-hang">。</span>
-    <ruby>举<rt>jǔ</rt></ruby><ruby>头<rt>tóu</rt></ruby><ruby>望<rt>wàng</rt></ruby><ruby>明<rt>míng</rt></ruby><ruby>月<rt>yuè</rt></ruby><span class="heti-hang">，</span>
-    <ruby>低<rt>dī</rt></ruby><ruby>头<rt>tóu</rt></ruby><ruby>思<rt>sī</rt></ruby><ruby>故<rt>gù</rt></ruby><ruby>乡<rt>xiāng</rt></ruby><span class="heti-hang">。</span>
+    <ruby><rb>床</rb><rp>(</rp><rt lang="zh-Latn">chuáng</rt><rp>)</rp></ruby><ruby><rb>前</rb><rp>(</rp><rt lang="zh-Latn">qián</rt><rp>)</rp></ruby><ruby><rb>明</rb><rp>(</rp><rt lang="zh-Latn">míng</rt><rp>)</rp></ruby><ruby><rb>月</rb><rp>(</rp><rt lang="zh-Latn">yuè</rt><rp>)</rp></ruby><ruby><rb>光</rb><rp>(</rp><rt lang="zh-Latn">guāng</rt><rp>)</rp></ruby><span class="heti-hang">，</span>
+    <ruby><rb>疑</rb><rp>(</rp><rt lang="zh-Latn">yí</rt><rp>)</rp></ruby><ruby><rb>是</rb><rp>(</rp><rt lang="zh-Latn">shì</rt><rp>)</rp></ruby><ruby><rb>地</rb><rp>(</rp><rt lang="zh-Latn">dì</rt><rp>)</rp></ruby><ruby><rb>上</rb><rp>(</rp><rt lang="zh-Latn">shàng</rt><rp>)</rp></ruby><ruby><rb>霜</rb><rp>(</rp><rt lang="zh-Latn">shuāng</rt><rp>)</rp></ruby><span class="heti-hang">。</span>
+    <ruby><rb>举</rb><rp>(</rp><rt lang="zh-Latn">jǔ</rt><rp>)</rp></ruby><ruby><rb>头</rb><rp>(</rp><rt lang="zh-Latn">tóu</rt><rp>)</rp></ruby><ruby><rb>望</rb><rp>(</rp><rt lang="zh-Latn">wàng</rt><rp>)</rp></ruby><ruby><rb>明</rb><rp>(</rp><rt lang="zh-Latn">míng</rt><rp>)</rp></ruby><ruby><rb>月</rb><rp>(</rp><rt lang="zh-Latn">yuè</rt><rp>)</rp></ruby><span class="heti-hang">，</span>
+    <ruby><rb>低</rb><rp>(</rp><rt lang="zh-Latn">dī</rt><rp>)</rp></ruby><ruby><rb>头</rb><rp>(</rp><rt lang="zh-Latn">tóu</rt><rp>)</rp></ruby><ruby><rb>思</rb><rp>(</rp><rt lang="zh-Latn">sī</rt><rp>)</rp></ruby><ruby><rb>故</rb><rp>(</rp><rt lang="zh-Latn">gù</rt><rp>)</rp></ruby><ruby><rb>乡</rb><rp>(</rp><rt lang="zh-Latn">xiāng</rt><rp>)</rp></ruby><span class="heti-hang">。</span>
   </p>
 </div>
 ```
@@ -501,10 +504,10 @@ This feature lets students learn and review poems by voice alone, without lookin
 
   **Channel 1 — Voice command (primary for hands-free):**
   Web Speech API `SpeechRecognition` (on-device in Chrome). The active vocabulary is just 4 words, so recognition accuracy is very high. Supported commands:
-  - "忘了" or "forgot" → Forgot
-  - "困难" or "hard" → Hard
-  - "不错" or "good" → Good
-  - "简单" or "easy" → Easy
+  - "淡忘" or "forgot" → Forgot
+  - "艰难" or "hard" → Hard
+  - "尚可" or "good" → Good
+  - "轻松" or "easy" → Easy
   Continuous listening mode with a 10-second timeout. If no command recognized within 10s, auto-rate as "Good" (configurable default in settings) and move on, so the session never stalls.
 
   **Channel 2 — Headphone button taps (best for noisy environments):**
@@ -516,7 +519,7 @@ This feature lets students learn and review poems by voice alone, without lookin
   Works with any Bluetooth headphones or wired earbuds with inline controls. More reliable than voice in noisy environments (bus, street, kitchen).
 
   **Channel 3 — Screen tap (fallback):**
-  Minimal lock-screen-style UI with four large, high-contrast tap zones filling the screen. Designed for a quick glance-and-tap without reading. The four zones use the app's color language: a muted tone for Forgot, warm tones graduating to the vermillion accent for Easy.
+  Minimal lock-screen-style UI with four large, high-contrast tap zones filling the screen. Designed for a quick glance-and-tap without reading. The four zones use the app's color language: a muted tone for Forgot, warm tones graduating to jade (#7bcfa6) for Easy.
 
 - After rating: SRS state updates exactly as in the visual review modes (same algorithm, same scheduling). Next poem plays immediately.
 - **Session summary:** When all due poems are reviewed (or session is stopped), a brief audio summary: "Today's listening review complete. N poems reviewed." The visual session summary shows the same calm report as visual review sessions.
@@ -532,7 +535,7 @@ This feature lets students learn and review poems by voice alone, without lookin
 
 **Phase 1: Core Experience (make a child want to open it)**
 
-1. **Aesthetic foundation + Living Scroll prototype** — Next.js scaffold, Tailwind config with light/dark theme (CSS variables + `next-themes`), LXGW WenKai + Noto Serif SC + Inter font stack, grayscale + vermillion color tokens, responsive layout shell, `next-intl` setup with zh-CN/en locale files. Install heti (`npm install heti`), import CSS in `layout.tsx`, wire up `autoSpacing()` in `PoemViewer` client component. Immediately build Living Scroll with 5 hardcoded poems and `hanzi-writer` — use `heti--vertical` for the scroll container. This is the "show a friend" moment. Get the feel right before anything else.
+1. **Aesthetic foundation + Living Scroll prototype** — Next.js scaffold, Tailwind config with light/dark theme (CSS variables + `next-themes`), LXGW WenKai + Noto Serif SC + Inter font stack, traditional Chinese color palette tokens (14 pigments), responsive layout shell, `next-intl` setup with zh-CN/en locale files. Install heti (`npm install heti`), import CSS in `layout.tsx`, wire up `autoSpacing()` in `PoemViewer` client component. Immediately build Living Scroll with 5 hardcoded poems and `hanzi-writer` — use `heti--vertical` for the scroll container. This is the "show a friend" moment. Get the feel right before anything else.
 2. **Poetry data pipeline** — Batch script: filter chinese-poetry, run pypinyin, manually verify 50 pilot poems (launch set). Automated flagging of polyphonic characters for remaining poems.
 3. **Supabase schema + Auth** — All tables from PRD (including `profiles` table), RLS policies, Supabase Auth with Email + Google + Apple + GitHub + Microsoft OAuth, Resend as custom SMTP, student profile creation and switching
 4. **Core review loop** — Card display with ruby pinyin, rating buttons, SM-2 scheduling, "晨光" home screen, Living Scroll as alternative review mode
@@ -578,7 +581,7 @@ This feature lets students learn and review poems by voice alone, without lookin
 
 8. **i18n from day one, content stays Chinese.** UI supports zh-CN, zh-TW, en, ja via `next-intl`. Poetry text, pinyin, poet names, and dynasty labels are never translated. Retrofitting i18n later is painful; the string extraction cost at day one is near-zero.
 
-9. **Light + dark theme from day one.** CSS variables + `next-themes` + Tailwind `darkMode: 'class'`. Light = white/grayscale, dark = #111111/grayscale, vermillion as sole accent in both. Retrofitting dark mode into an existing color system is one of the worst kinds of tech debt. Setting it up at scaffold time is free.
+9. **Light + dark theme from day one.** CSS variables + `next-themes` + Tailwind `darkMode: 'class'`. Light = white with traditional Chinese palette, dark = pine-tinted #1a2120 with jade as primary. The full 14-pigment palette works in both modes with appropriate adjustments. Retrofitting dark mode into an existing color system is one of the worst kinds of tech debt. Setting it up at scaffold time is free.
 
 10. **Resend for transactional email.** Supabase's built-in email is rate-limited (2/hr free, 100/hr Pro). Resend gives 3,000 emails/month free, which covers password reset and confirmation at launch scale. Dashboard-only config, no code changes.
 
@@ -611,7 +614,7 @@ Note: "诗词" (poetry, covering both 诗 and 词) is used throughout instead of
 - A child can open the app, see today's poems, and complete a review session with the living scroll
 - A parent can log in, switch to their child's profile, and see learning progress
 - Pinyin is accurate for all polyphonic characters in the curated library
-- The aesthetic is clean and minimal with cultural identity expressed through typography and the vermillion chop stamp, not surface decoration
+- The aesthetic is clean and minimal with cultural identity expressed through typography, the traditional Chinese color palette, and the pine-ink chop stamp, not surface decoration
 - The app runs smoothly on mobile Chrome (responsive, touch-friendly)
 - All three SRS algorithms produce correct scheduling intervals
 
@@ -624,7 +627,7 @@ Note: "诗词" (poetry, covering both 诗 and 词) is used throughout instead of
 
 ## Next Steps
 
-1. Scaffold Next.js project with Tailwind, configure font stack (LXGW WenKai + Noto Serif SC + Inter) and grayscale + vermillion color tokens
+1. Scaffold Next.js project with Tailwind, configure font stack (LXGW WenKai + Noto Serif SC + Inter) and traditional Chinese color palette tokens (14 pigments)
 2. Set up Supabase project and implement the database schema
 3. Build the poetry data pipeline (filter + pinyin generation + manual verification for 20 pilot poems)
 4. Implement the core review loop with SM-2
