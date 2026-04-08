@@ -1,0 +1,218 @@
+@import "tailwindcss";
+
+/* ─── Traditional Chinese Color System ─── */
+
+:root {
+  /* Surfaces */
+  --bg: #FFFFFF;
+  --bg-subtle: #FAFAFA;
+  --bg-muted: #EFEFEF;
+  --bg-card: #e3f9fd;
+
+  /* Text */
+  --text: #1c3532;
+  --text-secondary: #4a6b66;
+  --text-tertiary: #8a9e9a;
+
+  /* Borders */
+  --border: #d1c2d3;
+  --border-subtle: #e2dbd4;
+
+  /* Primary: 松 pine green */
+  --primary: #007d62;
+  --primary-hover: #006650;
+  --primary-soft: #a5d1b5;
+
+  /* Accent: 海棠 crabapple */
+  --accent: #f091a0;
+  --accent-hover: #e87d8e;
+  --accent-soft: #f1939c;
+
+  /* Semantic */
+  --success: #7bcfa6;
+  --error: #f1939c;
+  --info: #66a9c9;
+  --warning: #f3a694;
+
+  /* Extended palette */
+  --jade: #7bcfa6;
+  --sky: #66a9c9;
+  --willow: #a8bf8f;
+  --peach: #f3a694;
+  --frost: #e3f9fd;
+  --celadon: #93d5dc;
+  --crabapple: #f091a0;
+  --wave: #a0d2e2;
+  --wisteria: #a4abd6;
+  --bamboo: #a5d1b5;
+  --pine: #007d62;
+  --plum: #d1c2d3;
+  --blossom: #f1939c;
+
+  /* Radii */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+}
+
+[data-theme="dark"] {
+  --bg: #1a2120;
+  --bg-subtle: #222d2b;
+  --bg-muted: #2a3634;
+  --bg-card: #1e2d2b;
+  --text: #e8ece6;
+  --text-secondary: #9ab5ad;
+  --text-tertiary: #6b8a82;
+  --border: #3a4a47;
+  --border-subtle: #2f3e3b;
+  --primary: #7bcfa6;
+  --primary-hover: #93d5dc;
+  --primary-soft: #2a4a3e;
+  --accent: #f091a0;
+  --accent-hover: #f1939c;
+  --accent-soft: #3a2528;
+  --success: #7bcfa6;
+  --error: #f1939c;
+  --info: #93d5dc;
+  --warning: #f3a694;
+}
+
+/* ─── Tailwind v4 theme tokens ─── */
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-subtle: var(--bg-subtle);
+  --color-bg-muted: var(--bg-muted);
+  --color-bg-card: var(--bg-card);
+  --color-text: var(--text);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-tertiary: var(--text-tertiary);
+  --color-border: var(--border);
+  --color-border-subtle: var(--border-subtle);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-soft: var(--primary-soft);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-soft: var(--accent-soft);
+  --color-success: var(--success);
+  --color-error: var(--error);
+  --color-info: var(--info);
+  --color-warning: var(--warning);
+  --color-jade: var(--jade);
+  --color-sky: var(--sky);
+  --color-willow: var(--willow);
+  --color-peach: var(--peach);
+  --color-frost: var(--frost);
+  --color-celadon: var(--celadon);
+  --color-crabapple: var(--crabapple);
+  --color-wave: var(--wave);
+  --color-wisteria: var(--wisteria);
+  --color-bamboo: var(--bamboo);
+  --color-pine: var(--pine);
+  --color-plum: var(--plum);
+  --color-blossom: var(--blossom);
+
+  --font-poetry: 'LXGW WenKai', 'KaiTi', 'STKaiti', serif;
+  --font-heading: 'Noto Serif SC', 'SimSun', serif;
+  --font-ui: 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', system-ui, sans-serif;
+  --font-pinyin: var(--font-inter), sans-serif;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+}
+
+/* ─── Base styles ─── */
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-ui);
+  transition: background 0.35s ease, color 0.35s ease;
+}
+
+/* ─── Pinyin toggle ─── */
+
+.pinyin-hidden rt {
+  display: none;
+}
+
+/* ─── Equal-width ruby for poetry ─── */
+
+.poem-ruby ruby {
+  display: inline-flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  width: 1.8em;
+  vertical-align: top;
+}
+
+.poem-ruby rp {
+  display: none;
+}
+
+.poem-ruby rt {
+  display: block;
+  font-family: var(--font-pinyin);
+  font-size: 0.45em;
+  color: var(--text-tertiary);
+  font-weight: 400;
+  white-space: nowrap;
+  line-height: 1.2;
+}
+
+/* Hanging punctuation alignment */
+.poem-ruby .heti-hang {
+  display: inline-block;
+  vertical-align: top;
+  padding-top: 0.54em;
+}
+
+/* Polyphonic character marker */
+.polyphone-mark rt {
+  color: var(--accent);
+}
+
+/* ─── Vertical mode ─── */
+
+.poem-vertical ruby {
+  display: inline-flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  height: 1.8em;
+  width: auto;
+}
+
+.poem-vertical rp {
+  display: none;
+}
+
+.poem-vertical rt {
+  display: block;
+  font-family: var(--font-pinyin);
+  font-size: 0.45em;
+  color: var(--text-tertiary);
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+/* ─── Heatmap cells ─── */
+
+.heat-1 { background: var(--bamboo); }
+.heat-2 { background: var(--jade); }
+.heat-3 { background: #4aab85; }
+.heat-4 { background: var(--pine); }
+
+[data-theme="dark"] .heat-1 { background: #2a4a3e; }
+[data-theme="dark"] .heat-2 { background: #3a6b56; }
+[data-theme="dark"] .heat-3 { background: #5a9a7a; }
+
+/* ─── Animations ─── */
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}

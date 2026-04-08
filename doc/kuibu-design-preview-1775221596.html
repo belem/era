@@ -1,0 +1,1517 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>跬步 Design System Preview — Minimalist</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=LXGW+WenKai:wght@300;400&family=Noto+Serif+SC:wght@400;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/heti/umd/heti.min.css">
+  <script src="https://unpkg.com/heti/umd/heti-addon.min.js"></script>
+  <style>
+    :root {
+      /* ─── Traditional Chinese Color System ─── */
+      /* Surfaces */
+      --bg: #FFFFFF;              /* clean white */
+      --bg-subtle: #FAFAFA;      /* light gray */
+      --bg-muted: #EFEFEF;       /* muted gray */
+      --bg-card: #e3f9fd;        /* 霜 morning frost — cool card surfaces */
+
+      /* Text */
+      --text: #1c3532;           /* pine-ink — near-black with green undertone */
+      --text-secondary: #4a6b66; /* faded pine */
+      --text-tertiary: #8a9e9a;  /* mist */
+
+      /* Borders */
+      --border: #d1c2d3;         /* 藤 plum mist */
+      --border-subtle: #e2dbd4;  /* rice paper shadow */
+
+      /* Primary: 松 pine green — CTAs, active states, chop stamp */
+      --primary: #007d62;
+      --primary-hover: #006650;
+      --primary-soft: #a5d1b5;   /* 竹 bamboo */
+
+      /* Accent: 海棠 crabapple — warmth, delight, highlights */
+      --accent: #f091a0;
+      --accent-hover: #e87d8e;
+      --accent-soft: #f1939c;    /* 桃花 blossom */
+
+      /* Semantic */
+      --success: #7bcfa6;        /* 翡 jade */
+      --error: #f1939c;          /* 桃花 blossom */
+      --info: #66a9c9;           /* 蓝 sky blue */
+      --warning: #f3a694;        /* 桃 peach */
+
+      /* Extended palette */
+      --jade: #7bcfa6;
+      --sky: #66a9c9;
+      --willow: #a8bf8f;
+      --peach: #f3a694;
+      --frost: #e3f9fd;
+      --celadon: #93d5dc;
+      --crabapple: #f091a0;
+      --wave: #a0d2e2;
+      --wisteria: #a4abd6;
+      --bamboo: #a5d1b5;
+      --pine: #007d62;
+      --plum: #d1c2d3;
+      --blossom: #f1939c;
+
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-full: 9999px;
+      --font-poetry: 'LXGW WenKai', 'KaiTi', 'STKaiti', serif;
+      --font-heading: 'Noto Serif SC', 'SimSun', serif;
+      --font-ui: 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', system-ui, sans-serif;
+      --font-pinyin: 'Inter', sans-serif;
+    }
+
+    [data-theme="dark"] {
+      --bg: #1a2120;             /* deep pine night */
+      --bg-subtle: #222d2b;
+      --bg-muted: #2a3634;
+      --bg-card: #1e2d2b;
+      --text: #e8ece6;
+      --text-secondary: #9ab5ad;
+      --text-tertiary: #6b8a82;
+      --border: #3a4a47;
+      --border-subtle: #2f3e3b;
+      --primary: #7bcfa6;        /* jade becomes primary in dark mode */
+      --primary-hover: #93d5dc;
+      --primary-soft: #2a4a3e;
+      --accent: #f091a0;
+      --accent-hover: #f1939c;
+      --accent-soft: #3a2528;
+      --success: #7bcfa6;
+      --error: #f1939c;
+      --info: #93d5dc;
+      --warning: #f3a694;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-ui);
+      font-size: 16px;
+      line-height: 1.6;
+      transition: background 0.35s ease, color 0.35s ease;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 80px 32px;
+    }
+
+    /* Theme toggle */
+    .theme-toggle {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      z-index: 100;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--text-tertiary);
+    }
+
+    h1 {
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: 36px;
+      letter-spacing: 0.02em;
+      margin-bottom: 8px;
+    }
+
+    h2 {
+      font-family: var(--font-ui);
+      font-weight: 500;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-tertiary);
+      margin-top: 80px;
+      margin-bottom: 32px;
+    }
+
+    h3 {
+      font-family: var(--font-ui);
+      font-weight: 500;
+      font-size: 15px;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+      margin-top: 32px;
+    }
+
+    p {
+      margin-bottom: 16px;
+      color: var(--text-secondary);
+    }
+
+    .subtitle {
+      font-size: 16px;
+      color: var(--text-tertiary);
+      margin-bottom: 0;
+      font-weight: 400;
+    }
+
+    .design-thesis {
+      margin-top: 48px;
+      padding: 32px;
+      border-left: 3px solid var(--primary);
+      background: var(--bg-subtle);
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      font-family: var(--font-ui);
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .design-thesis strong {
+      color: var(--text);
+    }
+
+    /* ─── COLOR PALETTE ─── */
+    .palette {
+      display: flex;
+      gap: 2px;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+
+    .palette-strip {
+      flex: 1;
+      height: 64px;
+    }
+
+    .palette-labels {
+      display: flex;
+      gap: 2px;
+    }
+
+    .palette-label {
+      flex: 1;
+      font-family: var(--font-pinyin);
+      font-size: 11px;
+      color: var(--text-tertiary);
+      padding-top: 8px;
+    }
+
+    .palette-label .hex {
+      display: block;
+      font-size: 10px;
+      color: var(--text-tertiary);
+      opacity: 0.7;
+    }
+
+    .accent-showcase {
+      margin-top: 32px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .accent-block {
+      width: 80px;
+      height: 80px;
+      border-radius: var(--radius-md);
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .accent-block span {
+      font-family: var(--font-heading);
+      font-size: 28px;
+      color: #FFF;
+    }
+
+    .accent-desc {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.2;
+    }
+
+    .accent-desc strong {
+      color: var(--primary);
+    }
+
+    /* ─── TYPOGRAPHY SPECIMEN ─── */
+    .type-specimen {
+      margin-bottom: 24px;
+      padding: 20px;
+      background: var(--bg-subtle);
+      border-radius: var(--radius-lg);
+    }
+
+    .type-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-tertiary);
+      margin-bottom: 16px;
+      font-family: var(--font-pinyin);
+    }
+
+    .type-poetry {
+      font-family: var(--font-poetry);
+      font-size: 32px;
+      letter-spacing: 0.05em;
+      line-height: 1.6;
+    }
+
+    /* ─── EQUAL-WIDTH RUBY FOR POETRY ───
+       Problem: browser expands each <ruby> to fit its pinyin,
+       so 床(chuáng) is wider than 地(dì). Uneven character spacing.
+       Fix: fixed-width flex containers. Pinyin overflows visually
+       without affecting character spacing — standard CJK typesetting. */
+    .poem-heti ruby,
+    .type-poetry ruby,
+    .review-poem-body ruby {
+      display: inline-flex;
+      flex-direction: column-reverse; /* pinyin (rt) on top, character (rb) on bottom */
+      align-items: center;
+      width: 1.8em;
+      vertical-align: top;
+    }
+
+    .poem-heti rb,
+    .type-poetry rb,
+    .review-poem-body rb {
+      display: block;
+    }
+
+    .poem-heti rp,
+    .type-poetry rp,
+    .review-poem-body rp {
+      display: none; /* hidden in flex layout, fallback only for non-ruby browsers */
+    }
+
+    .poem-heti rt,
+    .type-poetry rt,
+    .review-poem-body rt {
+      display: block;
+      font-family: var(--font-pinyin);
+      font-size: 0.45em;
+      color: var(--text-tertiary);
+      font-weight: 400;
+      white-space: nowrap;
+      line-height: 1.2;
+    }
+
+    /* Vertical mode: same principle, fixed height instead of width.
+       flex-direction: column flows R→L in vertical-rl,
+       putting character (rb) right, pinyin (rt) left. */
+    .heti--vertical ruby {
+      display: inline-flex;
+      flex-direction: column-reverse; /* reversed block axis L→R: rb left, rt right */
+      align-items: center;
+      height: 1.8em;
+      width: auto;
+    }
+
+    .heti--vertical rb {
+      display: block;
+    }
+
+    .heti--vertical rp {
+      display: none;
+    }
+
+    .heti--vertical rt {
+      display: block;
+      font-family: var(--font-pinyin);
+      font-size: 0.45em;
+      color: var(--text-tertiary);
+      font-weight: 400;
+      white-space: nowrap;
+    }
+
+    /* Fallback for ruby outside poetry contexts (native browser rendering) */
+    ruby {
+      ruby-align: center;
+    }
+
+    rt,
+    .heti rt {
+      font-family: var(--font-pinyin);
+      font-size: 40%;
+      color: var(--text-tertiary);
+      font-weight: 400;
+    }
+
+    /* Punctuation alignment: add top space matching pinyin height
+       so ，。 sit at the same level as characters (below pinyin) */
+    .poem-heti .heti-hang,
+    .type-poetry .heti-hang,
+    .review-poem-body .heti-hang {
+      display: inline-block;
+      vertical-align: top;
+      padding-top: 0.54em;
+    }
+
+    /* Vertical punctuation: same flex structure as ruby.
+       column-reverse in vertical-rl: main axis L→R.
+       Text node (punctuation) = left = character column.
+       ::before spacer = right = pinyin column. */
+    .heti--vertical .heti-hang {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      height: 1.8em;
+      vertical-align: top;
+    }
+
+    .heti--vertical .heti-hang::before {
+      content: '\00a0';
+      display: block;
+      font-size: 0.45em;
+      visibility: hidden;
+    }
+
+    /* Pinyin toggle */
+    .pinyin-hidden rt {
+      display: none;
+    }
+
+    /* ─── HETI POETRY CARDS ─── */
+    .poem-examples-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .heti-poem-card {
+      background: var(--bg-subtle);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      text-align: center;
+    }
+
+    .poem-heti {
+      font-family: var(--font-poetry);
+      font-size: 24px;
+      letter-spacing: 0.05em;
+      line-height: 1.6;
+    }
+
+    .polyphone-mark rt {
+      color: var(--accent);
+    }
+
+    .pinyin-toggle-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+
+    /* Reset heti's default heading styles inside our cards */
+    .heti-poem-card .heti h2,
+    .heti-poem-card .heti h3 {
+      all: unset;
+    }
+
+    /* ─── BUTTONS ─── */
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .btn {
+      padding: 10px 24px;
+      border-radius: var(--radius-md);
+      font-family: var(--font-ui);
+      font-size: 14px;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      transition: all 0.1s ease;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #FFFFFF;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn-secondary {
+      background: var(--sky);
+      color: #FFFFFF;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--text-tertiary);
+    }
+
+    /* Rating buttons */
+    .rating-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .rating-btn {
+      flex: 1;
+      padding: 14px 8px;
+      border-radius: var(--radius-md);
+      font-family: var(--font-ui);
+      font-size: 14px;
+      font-weight: 500;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.1s ease;
+    }
+
+    .rating-btn:hover {
+      border-color: var(--text-tertiary);
+    }
+
+    .rating-easy {
+      background: var(--jade);
+      color: #FFFFFF;
+      border-color: var(--jade);
+    }
+
+    .rating-easy:hover {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    /* ─── FORM INPUTS ─── */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: var(--text-secondary);
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 12px 14px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      font-family: var(--font-ui);
+      font-size: 15px;
+      color: var(--text);
+      transition: border-color 0.2s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--text);
+    }
+
+    .form-input::placeholder {
+      color: var(--text-tertiary);
+    }
+
+    /* ─── MOCKUP SECTIONS ─── */
+    .mockup-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+
+    @media (max-width: 860px) {
+      .mockup-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .analytics-mockup {
+        grid-template-columns: 1fr;
+      }
+
+      .heatmap {
+        grid-column: span 1;
+      }
+    }
+
+    .section-label {
+      display: inline-block;
+      font-family: var(--font-pinyin);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-tertiary);
+      margin-bottom: 16px;
+    }
+
+    .mockup-frame {
+      max-width: 390px;
+      margin: 0 auto;
+      background: var(--bg);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 0 0 1px var(--border), 0 8px 32px rgba(0, 0, 0, 0.06);
+    }
+
+    .mockup-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .mockup-logo {
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: 18px;
+    }
+
+    .mockup-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-full);
+      background: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--bg);
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .mockup-body {
+      padding: 28px 20px;
+    }
+
+    .mockup-section-title {
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: 24px;
+      margin-bottom: 4px;
+    }
+
+    .streak {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--text-tertiary);
+      margin-bottom: 24px;
+    }
+
+    .poem-card {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .poem-card:last-of-type {
+      border-bottom: none;
+    }
+
+    .poem-card-title {
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: 16px;
+      margin-bottom: 2px;
+    }
+
+    .poem-card-meta {
+      font-size: 12px;
+      color: var(--text-tertiary);
+      margin-bottom: 6px;
+    }
+
+    .poem-card-line {
+      font-family: var(--font-poetry);
+      font-size: 15px;
+      color: var(--text-secondary);
+      letter-spacing: 0.03em;
+    }
+
+    .mockup-cta {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      background: var(--primary);
+      color: #FFFFFF;
+      border: none;
+      border-radius: var(--radius-md);
+      font-family: var(--font-ui);
+      font-size: 15px;
+      font-weight: 500;
+      text-align: center;
+      margin-top: 24px;
+      cursor: pointer;
+      transition: background 0.1s ease;
+    }
+
+    .mockup-cta:hover {
+      background: var(--primary-hover);
+    }
+
+    .mockup-tab-bar {
+      display: flex;
+      border-top: 1px solid var(--border);
+      padding: 10px 0 14px;
+    }
+
+    .tab-item {
+      flex: 1;
+      text-align: center;
+      font-size: 10px;
+      color: var(--text-tertiary);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+
+    .tab-item.active {
+      color: var(--primary);
+    }
+
+    .tab-icon {
+      font-size: 18px;
+    }
+
+    /* ─── SCROLL MOCKUP ─── */
+    .scroll-mockup {
+      max-width: 390px;
+      margin: 0 auto;
+      background: var(--bg);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 0 0 1px var(--border), 0 8px 32px rgba(0, 0, 0, 0.06);
+      padding: 40px 24px;
+      text-align: center;
+    }
+
+    .scroll-title {
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: 20px;
+      margin-bottom: 4px;
+    }
+
+    .scroll-meta {
+      font-size: 13px;
+      color: var(--text-tertiary);
+      margin-bottom: 40px;
+    }
+
+    .scroll-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+      margin: 0 auto 40px;
+      max-width: 280px;
+    }
+
+    .scroll-char {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-poetry);
+      font-size: 26px;
+      border-radius: var(--radius-sm);
+      transition: all 0.8s ease;
+    }
+
+    .scroll-char.revealed {
+      background: var(--bg-subtle);
+      color: var(--text);
+    }
+
+    .scroll-char.hidden {
+      background: var(--bg-muted);
+      color: transparent;
+    }
+
+    .scroll-char.active {
+      background: var(--bg-subtle);
+      box-shadow: 0 0 0 2px var(--primary);
+      color: var(--text);
+    }
+
+    /* The chop stamp — THE cultural moment */
+    .chop-stamp {
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 16px;
+      border-radius: 4px;
+      border: 3px solid var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-heading);
+      font-size: 24px;
+      color: var(--primary);
+      transform: rotate(-5deg);
+    }
+
+    .chop-label {
+      font-size: 12px;
+      color: var(--text-tertiary);
+    }
+
+    /* ─── LOGIN MOCKUP ─── */
+    .login-mockup {
+      max-width: 400px;
+      margin: 0 auto;
+      background: var(--bg);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 0 0 1px var(--border), 0 8px 32px rgba(0, 0, 0, 0.06);
+      padding: 48px 36px;
+      text-align: center;
+    }
+
+    .login-logo {
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: 28px;
+      margin-bottom: 4px;
+    }
+
+    .login-subtitle {
+      font-family: var(--font-poetry);
+      font-size: 14px;
+      color: var(--text-tertiary);
+      margin-bottom: 40px;
+      letter-spacing: 0.05em;
+    }
+
+    .oauth-row {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 28px;
+    }
+
+    .oauth-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      cursor: pointer;
+      transition: border-color 0.2s ease;
+      color: var(--text-secondary);
+    }
+
+    .oauth-btn:hover {
+      border-color: var(--text-tertiary);
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 28px;
+      font-size: 12px;
+      color: var(--text-tertiary);
+    }
+
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .login-footer {
+      font-size: 13px;
+      color: var(--text-tertiary);
+      margin-top: 24px;
+    }
+
+    .login-footer a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    /* ─── ANALYTICS MOCKUP ─── */
+    .analytics-mockup {
+      max-width: 800px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: 0 0 0 1px var(--border);
+    }
+
+    .stat-card {
+      background: var(--bg);
+      padding: 28px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-tertiary);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .stat-value {
+      font-family: var(--font-pinyin);
+      font-weight: 500;
+      font-size: 36px;
+      margin-bottom: 4px;
+      letter-spacing: -0.02em;
+    }
+
+    .stat-change {
+      font-size: 13px;
+      color: var(--success);
+    }
+
+    .heatmap {
+      grid-column: span 2;
+      background: var(--bg);
+      padding: 28px;
+    }
+
+    .heatmap-title {
+      font-size: 12px;
+      color: var(--text-tertiary);
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .heatmap-grid {
+      display: grid;
+      grid-template-columns: repeat(26, 1fr);
+      gap: 3px;
+    }
+
+    .heat-cell {
+      aspect-ratio: 1;
+      border-radius: 2px;
+      background: var(--bg-muted);
+    }
+
+    .heat-1 {
+      background: var(--bamboo);   /* #a5d1b5 light jade */
+    }
+
+    .heat-2 {
+      background: var(--jade);     /* #7bcfa6 */
+    }
+
+    .heat-3 {
+      background: #4aab85;         /* mid jade */
+    }
+
+    .heat-4 {
+      background: var(--pine);     /* #007d62 deep pine */
+    }
+
+    [data-theme="dark"] .heat-1 {
+      background: #2a4a3e;
+    }
+
+    [data-theme="dark"] .heat-2 {
+      background: #3a6b56;
+    }
+
+    [data-theme="dark"] .heat-3 {
+      background: #5a9a7a;
+    }
+
+    /* Badge */
+    .badge-row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      width: 52px;
+      height: 52px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-heading);
+      font-size: 22px;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    .badge-earned {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .badge-unearned {
+      color: var(--text-tertiary);
+      opacity: 0.35;
+    }
+
+    /* Review card mockup */
+    .review-mockup {
+      max-width: 390px;
+      margin: 0 auto;
+      background: var(--bg);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 0 0 1px var(--border), 0 8px 32px rgba(0, 0, 0, 0.06);
+      padding: 48px 28px 32px;
+      text-align: center;
+    }
+
+    .review-poem-title {
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: 18px;
+      margin-bottom: 4px;
+    }
+
+    .review-poem-meta {
+      font-size: 13px;
+      color: var(--text-tertiary);
+      margin-bottom: 40px;
+    }
+
+    .review-poem-body {
+      font-family: var(--font-poetry);
+      font-size: 28px;
+      letter-spacing: 0.05em;
+      line-height: 2.4;
+      margin-bottom: 48px;
+    }
+
+    .review-progress {
+      font-size: 12px;
+      color: var(--text-tertiary);
+      margin-bottom: 8px;
+    }
+
+    .review-eye {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      font-size: 18px;
+      color: var(--text-tertiary);
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn" title="Toggle theme"></button>
+
+  <div class="container">
+    <h1>跬步</h1>
+    <p class="subtitle">Design System — Traditional Chinese Colors</p>
+
+    <div class="design-thesis">
+      <strong>The thesis:</strong> A poetry app rooted in traditional Chinese color. Rice paper warmth, pine green
+      for authority, jade for growth, crabapple pink for delight. Every color is drawn from classical Chinese pigments.
+      The palette feels alive because each hue carries centuries of meaning.
+    </div>
+
+    <!-- ─── COLOR PALETTE ─── -->
+    <h2>Color</h2>
+    <h3>Traditional Chinese pigments — 14 colors, each with cultural weight</h3>
+
+    <div class="palette">
+      <div class="palette-strip" style="background:#f5f2e9; border: 1px solid #e2dbd4; border-right:none; border-radius: 12px 0 0 12px;"></div>
+      <div class="palette-strip" style="background:#e3f9fd;"></div>
+      <div class="palette-strip" style="background:#a5d1b5;"></div>
+      <div class="palette-strip" style="background:#7bcfa6;"></div>
+      <div class="palette-strip" style="background:#93d5dc;"></div>
+      <div class="palette-strip" style="background:#66a9c9;"></div>
+      <div class="palette-strip" style="background:#007d62; border-radius: 0 12px 12px 0;"></div>
+    </div>
+    <div class="palette-labels">
+      <div class="palette-label">宣纸 Rice Paper<span class="hex">#f5f2e9</span></div>
+      <div class="palette-label">霜 Frost<span class="hex">#e3f9fd</span></div>
+      <div class="palette-label">竹 Bamboo<span class="hex">#a5d1b5</span></div>
+      <div class="palette-label">翡 Jade<span class="hex">#7bcfa6</span></div>
+      <div class="palette-label">青瓷 Celadon<span class="hex">#93d5dc</span></div>
+      <div class="palette-label">蓝 Sky<span class="hex">#66a9c9</span></div>
+      <div class="palette-label">松 Pine<span class="hex">#007d62</span></div>
+    </div>
+
+    <div class="palette" style="margin-top:20px;">
+      <div class="palette-strip" style="background:#f3a694; border-radius: 12px 0 0 12px;"></div>
+      <div class="palette-strip" style="background:#f091a0;"></div>
+      <div class="palette-strip" style="background:#f1939c;"></div>
+      <div class="palette-strip" style="background:#a4abd6;"></div>
+      <div class="palette-strip" style="background:#d1c2d3;"></div>
+      <div class="palette-strip" style="background:#a8bf8f;"></div>
+      <div class="palette-strip" style="background:#a0d2e2; border-radius: 0 12px 12px 0;"></div>
+    </div>
+    <div class="palette-labels">
+      <div class="palette-label">桃 Peach<span class="hex">#f3a694</span></div>
+      <div class="palette-label">海棠 Crabapple<span class="hex">#f091a0</span></div>
+      <div class="palette-label">桃花 Blossom<span class="hex">#f1939c</span></div>
+      <div class="palette-label">紫藤 Wisteria<span class="hex">#a4abd6</span></div>
+      <div class="palette-label">藤 Plum<span class="hex">#d1c2d3</span></div>
+      <div class="palette-label">柳 Willow<span class="hex">#a8bf8f</span></div>
+      <div class="palette-label">波 Wave<span class="hex">#a0d2e2</span></div>
+    </div>
+
+    <div class="accent-showcase">
+      <div class="accent-block"><span>松</span></div>
+      <div class="accent-desc">
+        <strong>Pine #007d62</strong> anchors the system. CTAs, chop stamp, active states. In dark mode,
+        <strong>Jade #7bcfa6</strong> takes over as primary. Crabapple pink (<strong>#f091a0</strong>) provides warmth
+        for highlights and the rating "轻松" button uses jade to signal ease.
+      </div>
+    </div>
+
+    <!-- ─── TYPOGRAPHY ─── -->
+    <h2>Typography</h2>
+
+    <div class="type-specimen">
+      <div class="type-label">The cultural moment: LXGW WenKai × heti--annotation (grid-aligned ruby, hanging
+        punctuation)</div>
+      <div class="type-poetry heti heti--annotation" style="text-align:center;">
+        <ruby><rb>床</rb><rp>(</rp><rt lang="zh-Latn">chuáng</rt><rp>)</rp></ruby><ruby><rb>前</rb><rp>(</rp><rt lang="zh-Latn">qián</rt><rp>)</rp></ruby><ruby><rb>明</rb><rp>(</rp><rt lang="zh-Latn">míng</rt><rp>)</rp></ruby><ruby><rb>月</rb><rp>(</rp><rt lang="zh-Latn">yuè</rt><rp>)</rp></ruby><ruby><rb>光</rb><rp>(</rp><rt lang="zh-Latn">guāng</rt><rp>)</rp></ruby><span class="heti-hang">，</span><br>
+        <ruby><rb>疑</rb><rp>(</rp><rt lang="zh-Latn">yí</rt><rp>)</rp></ruby><ruby><rb>是</rb><rp>(</rp><rt lang="zh-Latn">shì</rt><rp>)</rp></ruby><ruby><rb>地</rb><rp>(</rp><rt lang="zh-Latn">dì</rt><rp>)</rp></ruby><ruby><rb>上</rb><rp>(</rp><rt lang="zh-Latn">shàng</rt><rp>)</rp></ruby><ruby><rb>霜</rb><rp>(</rp><rt lang="zh-Latn">shuāng</rt><rp>)</rp></ruby><span class="heti-hang">。</span>
+      </div>
+
+    </div>
+
+    <div class="type-specimen" style="background:var(--bg);">
+      <div class="type-label">Headings: Noto Serif SC</div>
+      <div style="font-family:var(--font-heading); font-weight:600; font-size:24px; margin-bottom:8px;">静夜思</div>
+      <div style="font-family:var(--font-heading); font-weight:400; font-size:14px; color:var(--text-tertiary);">〔唐〕李白
+      </div>
+    </div>
+
+    <div class="type-specimen" style="background:var(--bg);">
+      <div class="type-label">UI: System Sans + Inter</div>
+      <div style="font-size:14px; color:var(--text-secondary);">
+        <span style="font-weight:500; color:var(--text);">开始复习</span> &nbsp;&middot;&nbsp;
+        今日任务: 12首诗 &nbsp;&middot;&nbsp;
+        <span style="color:var(--text-tertiary);">2026年4月3日</span>
+      </div>
+    </div>
+
+    <!-- ─── POETRY RENDERING ─── -->
+    <h2>Poetry — Heti Rendering</h2>
+
+    <h3>Pinyin visibility — one CSS variable, all &lt;rt&gt; respond instantly</h3>
+    <div class="pinyin-toggle-bar">
+      <button class="btn btn-ghost" onclick="document.documentElement.classList.remove('pinyin-hidden')"
+        style="font-size:13px;padding:8px 18px;">显示拼音</button>
+      <button class="btn btn-ghost" onclick="document.documentElement.classList.add('pinyin-hidden')"
+        style="font-size:13px;padding:8px 18px;">隐藏拼音</button>
+      <span style="font-size:12px;color:var(--text-tertiary);">No React state. No re-render. The eye icon in card review
+        does the same thing.</span>
+    </div>
+
+    <div class="poem-examples-grid">
+
+      <!-- 静夜思 — Grade 1, baseline -->
+      <div class="heti-poem-card">
+        <div style="font-family:var(--font-heading);font-weight:600;font-size:17px;margin-bottom:2px;">静夜思</div>
+        <div style="font-size:11px;color:var(--text-tertiary);margin-bottom:28px;">〔唐〕李白 &nbsp;·&nbsp; 一年级</div>
+        <div class="poem-heti heti heti--annotation">
+          <ruby><rb>床</rb><rp>(</rp><rt lang="zh-Latn">chuáng</rt><rp>)</rp></ruby><ruby><rb>前</rb><rp>(</rp><rt lang="zh-Latn">qián</rt><rp>)</rp></ruby><ruby><rb>明</rb><rp>(</rp><rt lang="zh-Latn">míng</rt><rp>)</rp></ruby><ruby><rb>月</rb><rp>(</rp><rt lang="zh-Latn">yuè</rt><rp>)</rp></ruby><ruby><rb>光</rb><rp>(</rp><rt lang="zh-Latn">guāng</rt><rp>)</rp></ruby><span class="heti-hang">，</span><br>
+          <ruby><rb>疑</rb><rp>(</rp><rt lang="zh-Latn">yí</rt><rp>)</rp></ruby><ruby><rb>是</rb><rp>(</rp><rt lang="zh-Latn">shì</rt><rp>)</rp></ruby><ruby><rb>地</rb><rp>(</rp><rt lang="zh-Latn">dì</rt><rp>)</rp></ruby><ruby><rb>上</rb><rp>(</rp><rt lang="zh-Latn">shàng</rt><rp>)</rp></ruby><ruby><rb>霜</rb><rp>(</rp><rt lang="zh-Latn">shuāng</rt><rp>)</rp></ruby><span class="heti-hang">。</span><br>
+          <ruby><rb>举</rb><rp>(</rp><rt lang="zh-Latn">jǔ</rt><rp>)</rp></ruby><ruby><rb>头</rb><rp>(</rp><rt lang="zh-Latn">tóu</rt><rp>)</rp></ruby><ruby><rb>望</rb><rp>(</rp><rt lang="zh-Latn">wàng</rt><rp>)</rp></ruby><ruby><rb>明</rb><rp>(</rp><rt lang="zh-Latn">míng</rt><rp>)</rp></ruby><ruby><rb>月</rb><rp>(</rp><rt lang="zh-Latn">yuè</rt><rp>)</rp></ruby><span class="heti-hang">，</span><br>
+          <ruby><rb>低</rb><rp>(</rp><rt lang="zh-Latn">dī</rt><rp>)</rp></ruby><ruby><rb>头</rb><rp>(</rp><rt lang="zh-Latn">tóu</rt><rp>)</rp></ruby><ruby><rb>思</rb><rp>(</rp><rt lang="zh-Latn">sī</rt><rp>)</rp></ruby><ruby><rb>故</rb><rp>(</rp><rt lang="zh-Latn">gù</rt><rp>)</rp></ruby><ruby><rb>乡</rb><rp>(</rp><rt lang="zh-Latn">xiāng</rt><rp>)</rp></ruby><span class="heti-hang">。</span>
+        </div>
+      </div>
+
+      <!-- 春晓 — polyphonic: 处→chù not chǔ -->
+      <div class="heti-poem-card">
+        <div style="font-family:var(--font-heading);font-weight:600;font-size:17px;margin-bottom:2px;">春晓</div>
+        <div style="font-size:11px;color:var(--text-tertiary);margin-bottom:28px;">〔唐〕孟浩然 &nbsp;·&nbsp; 一年级</div>
+        <div class="poem-heti heti heti--annotation">
+          <ruby><rb>春</rb><rp>(</rp><rt lang="zh-Latn">chūn</rt><rp>)</rp></ruby><ruby><rb>眠</rb><rp>(</rp><rt lang="zh-Latn">mián</rt><rp>)</rp></ruby><ruby><rb>不</rb><rp>(</rp><rt lang="zh-Latn">bù</rt><rp>)</rp></ruby><ruby><rb>觉</rb><rp>(</rp><rt lang="zh-Latn">jué</rt><rp>)</rp></ruby><ruby><rb>晓</rb><rp>(</rp><rt lang="zh-Latn">xiǎo</rt><rp>)</rp></ruby><span class="heti-hang">，</span><br>
+          <ruby class="polyphone-mark"><rb>处</rb><rp>(</rp><rt lang="zh-Latn">chù</rt><rp>)</rp></ruby><ruby class="polyphone-mark"><rb>处</rb><rp>(</rp><rt lang="zh-Latn">chù</rt><rp>)</rp></ruby><ruby><rb>闻</rb><rp>(</rp><rt lang="zh-Latn">wén</rt><rp>)</rp></ruby><ruby><rb>啼</rb><rp>(</rp><rt lang="zh-Latn">tí</rt><rp>)</rp></ruby><ruby><rb>鸟</rb><rp>(</rp><rt lang="zh-Latn">niǎo</rt><rp>)</rp></ruby><span class="heti-hang">。</span><br>
+          <ruby><rb>夜</rb><rp>(</rp><rt lang="zh-Latn">yè</rt><rp>)</rp></ruby><ruby><rb>来</rb><rp>(</rp><rt lang="zh-Latn">lái</rt><rp>)</rp></ruby><ruby><rb>风</rb><rp>(</rp><rt lang="zh-Latn">fēng</rt><rp>)</rp></ruby><ruby><rb>雨</rb><rp>(</rp><rt lang="zh-Latn">yǔ</rt><rp>)</rp></ruby><ruby><rb>声</rb><rp>(</rp><rt lang="zh-Latn">shēng</rt><rp>)</rp></ruby><span class="heti-hang">，</span><br>
+          <ruby><rb>花</rb><rp>(</rp><rt lang="zh-Latn">huā</rt><rp>)</rp></ruby><ruby><rb>落</rb><rp>(</rp><rt lang="zh-Latn">luò</rt><rp>)</rp></ruby><ruby><rb>知</rb><rp>(</rp><rt lang="zh-Latn">zhī</rt><rp>)</rp></ruby><ruby><rb>多</rb><rp>(</rp><rt lang="zh-Latn">duō</rt><rp>)</rp></ruby><ruby><rb>少</rb><rp>(</rp><rt lang="zh-Latn">shǎo</rt><rp>)</rp></ruby><span class="heti-hang">。</span>
+        </div>
+        <div style="font-size:11px;color:var(--accent);margin-top:14px;">处 → chù not chǔ</div>
+      </div>
+
+      <!-- 登鹳雀楼 — polyphonic: 更→gèng not gēng -->
+      <div class="heti-poem-card">
+        <div style="font-family:var(--font-heading);font-weight:600;font-size:17px;margin-bottom:2px;">登鹳雀楼</div>
+        <div style="font-size:11px;color:var(--text-tertiary);margin-bottom:28px;">〔唐〕王之涣 &nbsp;·&nbsp; 二年级</div>
+        <div class="poem-heti heti heti--annotation">
+          <ruby><rb>白</rb><rp>(</rp><rt lang="zh-Latn">bái</rt><rp>)</rp></ruby><ruby><rb>日</rb><rp>(</rp><rt lang="zh-Latn">rì</rt><rp>)</rp></ruby><ruby><rb>依</rb><rp>(</rp><rt lang="zh-Latn">yī</rt><rp>)</rp></ruby><ruby><rb>山</rb><rp>(</rp><rt lang="zh-Latn">shān</rt><rp>)</rp></ruby><ruby><rb>尽</rb><rp>(</rp><rt lang="zh-Latn">jìn</rt><rp>)</rp></ruby><span class="heti-hang">，</span><br>
+          <ruby><rb>黄</rb><rp>(</rp><rt lang="zh-Latn">huáng</rt><rp>)</rp></ruby><ruby><rb>河</rb><rp>(</rp><rt lang="zh-Latn">hé</rt><rp>)</rp></ruby><ruby><rb>入</rb><rp>(</rp><rt lang="zh-Latn">rù</rt><rp>)</rp></ruby><ruby><rb>海</rb><rp>(</rp><rt lang="zh-Latn">hǎi</rt><rp>)</rp></ruby><ruby><rb>流</rb><rp>(</rp><rt lang="zh-Latn">liú</rt><rp>)</rp></ruby><span class="heti-hang">。</span><br>
+          <ruby><rb>欲</rb><rp>(</rp><rt lang="zh-Latn">yù</rt><rp>)</rp></ruby><ruby><rb>穷</rb><rp>(</rp><rt lang="zh-Latn">qióng</rt><rp>)</rp></ruby><ruby><rb>千</rb><rp>(</rp><rt lang="zh-Latn">qiān</rt><rp>)</rp></ruby><ruby><rb>里</rb><rp>(</rp><rt lang="zh-Latn">lǐ</rt><rp>)</rp></ruby><ruby><rb>目</rb><rp>(</rp><rt lang="zh-Latn">mù</rt><rp>)</rp></ruby><span class="heti-hang">，</span><br>
+          <ruby class="polyphone-mark"><rb>更</rb><rp>(</rp><rt lang="zh-Latn">gèng</rt><rp>)</rp></ruby><ruby><rb>上</rb><rp>(</rp><rt lang="zh-Latn">shàng</rt><rp>)</rp></ruby><ruby><rb>一</rb><rp>(</rp><rt lang="zh-Latn">yī</rt><rp>)</rp></ruby><ruby><rb>层</rb><rp>(</rp><rt lang="zh-Latn">céng</rt><rp>)</rp></ruby><ruby><rb>楼</rb><rp>(</rp><rt lang="zh-Latn">lóu</rt><rp>)</rp></ruby><span class="heti-hang">。</span>
+        </div>
+        <div style="font-size:11px;color:var(--accent);margin-top:14px;">更 → gèng not gēng</div>
+      </div>
+
+      <!-- 悯农·其二 — clean, no polyphonics, regression baseline -->
+      <div class="heti-poem-card">
+        <div style="font-family:var(--font-heading);font-weight:600;font-size:17px;margin-bottom:2px;">悯农·其二</div>
+        <div style="font-size:11px;color:var(--text-tertiary);margin-bottom:28px;">〔唐〕李绅 &nbsp;·&nbsp; 二年级</div>
+        <div class="poem-heti heti heti--annotation">
+          <ruby><rb>锄</rb><rp>(</rp><rt lang="zh-Latn">chú</rt><rp>)</rp></ruby><ruby><rb>禾</rb><rp>(</rp><rt lang="zh-Latn">hé</rt><rp>)</rp></ruby><ruby><rb>日</rb><rp>(</rp><rt lang="zh-Latn">rì</rt><rp>)</rp></ruby><ruby><rb>当</rb><rp>(</rp><rt lang="zh-Latn">dāng</rt><rp>)</rp></ruby><ruby><rb>午</rb><rp>(</rp><rt lang="zh-Latn">wǔ</rt><rp>)</rp></ruby><span class="heti-hang">，</span><br>
+          <ruby><rb>汗</rb><rp>(</rp><rt lang="zh-Latn">hàn</rt><rp>)</rp></ruby><ruby><rb>滴</rb><rp>(</rp><rt lang="zh-Latn">dī</rt><rp>)</rp></ruby><ruby><rb>禾</rb><rp>(</rp><rt lang="zh-Latn">hé</rt><rp>)</rp></ruby><ruby><rb>下</rb><rp>(</rp><rt lang="zh-Latn">xià</rt><rp>)</rp></ruby><ruby><rb>土</rb><rp>(</rp><rt lang="zh-Latn">tǔ</rt><rp>)</rp></ruby><span class="heti-hang">。</span><br>
+          <ruby><rb>谁</rb><rp>(</rp><rt lang="zh-Latn">shuí</rt><rp>)</rp></ruby><ruby><rb>知</rb><rp>(</rp><rt lang="zh-Latn">zhī</rt><rp>)</rp></ruby><ruby><rb>盘</rb><rp>(</rp><rt lang="zh-Latn">pán</rt><rp>)</rp></ruby><ruby><rb>中</rb><rp>(</rp><rt lang="zh-Latn">zhōng</rt><rp>)</rp></ruby><ruby><rb>餐</rb><rp>(</rp><rt lang="zh-Latn">cān</rt><rp>)</rp></ruby><span class="heti-hang">，</span><br>
+          <ruby><rb>粒</rb><rp>(</rp><rt lang="zh-Latn">lì</rt><rp>)</rp></ruby><ruby><rb>粒</rb><rp>(</rp><rt lang="zh-Latn">lì</rt><rp>)</rp></ruby><ruby><rb>皆</rb><rp>(</rp><rt lang="zh-Latn">jiē</rt><rp>)</rp></ruby><ruby><rb>辛</rb><rp>(</rp><rt lang="zh-Latn">xīn</rt><rp>)</rp></ruby><ruby><rb>苦</rb><rp>(</rp><rt lang="zh-Latn">kǔ</rt><rp>)</rp></ruby><span class="heti-hang">。</span>
+        </div>
+      </div>
+
+      <!-- 江雪 — zero polyphonics, pure rendering test -->
+      <div class="heti-poem-card">
+        <div style="font-family:var(--font-heading);font-weight:600;font-size:17px;margin-bottom:2px;">江雪</div>
+        <div style="font-size:11px;color:var(--text-tertiary);margin-bottom:28px;">〔唐〕柳宗元 &nbsp;·&nbsp; 三年级</div>
+        <div class="poem-heti heti heti--annotation">
+          <ruby><rb>千</rb><rp>(</rp><rt lang="zh-Latn">qiān</rt><rp>)</rp></ruby><ruby><rb>山</rb><rp>(</rp><rt lang="zh-Latn">shān</rt><rp>)</rp></ruby><ruby><rb>鸟</rb><rp>(</rp><rt lang="zh-Latn">niǎo</rt><rp>)</rp></ruby><ruby><rb>飞</rb><rp>(</rp><rt lang="zh-Latn">fēi</rt><rp>)</rp></ruby><ruby><rb>绝</rb><rp>(</rp><rt lang="zh-Latn">jué</rt><rp>)</rp></ruby><span class="heti-hang">，</span><br>
+          <ruby><rb>万</rb><rp>(</rp><rt lang="zh-Latn">wàn</rt><rp>)</rp></ruby><ruby><rb>径</rb><rp>(</rp><rt lang="zh-Latn">jìng</rt><rp>)</rp></ruby><ruby><rb>人</rb><rp>(</rp><rt lang="zh-Latn">rén</rt><rp>)</rp></ruby><ruby><rb>踪</rb><rp>(</rp><rt lang="zh-Latn">zōng</rt><rp>)</rp></ruby><ruby><rb>灭</rb><rp>(</rp><rt lang="zh-Latn">miè</rt><rp>)</rp></ruby><span class="heti-hang">。</span><br>
+          <ruby><rb>孤</rb><rp>(</rp><rt lang="zh-Latn">gū</rt><rp>)</rp></ruby><ruby><rb>舟</rb><rp>(</rp><rt lang="zh-Latn">zhōu</rt><rp>)</rp></ruby><ruby><rb>蓑</rb><rp>(</rp><rt lang="zh-Latn">suō</rt><rp>)</rp></ruby><ruby><rb>笠</rb><rp>(</rp><rt lang="zh-Latn">lì</rt><rp>)</rp></ruby><ruby><rb>翁</rb><rp>(</rp><rt lang="zh-Latn">wēng</rt><rp>)</rp></ruby><span class="heti-hang">，</span><br>
+          <ruby><rb>独</rb><rp>(</rp><rt lang="zh-Latn">dú</rt><rp>)</rp></ruby><ruby><rb>钓</rb><rp>(</rp><rt lang="zh-Latn">diào</rt><rp>)</rp></ruby><ruby><rb>寒</rb><rp>(</rp><rt lang="zh-Latn">hán</rt><rp>)</rp></ruby><ruby><rb>江</rb><rp>(</rp><rt lang="zh-Latn">jiāng</rt><rp>)</rp></ruby><ruby><rb>雪</rb><rp>(</rp><rt lang="zh-Latn">xuě</rt><rp>)</rp></ruby><span class="heti-hang">。</span>
+        </div>
+      </div>
+
+      <!-- 游子吟 — 6 lines, 2 polyphonics: 行→xíng, 缝→féng -->
+      <div class="heti-poem-card">
+        <div style="font-family:var(--font-heading);font-weight:600;font-size:17px;margin-bottom:2px;">游子吟</div>
+        <div style="font-size:11px;color:var(--text-tertiary);margin-bottom:28px;">〔唐〕孟郊 &nbsp;·&nbsp; 三年级</div>
+        <div class="poem-heti heti heti--annotation" style="font-size:20px;">
+          <ruby><rb>慈</rb><rp>(</rp><rt lang="zh-Latn">cí</rt><rp>)</rp></ruby><ruby><rb>母</rb><rp>(</rp><rt lang="zh-Latn">mǔ</rt><rp>)</rp></ruby><ruby><rb>手</rb><rp>(</rp><rt lang="zh-Latn">shǒu</rt><rp>)</rp></ruby><ruby><rb>中</rb><rp>(</rp><rt lang="zh-Latn">zhōng</rt><rp>)</rp></ruby><ruby><rb>线</rb><rp>(</rp><rt lang="zh-Latn">xiàn</rt><rp>)</rp></ruby><span class="heti-hang">，</span><br>
+          <ruby><rb>游</rb><rp>(</rp><rt lang="zh-Latn">yóu</rt><rp>)</rp></ruby><ruby><rb>子</rb><rp>(</rp><rt lang="zh-Latn">zǐ</rt><rp>)</rp></ruby><ruby><rb>身</rb><rp>(</rp><rt lang="zh-Latn">shēn</rt><rp>)</rp></ruby><ruby><rb>上</rb><rp>(</rp><rt lang="zh-Latn">shàng</rt><rp>)</rp></ruby><ruby><rb>衣</rb><rp>(</rp><rt lang="zh-Latn">yī</rt><rp>)</rp></ruby><span class="heti-hang">。</span><br>
+          <ruby><rb>临</rb><rp>(</rp><rt lang="zh-Latn">lín</rt><rp>)</rp></ruby><ruby class="polyphone-mark"><rb>行</rb><rp>(</rp><rt lang="zh-Latn">xíng</rt><rp>)</rp></ruby><ruby><rb>密</rb><rp>(</rp><rt lang="zh-Latn">mì</rt><rp>)</rp></ruby><ruby><rb>密</rb><rp>(</rp><rt lang="zh-Latn">mì</rt><rp>)</rp></ruby><ruby class="polyphone-mark"><rb>缝</rb><rp>(</rp><rt lang="zh-Latn">féng</rt><rp>)</rp></ruby><span class="heti-hang">，</span><br>
+          <ruby><rb>意</rb><rp>(</rp><rt lang="zh-Latn">yì</rt><rp>)</rp></ruby><ruby><rb>恐</rb><rp>(</rp><rt lang="zh-Latn">kǒng</rt><rp>)</rp></ruby><ruby><rb>迟</rb><rp>(</rp><rt lang="zh-Latn">chí</rt><rp>)</rp></ruby><ruby><rb>迟</rb><rp>(</rp><rt lang="zh-Latn">chí</rt><rp>)</rp></ruby><ruby><rb>归</rb><rp>(</rp><rt lang="zh-Latn">guī</rt><rp>)</rp></ruby><span class="heti-hang">。</span><br>
+          <ruby><rb>谁</rb><rp>(</rp><rt lang="zh-Latn">shuí</rt><rp>)</rp></ruby><ruby><rb>言</rb><rp>(</rp><rt lang="zh-Latn">yán</rt><rp>)</rp></ruby><ruby><rb>寸</rb><rp>(</rp><rt lang="zh-Latn">cùn</rt><rp>)</rp></ruby><ruby><rb>草</rb><rp>(</rp><rt lang="zh-Latn">cǎo</rt><rp>)</rp></ruby><ruby><rb>心</rb><rp>(</rp><rt lang="zh-Latn">xīn</rt><rp>)</rp></ruby><span class="heti-hang">，</span><br>
+          <ruby><rb>报</rb><rp>(</rp><rt lang="zh-Latn">bào</rt><rp>)</rp></ruby><ruby><rb>得</rb><rp>(</rp><rt lang="zh-Latn">de</rt><rp>)</rp></ruby><ruby><rb>三</rb><rp>(</rp><rt lang="zh-Latn">sān</rt><rp>)</rp></ruby><ruby><rb>春</rb><rp>(</rp><rt lang="zh-Latn">chūn</rt><rp>)</rp></ruby><ruby><rb>晖</rb><rp>(</rp><rt lang="zh-Latn">huī</rt><rp>)</rp></ruby><span class="heti-hang">。</span>
+        </div>
+        <div style="font-size:11px;color:var(--accent);margin-top:14px;">行→xíng, 缝→féng (2 polyphonics)</div>
+      </div>
+
+    </div>
+
+    <h3>Vertical mode — heti--vertical (Living Scroll / Scroll Gallery)</h3>
+    <div style="display:flex;gap:32px;flex-wrap:wrap;margin-bottom:40px;align-items:flex-start;">
+
+      <div class="heti-poem-card" style="flex:0 0 auto;">
+        <div
+          style="font-size:11px;color:var(--text-tertiary);margin-bottom:12px;letter-spacing:0.08em;text-transform:uppercase;">
+          横排默认</div>
+        <div class="poem-heti heti heti--annotation" style="font-size:22px;">
+          <ruby><rb>床</rb><rp>(</rp><rt lang="zh-Latn">chuáng</rt><rp>)</rp></ruby><ruby><rb>前</rb><rp>(</rp><rt lang="zh-Latn">qián</rt><rp>)</rp></ruby><ruby><rb>明</rb><rp>(</rp><rt lang="zh-Latn">míng</rt><rp>)</rp></ruby><ruby><rb>月</rb><rp>(</rp><rt lang="zh-Latn">yuè</rt><rp>)</rp></ruby><ruby><rb>光</rb><rp>(</rp><rt lang="zh-Latn">guāng</rt><rp>)</rp></ruby><span class="heti-hang">，</span><br>
+          <ruby><rb>疑</rb><rp>(</rp><rt lang="zh-Latn">yí</rt><rp>)</rp></ruby><ruby><rb>是</rb><rp>(</rp><rt lang="zh-Latn">shì</rt><rp>)</rp></ruby><ruby><rb>地</rb><rp>(</rp><rt lang="zh-Latn">dì</rt><rp>)</rp></ruby><ruby><rb>上</rb><rp>(</rp><rt lang="zh-Latn">shàng</rt><rp>)</rp></ruby><ruby><rb>霜</rb><rp>(</rp><rt lang="zh-Latn">shuāng</rt><rp>)</rp></ruby><span class="heti-hang">。</span>
+        </div>
+      </div>
+
+      <div class="heti-poem-card" style="flex:0 0 auto;">
+        <div
+          style="font-size:11px;color:var(--text-tertiary);margin-bottom:12px;letter-spacing:0.08em;text-transform:uppercase;">
+          竖排 heti--vertical</div>
+        <div class="heti heti--vertical heti--annotation"
+          style="font-family:var(--font-poetry);font-size:22px;height:220px;letter-spacing:0.08em;line-height:1.6;">
+          <ruby><rb>床</rb><rp>(</rp><rt lang="zh-Latn">chuáng</rt><rp>)</rp></ruby><ruby><rb>前</rb><rp>(</rp><rt lang="zh-Latn">qián</rt><rp>)</rp></ruby><ruby><rb>明</rb><rp>(</rp><rt lang="zh-Latn">míng</rt><rp>)</rp></ruby><ruby><rb>月</rb><rp>(</rp><rt lang="zh-Latn">yuè</rt><rp>)</rp></ruby><ruby><rb>光</rb><rp>(</rp><rt lang="zh-Latn">guāng</rt><rp>)</rp></ruby><span class="heti-hang">，</span><br>
+          <ruby><rb>疑</rb><rp>(</rp><rt lang="zh-Latn">yí</rt><rp>)</rp></ruby><ruby><rb>是</rb><rp>(</rp><rt lang="zh-Latn">shì</rt><rp>)</rp></ruby><ruby><rb>地</rb><rp>(</rp><rt lang="zh-Latn">dì</rt><rp>)</rp></ruby><ruby><rb>上</rb><rp>(</rp><rt lang="zh-Latn">shàng</rt><rp>)</rp></ruby><ruby><rb>霜</rb><rp>(</rp><rt lang="zh-Latn">shuāng</rt><rp>)</rp></ruby><span class="heti-hang">。</span>
+        </div>
+      </div>
+
+      <div style="flex:1;min-width:200px;font-size:13px;color:var(--text-tertiary);line-height:1.7;align-self:center;">
+        In vertical mode, <code
+          style="font-size:11px;background:var(--bg-muted);padding:1px 4px;border-radius:3px;">writing-mode: vertical-rl</code>
+        flows characters as right-to-left columns. Replace <code
+          style="font-size:11px;background:var(--bg-muted);padding:1px 4px;border-radius:3px;">&lt;br&gt;</code> with
+        spaces between lines. Pinyin appears to the left of each character, matching vertical ruby convention.
+      </div>
+    </div>
+
+    <!-- ─── COMPONENTS ─── -->
+    <h2>Components</h2>
+    <h3>Buttons</h3>
+    <div class="btn-row">
+      <button class="btn btn-primary">开始复习</button>
+      <button class="btn btn-secondary">活字卷轴</button>
+      <button class="btn btn-ghost">查看诗库</button>
+    </div>
+
+    <h3>Rating</h3>
+    <div class="rating-row" style="max-width:390px;">
+      <button class="rating-btn">淡忘</button>
+      <button class="rating-btn">艰难</button>
+      <button class="rating-btn">尚可</button>
+      <button class="rating-btn rating-easy">轻松</button>
+    </div>
+
+    <h3>Inputs</h3>
+    <div style="max-width:390px;">
+      <div class="form-group">
+        <label class="form-label">邮箱</label>
+        <input class="form-input" type="email" placeholder="your@email.com">
+      </div>
+    </div>
+
+    <h3>Badges — palette-coded tiers</h3>
+    <div class="badge-row">
+      <div class="badge" style="border-color:var(--peach);color:var(--peach);" title="十首通">十</div>
+      <div class="badge" style="border-color:var(--sky);color:var(--sky);" title="月满">月</div>
+      <div class="badge" style="border-color:var(--jade);color:var(--jade);" title="百首通">百</div>
+      <div class="badge" style="border-color:var(--pine);color:var(--pine);" title="年满">年</div>
+    </div>
+
+    <!-- ─── MOCKUPS ─── -->
+    <h2>Screens</h2>
+
+    <div class="mockup-grid">
+      <div>
+        <span class="section-label">晨光 Home</span>
+        <div class="mockup-frame">
+          <div class="mockup-header">
+            <span class="mockup-logo">跬步</span>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <span style="font-size:13px;color:var(--text-tertiary);">小明</span>
+              <div class="mockup-avatar">明</div>
+            </div>
+          </div>
+          <div class="mockup-body">
+            <div class="mockup-section-title">晨光</div>
+            <div class="streak">第14天</div>
+
+            <div class="poem-card">
+              <div class="poem-card-title">静夜思</div>
+              <div class="poem-card-meta">〔唐〕李白</div>
+              <div class="poem-card-line">床前明月光，疑是地上霜。</div>
+            </div>
+            <div class="poem-card">
+              <div class="poem-card-title">春晓</div>
+              <div class="poem-card-meta">〔唐〕孟浩然</div>
+              <div class="poem-card-line">春眠不觉晓，处处闻啼鸟。</div>
+            </div>
+            <div class="poem-card">
+              <div class="poem-card-title">登鹳雀楼</div>
+              <div class="poem-card-meta">〔唐〕王之涣</div>
+              <div class="poem-card-line">白日依山尽，黄河入海流。</div>
+            </div>
+
+            <button class="mockup-cta">开始复习</button>
+          </div>
+          <div class="mockup-tab-bar">
+            <div class="tab-item active"><span class="tab-icon">&#9750;</span>首页</div>
+            <div class="tab-item"><span class="tab-icon">&#9783;</span>诗库</div>
+            <div class="tab-item"><span class="tab-icon">&#9835;</span>听诵</div>
+            <div class="tab-item"><span class="tab-icon">&#9641;</span>卷轴</div>
+            <div class="tab-item"><span class="tab-icon">&#9786;</span>我的</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <span class="section-label">活字卷轴 Living Scroll</span>
+        <div class="scroll-mockup">
+          <div class="scroll-title">静夜思</div>
+          <div class="scroll-meta">〔唐〕李白 &nbsp;&middot;&nbsp; 3 / 20</div>
+          <div class="scroll-grid">
+            <div class="scroll-char revealed">床</div>
+            <div class="scroll-char revealed">前</div>
+            <div class="scroll-char active">明</div>
+            <div class="scroll-char hidden">&nbsp;</div>
+            <div class="scroll-char hidden">&nbsp;</div>
+            <div class="scroll-char hidden">&nbsp;</div>
+            <div class="scroll-char hidden">&nbsp;</div>
+            <div class="scroll-char hidden">&nbsp;</div>
+            <div class="scroll-char hidden">&nbsp;</div>
+            <div class="scroll-char hidden">&nbsp;</div>
+            <div class="scroll-char hidden">&nbsp;</div>
+            <div class="scroll-char hidden">&nbsp;</div>
+            <div class="scroll-char hidden">&nbsp;</div>
+            <div class="scroll-char hidden">&nbsp;</div>
+            <div class="scroll-char hidden">&nbsp;</div>
+            <div class="scroll-char hidden">&nbsp;</div>
+            <div class="scroll-char hidden">&nbsp;</div>
+            <div class="scroll-char hidden">&nbsp;</div>
+            <div class="scroll-char hidden">&nbsp;</div>
+            <div class="scroll-char hidden">&nbsp;</div>
+          </div>
+
+          <div class="chop-stamp">明</div>
+          <div class="chop-label">完成后加盖印章</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card Review -->
+    <div style="margin-top:48px;">
+      <div class="mockup-grid">
+        <div>
+          <span class="section-label">诗词复习 Card Review</span>
+          <div class="review-mockup" style="position:relative;">
+            <span class="review-eye" title="Toggle pinyin"
+              onclick="document.documentElement.classList.toggle('pinyin-hidden')"
+              style="cursor:pointer;">&#128065;</span>
+            <div class="review-progress">3 / 12</div>
+            <div class="review-poem-title">静夜思</div>
+            <div class="review-poem-meta">〔唐〕李白</div>
+            <div class="review-poem-body heti heti--annotation" style="text-align:center;">
+              <ruby><rb>床</rb><rp>(</rp><rt lang="zh-Latn">chuáng</rt><rp>)</rp></ruby><ruby><rb>前</rb><rp>(</rp><rt lang="zh-Latn">qián</rt><rp>)</rp></ruby><ruby><rb>明</rb><rp>(</rp><rt lang="zh-Latn">míng</rt><rp>)</rp></ruby><ruby><rb>月</rb><rp>(</rp><rt lang="zh-Latn">yuè</rt><rp>)</rp></ruby><ruby><rb>光</rb><rp>(</rp><rt lang="zh-Latn">guāng</rt><rp>)</rp></ruby><span class="heti-hang">，</span><br>
+              <ruby><rb>疑</rb><rp>(</rp><rt lang="zh-Latn">yí</rt><rp>)</rp></ruby><ruby><rb>是</rb><rp>(</rp><rt lang="zh-Latn">shì</rt><rp>)</rp></ruby><ruby><rb>地</rb><rp>(</rp><rt lang="zh-Latn">dì</rt><rp>)</rp></ruby><ruby><rb>上</rb><rp>(</rp><rt lang="zh-Latn">shàng</rt><rp>)</rp></ruby><ruby><rb>霜</rb><rp>(</rp><rt lang="zh-Latn">shuāng</rt><rp>)</rp></ruby><span class="heti-hang">。</span><br>
+              <ruby><rb>举</rb><rp>(</rp><rt lang="zh-Latn">jǔ</rt><rp>)</rp></ruby><ruby><rb>头</rb><rp>(</rp><rt lang="zh-Latn">tóu</rt><rp>)</rp></ruby><ruby><rb>望</rb><rp>(</rp><rt lang="zh-Latn">wàng</rt><rp>)</rp></ruby><ruby><rb>明</rb><rp>(</rp><rt lang="zh-Latn">míng</rt><rp>)</rp></ruby><ruby><rb>月</rb><rp>(</rp><rt lang="zh-Latn">yuè</rt><rp>)</rp></ruby><span class="heti-hang">，</span><br>
+              <ruby><rb>低</rb><rp>(</rp><rt lang="zh-Latn">dī</rt><rp>)</rp></ruby><ruby><rb>头</rb><rp>(</rp><rt lang="zh-Latn">tóu</rt><rp>)</rp></ruby><ruby><rb>思</rb><rp>(</rp><rt lang="zh-Latn">sī</rt><rp>)</rp></ruby><ruby><rb>故</rb><rp>(</rp><rt lang="zh-Latn">gù</rt><rp>)</rp></ruby><ruby><rb>乡</rb><rp>(</rp><rt lang="zh-Latn">xiāng</rt><rp>)</rp></ruby><span class="heti-hang">。</span>
+            </div>
+            <div class="rating-row">
+              <button class="rating-btn">淡忘</button>
+              <button class="rating-btn">艰难</button>
+              <button class="rating-btn">尚可</button>
+              <button class="rating-btn rating-easy">轻松</button>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <span class="section-label">登录 Login</span>
+          <div class="login-mockup">
+            <div class="login-logo">跬步</div>
+            <div class="login-subtitle">千里之行，始于跬步</div>
+
+            <div class="oauth-row">
+              <button class="oauth-btn" title="Google">G</button>
+              <button class="oauth-btn" title="Apple"></button>
+              <button class="oauth-btn" title="GitHub">&#9776;</button>
+              <button class="oauth-btn" title="Microsoft">&#9638;</button>
+            </div>
+
+            <div class="divider">或使用邮箱登录</div>
+
+            <div style="text-align:left;">
+              <div class="form-group">
+                <label class="form-label">邮箱</label>
+                <input class="form-input" type="email" placeholder="your@email.com">
+              </div>
+              <div class="form-group">
+                <label class="form-label">密码</label>
+                <input class="form-input" type="password" placeholder="输入密码">
+              </div>
+              <div style="text-align:right; margin-bottom:20px;">
+                <a href="#" style="font-size:12px; color:var(--primary); text-decoration:none;">忘记密码?</a>
+              </div>
+              <button class="mockup-cta" style="margin-top:0;">登录</button>
+            </div>
+
+            <div class="login-footer">
+              还没有账号? <a href="#">注册</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── ANALYTICS ─── -->
+    <div style="margin-top:48px;">
+      <span class="section-label">家长数据面板 Analytics</span>
+      <div class="analytics-mockup">
+        <div class="stat-card">
+          <div class="stat-label">已掌握诗词</div>
+          <div class="stat-value">47</div>
+          <div class="stat-change">+5 本周</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">连续天数</div>
+          <div class="stat-value">14</div>
+          <div class="stat-change">个人最佳!</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">复习完成率</div>
+          <div class="stat-value">89%</div>
+          <div class="stat-change">+12% vs 上周</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">听诵时长</div>
+          <div class="stat-value">3h 20m</div>
+          <div class="stat-change">本周</div>
+        </div>
+        <div class="heatmap">
+          <div class="heatmap-title">学习频率</div>
+          <div class="heatmap-grid" id="heatmapGrid"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function toggleTheme() {
+      const root = document.documentElement;
+      const btn = document.getElementById('themeBtn');
+      if (root.getAttribute('data-theme') === 'dark') {
+        root.removeAttribute('data-theme');
+        btn.textContent = '\u263D';
+      } else {
+        root.setAttribute('data-theme', 'dark');
+        btn.textContent = '\u2600';
+      }
+    }
+    document.getElementById('themeBtn').textContent = '\u263D';
+
+    // Heti autoSpacing: adds thin spaces between CJK and Latin/digits
+    document.addEventListener('DOMContentLoaded', function () {
+      if (window.Heti) { new window.Heti('.heti').autoSpacing(); }
+    });
+
+    const grid = document.getElementById('heatmapGrid');
+    const levels = [0, 0, 1, 2, 0, 0, 0, 0, 1, 1, 3, 2, 0, 0, 1, 2, 3, 4, 3, 1, 0, 2, 3, 4, 4, 3, 2, 1, 0, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 4, 3, 2, 1, 0, 0, 1, 2, 1, 2, 3, 2, 1, 0, 0, 0, 1, 2, 3, 4, 3, 2, 1, 0, 1, 2, 3, 2, 1, 0, 0, 1, 0, 0, 0, 0];
+    levels.forEach(l => {
+      const cell = document.createElement('div');
+      cell.className = 'heat-cell' + (l > 0 ? ' heat-' + l : '');
+      grid.appendChild(cell);
+    });
+  </script>
+</body>
+
+</html>
