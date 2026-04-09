@@ -7,11 +7,13 @@ import { PoemCard } from "@/components/PoemCard";
 export default function LibraryPage() {
   return (
     <>
-      <ThemeToggle />
       <AppHeader />
-      <main className="flex-1 px-5 py-7 max-w-[600px] mx-auto w-full">
-        <h1 className="font-heading font-semibold text-2xl mb-6">诗库</h1>
-        <div>
+      <ThemeToggle />
+      <main className="flex-1 px-6 py-10 max-w-[600px] mx-auto w-full">
+        <h1 className="font-heading font-semibold text-[28px] leading-tight tracking-tight mb-8">
+          诗库
+        </h1>
+        <div className="space-y-1">
           {poems.map((poem) => (
             <PoemCard key={poem.id} poem={poem} />
           ))}

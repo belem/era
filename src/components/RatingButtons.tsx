@@ -11,7 +11,7 @@ const ratings = [
   {
     key: "easy" as const,
     label: "轻松",
-    className: "bg-jade text-white border-jade hover:bg-pine hover:border-pine",
+    className: "bg-success text-white border-success hover:opacity-90",
   },
 ];
 
@@ -22,9 +22,9 @@ export function RatingButtons({ onRate }: RatingButtonsProps) {
         <button
           key={r.key}
           onClick={() => onRate(r.key)}
-          className={`flex-1 py-3.5 px-2 rounded-[var(--radius-md)] font-ui text-sm font-medium border transition-colors cursor-pointer ${
+          className={`flex-1 py-3 px-2 rounded-[var(--radius-md)] font-ui text-[14px] font-normal border transition-all cursor-pointer ${
             r.className ||
-            "border-border bg-bg text-text-secondary hover:border-text-tertiary"
+            "border-border bg-transparent text-text-secondary hover:bg-bg-muted"
           }`}
           aria-label={`Rate as ${r.key}`}
         >

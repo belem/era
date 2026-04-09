@@ -14,8 +14,8 @@ export function TabBar() {
   const pathname = usePathname();
 
   return (
-    <nav className="sticky bottom-0 border-t border-border bg-bg">
-      <div className="flex py-2.5 pb-3.5">
+    <nav className="glass-nav sticky bottom-0 z-40">
+      <div className="flex py-2 pb-3">
         {tabs.map((tab) => {
           const isActive =
             tab.href === "/"
@@ -25,11 +25,11 @@ export function TabBar() {
             <Link
               key={tab.href}
               href={tab.href}
-              className={`flex-1 flex flex-col items-center gap-0.5 text-[10px] font-medium tracking-wide transition-colors ${
+              className={`flex-1 flex flex-col items-center gap-0.5 text-[10px] font-medium transition-colors ${
                 isActive ? "text-primary" : "text-text-tertiary"
               }`}
             >
-              <span className="text-lg">{tab.icon}</span>
+              <span className="text-base">{tab.icon}</span>
               {tab.label}
             </Link>
           );

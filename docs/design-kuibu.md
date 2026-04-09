@@ -14,9 +14,9 @@ Classical Chinese poetry memorization is a core part of primary and middle schoo
 
 The intersection of three things no one is combining well:
 
-1. **Modern minimalism + cultural punctuation** — The app is clean, quiet, contemporary. Not a theme park recreation of ancient China. Cultural identity comes through typography (LXGW WenKai), the pine-ink chop stamp, and the Living Scroll interaction, not through surface decoration. The design should feel like a well-made notebook, not a museum exhibit.
+1. **Apple-inspired minimalism + cultural punctuation** — The app draws from Apple's reductive design philosophy: controlled drama, cinematic spacing, and a singular accent color. Cultural identity comes through typography (LXGW WenKai, Noto Serif SC) and the Living Scroll interaction, not through surface decoration. The design should feel like a precision-crafted instrument, not a museum exhibit.
 
-   **Color philosophy — traditional Chinese pigments:** The palette draws entirely from classical Chinese colors, each carrying centuries of cultural meaning. Surfaces are clean white (#FFFFFF light, pine-tinted dark #1a2120). Text uses pine-ink (#1c3532) with faded pine (#4a6b66) and mist (#8a9e9a) for hierarchy. The primary action color is pine green (#007d62), the darkest and most commanding hue, used for CTAs, the chop stamp, and active states. In dark mode, jade (#7bcfa6) takes over as primary. Crabapple pink (#f091a0) provides warmth for accents and highlights. The full palette of 14 traditional colors — jade (#7bcfa6), sky blue (#66a9c9), willow (#a8bf8f), peach (#f3a694), frost (#e3f9fd), celadon (#93d5dc), crabapple (#f091a0), wave (#a0d2e2), wisteria (#a4abd6), bamboo (#a5d1b5), pine (#007d62), plum (#d1c2d3), blossom (#f1939c), and rice paper (#f5f2e9) — is available for semantic contexts: badge tiers (peach → sky → jade → pine), heatmap gradients (bamboo → jade → pine), polyphonic character markers (crabapple), and success states (jade). The colors never compete because each has a defined role.
+   **Color philosophy — Apple's controlled palette:** The color system is starkly binary, inspired by Apple's website. Surfaces alternate between pure white (#ffffff) and light gray (#f5f5f7) in light mode, and pure black (#000000) with dark surfaces (#1c1c1e) in dark mode. This creates cinematic pacing — dark sections feel immersive, light sections feel open. The singular interactive accent is Apple Blue (#0071e3 light, #2997ff dark) — reserved exclusively for CTAs, links, focus rings, and active states. Every clickable element gets unmistakable visibility through this single hue. Text uses near-black (#1d1d1f) with secondary (#6e6e73) and tertiary (#86868b) grays for hierarchy. For content-level accents only (polyphonic character markers in poetry), a warm coral (#ff6b6b) is used — this is never applied to interactive UI elements. Semantic colors follow Apple's system: green (#34c759) for success/Easy, red (#ff3b30) for errors, orange (#ff9500) for warnings. Badge tiers use a minimal palette: orange → blue → green → near-black.
 
    **Typography — three voices, carefully paired:**
 
@@ -32,13 +32,13 @@ The intersection of three things no one is combining well:
 
    **Space — the art of leaving blank (留白):** Classical Chinese composition prizes negative space as much as the mark. A poem of twenty characters should feel like it's floating in open air, not crammed into a card. Generous margins. Vertical rhythm that lets each line breathe. The screen should never feel full. When in doubt, remove, don't add. This is the hardest design discipline and the one that will most distinguish Kuibu from every other education app.
 
-   **Surfaces — clean, not textured:** No paper grain, no warm tinting, no skeuomorphic textures. Backgrounds are flat solid colors. Visual depth comes from subtle borders (1px, plum mist #d1c2d3 light / #3a4a47 dark), not shadows. Cards and sections are defined by background-color shifts between --bg (#FFFFFF / #1a2120), --bg-subtle (#FAFAFA / #222d2b), and --bg-muted (#EFEFEF / #2a3634). Card surfaces can use frost (#e3f9fd) for cool contrast. The effect is architecturally minimal, like a white-walled gallery where the art (the poetry) is the focus.
+   **Surfaces — clean, not textured:** No paper grain, no warm tinting, no skeuomorphic textures. Backgrounds are flat solid colors. Visual depth comes primarily from background-color contrast, not shadows or borders. Borders are used sparingly (neutral gray #d2d2d7 light / #38383a dark). Cards and sections are defined by background-color shifts between --bg (#ffffff / #000000), --bg-subtle (#f5f5f7 / #1c1c1e), and --bg-muted (#e8e8ed / #2c2c2e). The effect is architecturally minimal, like a white-walled gallery where the art (the poetry) is the focus.
 
-   **Light and dark — both intentional:** Light mode is clean white with the traditional Chinese palette providing all color. Dark mode uses pine-tinted darks (#1a2120 base) that feel warm rather than generic gray. Both themes use the same structural logic. In dark mode, jade (#7bcfa6) replaces pine (#007d62) as the primary action color for better contrast against dark surfaces. The full traditional palette is available in both modes with appropriate adjustments.
+   **Light and dark — cinematic, binary:** Light mode uses clean white and light gray (#f5f5f7) sections with Apple Blue as the singular accent. Dark mode uses pure black (#000000) — cinematic and immersive, not warm gray. Both themes use the same structural logic. In dark mode, Bright Blue (#2997ff) replaces Apple Blue (#0071e3) for contrast against dark surfaces. The translucent glass navigation bar (`backdrop-filter: blur(20px)`) floats above content in both modes.
 
-   **Interaction feel — unhurried:** Every animation runs slightly slower than a typical app. Not sluggish, but deliberate. The brush strokes in Living Scroll mode take the time a real brush would take. Page transitions have the weight of turning thick paper. The rating buttons after a review don't bounce or flash — they respond with the quiet confidence of a well-made physical button. The entire tempo communicates: this is not a game you rush through. This is practice. Practice has its own pace.
+   **Interaction feel — precise and restrained:** Animations are subtle, fast, and functional — not decorative. Apple's motion language: things appear, they don't bounce. The brush strokes in Living Scroll mode are deliberate. The rating buttons respond with quiet confidence. The entire tempo communicates: this is not a game you rush through. This is practice.
 
-2. **The "Living Scroll" interaction** — Instead of a binary flashcard flip, students reveal characters one by one on a virtual scroll with brush-stroke animations (via `hanzi-writer`). Completed scrolls are sealed with a pine-ink chop stamp and saved to a personal gallery. Kids collect scrolls like trophies. This turns memorization into a calligraphy performance.
+2. **The "Living Scroll" interaction** — Instead of a binary flashcard flip, students reveal characters one by one on a virtual scroll with brush-stroke animations (via `hanzi-writer`). Completed scrolls are sealed with a blue chop stamp and saved to a personal gallery. Kids collect scrolls like trophies. This turns memorization into a calligraphy performance.
 
 3. **Scientifically-backed spaced repetition with parent management** — Three algorithms (SM-2, Leitner, FSRS) with a parent-managed account model designed for young children who don't hold independent credentials.
 
@@ -61,7 +61,7 @@ The intersection of three things no one is combining well:
 
 - **Keyboard navigation:** All interactive elements (rating buttons, profile switcher, pinyin toggle, navigation) must be reachable and operable via keyboard. Living Scroll mode supports spacebar/enter to reveal next character
 - **Screen readers:** ARIA labels on the Living Scroll canvas/SVG (announces poem title, current character position, and completion state). Rating buttons have descriptive labels ("Rate as Forgot", not just color). Scroll Gallery items announce poem title and completion date
-- **Color contrast:** All text/background combinations must meet WCAG AA (4.5:1 for body text, 3:1 for large text). Mist (#8a9e9a) on white (#FFFFFF) is 3.1:1 — only use for large text (>18px) or decorative elements, never for essential body text. Faded pine (#4a6b66) on white is 5.2:1 (AA). Pine-ink (#1c3532) on white is 11.3:1 (AAA). Dark mode colors verified separately
+- **Color contrast:** All text/background combinations must meet WCAG AA (4.5:1 for body text, 3:1 for large text). Tertiary text (#86868b) on white (#ffffff) is 3.5:1 — only use for large text (>18px) or decorative elements, never for essential body text. Secondary text (#6e6e73) on white is 4.6:1 (AA). Primary text (#1d1d1f) on white is 16.7:1 (AAA). Apple Blue (#0071e3) on white is 4.5:1 (AA). Dark mode colors verified separately
 - **Reduced motion:** Respect `prefers-reduced-motion: reduce`. When active: Living Scroll reveals characters instantly (no stroke animation), page transitions are instant, the chop stamp appears without animation. The "unhurried" aesthetic is a default, not a requirement
 - **Touch targets:** All interactive elements ≥48x48px on mobile, per WCAG 2.5.8. Rating buttons and Ear Training tap zones are already large by design
 - **Pinyin as accessible annotation:** `<ruby>/<rt>` markup is natively accessible to screen readers. The `lang="zh-Latn"` attribute on `<rt>` helps screen readers switch pronunciation engines
@@ -122,7 +122,7 @@ Rejected as over-scoped for a fun/learning project. Electron adds 100MB+ for wha
 |-------|-----------|-----------|
 | Framework | Next.js 16+ (App Router) | Server components for read-heavy pages, client components for interactive learning, API routes for backend logic |
 | Database/Auth | Supabase (Postgres + Auth + RLS) | Row-level security maps to guardian permission model; auth handles parent login |
-| Styling | Tailwind CSS + CSS variables | Traditional Chinese color palette (14 pigments); `--primary`/`--accent` semantic tokens; responsive mobile-first |
+| Styling | Tailwind CSS + CSS variables | Apple-inspired color system (binary surfaces, single blue accent); `--primary`/`--accent` semantic tokens; glass navigation; responsive mobile-first |
 | Font System | Three-register stack (see typography detail below) | Poetry: LXGW WenKai. Headings: Noto Serif SC. UI/Pinyin: system sans + Inter |
 | SRS Algorithms | SM-2 (custom ~40 LOC), Leitner (custom ~30 LOC), FSRS (ts-fsrs npm) | All three at launch per premises |
 | Pinyin Generation | pypinyin (Python, called via Next.js API route or batch script) | Context-aware polyphonic disambiguation |
@@ -133,7 +133,7 @@ Rejected as over-scoped for a fun/learning project. Electron adds 100MB+ for wha
 | Auth Providers | Supabase Auth (Email + Google + Apple + GitHub + Microsoft) | All free, all native to Supabase. Phone SMS deferred. No Chinese social logins (require ICP filing) |
 | Transactional Email | Resend (custom SMTP) | 3,000 emails/month free. Handles password reset, email confirmation, magic links |
 | i18n | next-intl | UI strings in zh-CN, zh-TW, en, ja. Browser locale detection + user preference override. Poetry content stays in original Chinese |
-| Theming | Tailwind `darkMode: 'class'` + CSS variables + next-themes | Light (white + traditional Chinese palette) and dark (pine-tinted #1a2120) themes. Pine primary, crabapple accent. Respects system preference, user override in settings |
+| Theming | Tailwind `darkMode: 'class'` + CSS variables + next-themes | Apple-inspired: Light (white/#f5f5f7) and dark (pure black/#1c1c1e) themes. Apple Blue primary, coral content accent. Glass navigation. Respects system preference, user override in settings |
 | Deployment | Vercel | Native Next.js deployment; edge functions for API routes |
 | AI Runtime | Transformers.js / ONNX Runtime Web | Client-side inference via WebGPU/WebNN. First use: TTS. Future: pronunciation scoring, smart hints |
 
@@ -205,15 +205,17 @@ Directly from the PRD (all tables confirmed):
 - What IS translated: menus, settings, onboarding flows, error messages, button labels, tooltips, empty states, notification copy, session summaries, analytics labels
 - **zh-TW and character forms:** Poetry content is stored and displayed in simplified Chinese (简体字) only in v1. Traditional Chinese (zh-TW) users see simplified character poems — this is acceptable because the poems themselves are the canonical text, and most zh-TW readers can read simplified. Future: consider an OpenCC conversion layer to display poems in traditional characters for zh-TW locale users. This is a display-only transformation (stored simplified, rendered traditional) and does not affect pinyin or SRS state
 
-**Theming (Light + Dark):**
-- Light theme: white (#FFFFFF) surfaces, pine-ink (#1c3532) text, traditional Chinese color palette. Primary: pine green (#007d62). Accent: crabapple (#f091a0)
-- Dark theme: pine-tinted dark (#1a2120) surfaces, light (#e8ece6) text. Primary flips to jade (#7bcfa6) for contrast. Accent stays crabapple
-- Semantic color tokens: `--bg`, `--bg-subtle`, `--bg-muted`, `--bg-card` (frost #e3f9fd light / #2a3634 dark — used for card surfaces that need cool contrast against the base background), `--text`, `--text-secondary`, `--text-tertiary`, `--border`, `--border-subtle`, `--primary`, `--primary-hover`, `--primary-soft`, `--accent`, `--accent-hover`, `--accent-soft`, `--success` (jade), `--error` (blossom), `--info` (sky), `--warning` (peach)
-- Extended palette tokens: `--jade`, `--sky`, `--willow`, `--peach`, `--frost`, `--celadon`, `--crabapple`, `--wave`, `--wisteria`, `--bamboo`, `--pine`, `--plum`, `--blossom`
+**Theming (Light + Dark) — Apple-inspired:**
+- Light theme: white (#ffffff) and light gray (#f5f5f7) surfaces, near-black (#1d1d1f) text. Primary: Apple Blue (#0071e3). Content accent: coral (#ff6b6b) for polyphonic markers only
+- Dark theme: pure black (#000000) surfaces with dark gray (#1c1c1e) elevated surfaces, near-white (#f5f5f7) text. Primary flips to Bright Blue (#2997ff) for contrast
+- Semantic color tokens: `--bg`, `--bg-subtle`, `--bg-muted`, `--bg-card`, `--text`, `--text-secondary`, `--text-tertiary`, `--border`, `--border-subtle`, `--primary`, `--primary-hover`, `--primary-soft`, `--accent`, `--accent-hover`, `--accent-soft`, `--success` (Apple green #34c759), `--error` (Apple red #ff3b30), `--info` (Apple Blue), `--warning` (Apple orange #ff9500)
+- Badge palette tokens: `--badge-1` (orange), `--badge-2` (blue), `--badge-3` (green), `--badge-4` (near-black/white)
 - Implementation: Tailwind `darkMode: 'class'` + CSS variables + `next-themes` for toggle and persistence
+- Glass navigation: `backdrop-filter: saturate(180%) blur(20px)` on translucent background — the signature Apple UI depth element
 - System preference respected by default via `prefers-color-scheme`. User override stored in profile (`theme_preference`: system / light / dark)
-- Toggle in settings. Also accessible from a quick toggle in the app header (sun/moon icon)
+- Toggle accessible from the glass navigation header (sun/moon icon)
 - All color references in the app use CSS variables, never hardcoded hex values
+- Apple Blue is the ONLY interactive accent color. No other chromatic hues for UI elements
 
 **Onboarding Flow:**
 1. Parent creates account (email/password or OAuth via Supabase Auth)
@@ -234,7 +236,7 @@ Directly from the PRD (all tables confirmed):
 - Tapping reveals characters one by one with `hanzi-writer` stroke-order animation
 - Correct reveals paint ink on rice paper (Canvas/SVG effect)
 - Incorrect attempts show a red circle (traditional teacher correction mark)
-- Completed scroll seals with a pine-ink chop stamp (pine green #007d62 light / jade #7bcfa6 dark) bearing the student's name
+- Completed scroll seals with a chop stamp (Apple Blue #0071e3 light / Bright Blue #2997ff dark) bearing the student's name
 - Scrolls save to a personal gallery (the gamification collection layer)
 - After completion, student rates difficulty (Forgot/Hard/Good/Easy) for SRS scheduling
 - **Performance strategy:** Lazy-load hanzi-writer only for the active character, preload next 3 characters in background, cache stroke data in IndexedDB after first render, provide "skip animation" fast-path for repeat reviews
@@ -246,7 +248,7 @@ Directly from the PRD (all tables confirmed):
 - Frontend: `<ruby><rb>字</rb><rp>(</rp><rt lang="zh-Latn">pinyin</rt><rp>)</rp></ruby>` inside a `heti heti--annotation` container. This is heti's official markup pattern: `<rb>` wraps the base character, `<rp>` provides fallback parentheses, `lang="zh-Latn"` on `<rt>` triggers correct font selection for pinyin. Zero whitespace between tags (whitespace creates text nodes that break ruby alignment). Pinyin toggle via `.pinyin-hidden rt { display: none }` class on `<html>`
 - Equal-width character spacing: poetry containers use `display: inline-flex; flex-direction: column-reverse; width: 1.8em` on `ruby` elements so every character occupies the same horizontal space regardless of pinyin length. `<rp>` is `display: none`, `<rb>` and `<rt>` are `display: block`. Long pinyin overflows visually without pushing characters apart (standard CJK typesetting approach)
 - Vertical mode (`heti--vertical`): same flex approach with fixed `height: 1.8em` instead of width. `flex-direction: column-reverse` puts pinyin to the right of each character
-- Polyphonic characters marked with `data-polyphone="true"` on the `<ruby>` element so the editor can surface them for manual review. Polyphonic pinyin renders in crabapple (#f091a0) accent color
+- Polyphonic characters marked with `data-polyphone="true"` on the `<ruby>` element so the editor can surface them for manual review. Polyphonic pinyin renders in coral (#ff6b6b) content accent color
 
 **Pinyin Visibility — two layers of control:**
 
@@ -544,7 +546,7 @@ This feature lets students learn and review poems by voice alone, without lookin
   Works with any Bluetooth headphones or wired earbuds with inline controls. More reliable than voice in noisy environments (bus, street, kitchen).
 
   **Channel 3 — Screen tap (fallback):**
-  Minimal lock-screen-style UI with four large, high-contrast tap zones filling the screen. Designed for a quick glance-and-tap without reading. The four zones use the app's color language: a muted tone for Forgot, warm tones graduating to jade (#7bcfa6) for Easy.
+  Minimal lock-screen-style UI with four large, high-contrast tap zones filling the screen. Designed for a quick glance-and-tap without reading. The four zones use the app's color language: a muted tone for Forgot, neutral tones graduating to green (#34c759) for Easy.
 
 - After rating: SRS state updates exactly as in the visual review modes (same algorithm, same scheduling). Next poem plays immediately.
 - **Session summary:** When all due poems are reviewed (or session is stopped), a brief audio summary: "Today's listening review complete. N poems reviewed." The visual session summary shows the same calm report as visual review sessions.
@@ -560,7 +562,7 @@ This feature lets students learn and review poems by voice alone, without lookin
 
 **Phase 1: Core Experience (make a child want to open it)**
 
-1. **Aesthetic foundation + Living Scroll prototype** — Next.js scaffold, Tailwind config with light/dark theme (CSS variables + `next-themes`), LXGW WenKai + Noto Serif SC + Inter font stack, traditional Chinese color palette tokens (14 pigments), responsive layout shell, `next-intl` setup with zh-CN/en locale files. Install heti (`npm install heti`), import CSS in `layout.tsx`, wire up `autoSpacing()` in `PoemViewer` client component. Immediately build Living Scroll with 5 hardcoded poems and `hanzi-writer` — use `heti--vertical` for the scroll container. This is the "show a friend" moment. Get the feel right before anything else.
+1. **Aesthetic foundation + Living Scroll prototype** — Next.js scaffold, Tailwind config with light/dark theme (CSS variables + `next-themes`), LXGW WenKai + Noto Serif SC + Inter font stack, Apple-inspired color tokens (binary surfaces, single blue accent, glass navigation), responsive layout shell, `next-intl` setup with zh-CN/en locale files. Install heti (`npm install heti`), import CSS in `layout.tsx`, wire up `autoSpacing()` in `PoemViewer` client component. Immediately build Living Scroll with 5 hardcoded poems and `hanzi-writer` — use `heti--vertical` for the scroll container. This is the "show a friend" moment. Get the feel right before anything else.
 2. **Poetry data pipeline** — Batch script: filter chinese-poetry, run pypinyin, manually verify 50 pilot poems (launch set). Automated flagging of polyphonic characters for remaining poems.
 3. **Supabase schema + Auth** — All tables from PRD (including `profiles` table), RLS policies, Supabase Auth with Email + Google + Apple + GitHub + Microsoft OAuth, Resend as custom SMTP, student profile creation and switching
 4. **Core review loop** — Card display with ruby pinyin, rating buttons, SM-2 scheduling, "晨光" home screen, Living Scroll as alternative review mode
@@ -606,7 +608,7 @@ This feature lets students learn and review poems by voice alone, without lookin
 
 8. **i18n from day one, content stays Chinese.** UI supports zh-CN, zh-TW, en, ja via `next-intl`. Poetry text, pinyin, poet names, and dynasty labels are never translated. Retrofitting i18n later is painful; the string extraction cost at day one is near-zero.
 
-9. **Light + dark theme from day one.** CSS variables + `next-themes` + Tailwind `darkMode: 'class'`. Light = white with traditional Chinese palette, dark = pine-tinted #1a2120 with jade as primary. The full 14-pigment palette works in both modes with appropriate adjustments. Retrofitting dark mode into an existing color system is one of the worst kinds of tech debt. Setting it up at scaffold time is free.
+9. **Light + dark theme from day one.** CSS variables + `next-themes` + Tailwind `darkMode: 'class'`. Apple-inspired: light = white/#f5f5f7 with Apple Blue primary, dark = pure black/#1c1c1e with Bright Blue primary. Glass navigation in both modes. Retrofitting dark mode into an existing color system is one of the worst kinds of tech debt. Setting it up at scaffold time is free.
 
 10. **Resend for transactional email.** Supabase's built-in email is rate-limited (2/hr free, 100/hr Pro). Resend gives 3,000 emails/month free, which covers password reset and confirmation at launch scale. Dashboard-only config, no code changes.
 
@@ -666,7 +668,7 @@ None. All resolved.
 - A child can open the app, see today's poems, and complete a review session with the living scroll
 - A parent can log in, switch to their child's profile, and see learning progress
 - Pinyin is accurate for all polyphonic characters in the curated library
-- The aesthetic is clean and minimal with cultural identity expressed through typography, the traditional Chinese color palette, and the pine-ink chop stamp, not surface decoration
+- The aesthetic is clean and minimal with cultural identity expressed through typography (LXGW WenKai, Noto Serif SC), Apple-inspired surfaces, and the blue chop stamp, not surface decoration
 - The app runs smoothly on mobile Chrome (responsive, touch-friendly)
 - All three SRS algorithms produce correct scheduling intervals
 
@@ -679,7 +681,7 @@ None. All resolved.
 
 ## Next Steps
 
-1. Scaffold Next.js project with Tailwind, configure font stack (LXGW WenKai + Noto Serif SC + Inter) and traditional Chinese color palette tokens (14 pigments)
+1. Scaffold Next.js project with Tailwind, configure font stack (LXGW WenKai + Noto Serif SC + Inter) and Apple-inspired color tokens (binary surfaces, single blue accent, glass nav)
 2. Set up Supabase project and implement the database schema
 3. Build the poetry data pipeline (filter + pinyin generation + manual verification for 20 pilot poems)
 4. Implement the core review loop with SM-2

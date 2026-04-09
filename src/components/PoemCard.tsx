@@ -7,12 +7,12 @@ export function PoemCard({ poem }: { poem: Poem }) {
   return (
     <Link
       href={`/review?id=${poem.id}`}
-      className="block py-4 border-b border-border last:border-b-0 transition-colors hover:bg-bg-subtle"
+      className="block px-4 py-4 -mx-4 rounded-[var(--radius-lg)] transition-colors hover:bg-bg-subtle"
     >
-      <div className="font-heading font-semibold text-base mb-0.5">
+      <div className="font-heading font-semibold text-[17px] tracking-tight mb-0.5">
         {poem.title}
       </div>
-      <div className="text-xs text-text-tertiary mb-1.5">
+      <div className="text-[14px] text-text-tertiary tracking-tight mb-1.5">
         〔{poem.dynasty}〕{poem.author} · {poem.grade}年级
       </div>
       <div className="font-poetry text-[15px] text-text-secondary tracking-wide">

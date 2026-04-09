@@ -12,7 +12,10 @@
       "Bash(curl -s \"https://raw.githubusercontent.com/sivan/heti/master/src/heti.css\")",
       "Bash(curl -s \"https://raw.githubusercontent.com/sivan/heti/master/README.md\")",
       "WebFetch(domain:raw.githubusercontent.com)",
-      "WebFetch(domain:api.github.com)"
+      "WebFetch(domain:api.github.com)",
+      "Bash(npx next:*)",
+      "Bash(npm run:*)",
+      "Skill(checkpoint)"
     ]
   }
 }
