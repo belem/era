@@ -40,11 +40,14 @@
   },
   "login": {
     "title": "跬步",
-    "subtitle": "千里之行，始于跬步",
+    "subtitle": "积跬步，至千里",
     "or": "或",
     "emailPlaceholder": "邮箱地址",
     "signIn": "登录",
-    "signUp": "注册"
+    "signUp": "注册",
+    "confirmationSent": "确认邮件已发送",
+    "checkEmail": "请查收邮箱中的确认链接，确认后即可登录。",
+    "backToSignIn": "返回登录"
   },
   "onboarding": {
     "createStudent": "创建第一个学生档案",

@@ -2067,7 +2067,7 @@ npm install next-intl
   "library": { "title": "诗库" },
   "gallery": { "title": "卷轴馆", "empty": "完成复习后，卷轴将在此展示" },
   "profile": { "title": "我的", "achievements": "成就" },
-  "login": { "title": "跬步", "subtitle": "千里之行，始于跬步", "or": "或", "emailPlaceholder": "邮箱地址", "signIn": "登录", "signUp": "注册" },
+  "login": { "title": "跬步", "subtitle": "积跬步，至千里", "or": "或", "emailPlaceholder": "邮箱地址", "signIn": "登录", "signUp": "注册" },
   "onboarding": { "createStudent": "创建第一个学生档案", "name": "姓名", "grade": "年级", "next": "下一步", "done": "开始学习" }
 }
 ```

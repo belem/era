@@ -14,6 +14,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [confirmationSent, setConfirmationSent] = useState(false);
 
   const handleOAuthSignIn = async (provider: "google" | "apple" | "github" | "azure" | "twitter") => {
     try {
@@ -44,7 +45,7 @@ export default function LoginPage() {
       } else {
         const { error } = await supabase.auth.signUp({ email, password });
         if (error) throw error;
-        router.push("/");
+        setConfirmationSent(true);
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Authentication error");
@@ -64,6 +65,23 @@ export default function LoginPage() {
 
         {/* Card */}
         <div className="bg-bg-subtle rounded-[var(--radius-lg)] p-8">
+          {confirmationSent ? (
+            <div className="text-center space-y-4">
+              <div className="text-4xl mb-2">✉️</div>
+              <h2 className="text-lg font-heading text-text">{t("confirmationSent")}</h2>
+              <p className="text-text-secondary text-sm">{t("checkEmail")}</p>
+              <button
+                onClick={() => {
+                  setConfirmationSent(false);
+                  setMode("signin");
+                  setError("");
+                }}
+                className="text-primary text-sm hover:underline"
+              >
+                {t("backToSignIn")}
+              </button>
+            </div>
+          ) : (<>
           {/* OAuth Row */}
           <div className="flex gap-3 mb-6">
             <button
@@ -145,6 +163,7 @@ export default function LoginPage() {
               {mode === "signin" ? t("signUp") : t("signIn")}
             </button>
           </form>
+          </>)}
         </div>
       </div>
     </div>
