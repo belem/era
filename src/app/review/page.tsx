@@ -1,36 +1,80 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { poems } from "@/data/poems";
+import { useTranslations } from "next-intl";
+import { useReviewQueue } from "@/hooks/useReviewQueue";
+import { useStudent } from "@/hooks/useStudent";
 import { AppHeader } from "@/components/AppHeader";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { CardReview } from "@/components/CardReview";
 import { LivingScroll } from "@/components/LivingScroll";
 
 function ReviewContent() {
+  const t = useTranslations("review");
   const searchParams = useSearchParams();
   const poemId = searchParams.get("id");
+  const { student } = useStudent();
+  const { poems, loading } = useReviewQueue();
 
-  const [currentIndex, setCurrentIndex] = useState(() => {
-    if (poemId) {
-      const idx = poems.findIndex((p) => p.id === poemId);
-      return idx >= 0 ? idx : 0;
-    }
-    return 0;
-  });
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [mode, setMode] = useState<"card" | "scroll">("card");
   const [sessionComplete, setSessionComplete] = useState(false);
 
+  // Set initial index when poems load and poemId is present
+  useEffect(() => {
+    if (!loading && poems.length > 0 && poemId) {
+      const idx = poems.findIndex((p) => p.id === poemId);
+      if (idx >= 0) {
+        setCurrentIndex(idx);
+      }
+    }
+  }, [loading, poems, poemId]);
+
   const poem = poems[currentIndex];
 
-  const handleRate = () => {
+  const handleRate = async (rating: "forgot" | "hard" | "good" | "easy") => {
+    if (student && poem) {
+      await fetch("/api/schedule", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          studentId: student.id,
+          poemId: poem.id,
+          rating,
+        }),
+      });
+    }
     if (currentIndex < poems.length - 1) {
       setCurrentIndex((prev) => prev + 1);
     } else {
       setSessionComplete(true);
     }
   };
+
+  if (loading) {
+    return (
+      <>
+        <AppHeader />
+        <ThemeToggle />
+        <main className="flex-1 flex items-center justify-center px-6 py-20">
+          <div className="text-text-tertiary text-[14px]">Loading...</div>
+        </main>
+      </>
+    );
+  }
+
+  if (poems.length === 0) {
+    return (
+      <>
+        <AppHeader />
+        <ThemeToggle />
+        <main className="flex-1 flex items-center justify-center px-6 py-20 text-center">
+          <p className="text-text-tertiary text-[14px]">No poems to review</p>
+        </main>
+      </>
+    );
+  }
 
   if (sessionComplete) {
     return (
@@ -42,12 +86,12 @@ function ReviewContent() {
             成
           </div>
           <h2 className="font-heading font-semibold text-[21px] tracking-tight mb-2">
-            复习完成
+            {t("complete")}
           </h2>
           <p className="text-text-secondary text-[14px] tracking-tight mb-1">
-            今日复习 {poems.length} 首诗
+            {t("todayCount", { count: poems.length })}
           </p>
-          <p className="text-text-tertiary text-[12px]">明日再见</p>
+          <p className="text-text-tertiary text-[12px]">{t("tomorrow")}</p>
         </main>
       </>
     );
@@ -71,7 +115,7 @@ function ReviewContent() {
                   : "border-border text-text-tertiary hover:text-text-secondary"
               }`}
             >
-              卡片
+              {t("card")}
             </button>
             <button
               onClick={() => setMode("scroll")}
@@ -81,7 +125,7 @@ function ReviewContent() {
                   : "border-border text-text-tertiary hover:text-text-secondary"
               }`}
             >
-              卷轴
+              {t("scroll")}
             </button>
           </div>
         </div>

@@ -2,16 +2,18 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-const tabs = [
-  { href: "/", label: "晨光", icon: "☀" },
-  { href: "/library", label: "诗库", icon: "📖" },
-  { href: "/gallery", label: "卷轴馆", icon: "📜" },
-  { href: "/profile", label: "我的", icon: "👤" },
-];
+import { useTranslations } from "next-intl";
 
 export function TabBar() {
+  const t = useTranslations("nav");
   const pathname = usePathname();
+
+  const tabs = [
+    { href: "/", label: t("home"), icon: "☀" },
+    { href: "/library", label: t("library"), icon: "📖" },
+    { href: "/gallery", label: t("gallery"), icon: "📜" },
+    { href: "/profile", label: t("profile"), icon: "👤" },
+  ];
 
   return (
     <nav className="glass-nav sticky bottom-0 z-40">

@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { ProfileSwitcher } from "./ProfileSwitcher";
 
 export function AppHeader() {
   return (
@@ -6,9 +9,7 @@ export function AppHeader() {
       <Link href="/" className="font-heading font-semibold text-[17px] tracking-tight text-white">
         跬步
       </Link>
-      <div className="w-7 h-7 rounded-full bg-white/20 text-white flex items-center justify-center text-[12px] font-medium">
-        学
-      </div>
+      <ProfileSwitcher />
     </header>
   );
 }

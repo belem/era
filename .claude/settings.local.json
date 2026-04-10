@@ -15,7 +15,17 @@
       "WebFetch(domain:api.github.com)",
       "Bash(npx next:*)",
       "Bash(npm run:*)",
-      "Skill(checkpoint)"
+      "Skill(checkpoint)",
+      "Bash(npm install:*)",
+      "Bash(npm test:*)",
+      "Bash(node -e ':*)",
+      "Bash(npx vitest:*)",
+      "Bash(pip install:*)",
+      "Bash(python scripts/filter-poems.py)",
+      "Bash(python scripts/generate-pinyin.py)",
+      "Bash(python scripts/generate-seed-sql.py)",
+      "Bash(ls:*)",
+      "Bash(python -c \"import json; poems = json.load\\(open\\('scripts/poems-with-pinyin.json', encoding='utf-8'\\)\\); print\\(f'Total poems: {len\\(poems\\)}'\\); p = poems[0]; print\\(f'Sample: {p[\\\\\"title\\\\\"]} - {len\\(p[\\\\\"content_lines\\\\\"]\\)} lines, first char: {p[\\\\\"content_lines\\\\\"][0][\\\\\"chars\\\\\"][0]}'\\)\")"
     ]
   }
 }

@@ -1,15 +1,17 @@
+import { useTranslations } from "next-intl";
 import { AppHeader } from "@/components/AppHeader";
 import { TabBar } from "@/components/TabBar";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 export default function ProfilePage() {
+  const t = useTranslations("profile");
   return (
     <>
       <AppHeader />
       <ThemeToggle />
       <main className="flex-1 px-6 py-10 max-w-[600px] mx-auto w-full">
         <h1 className="font-heading font-semibold text-[28px] leading-tight tracking-tight mb-8">
-          我的
+          {t("title")}
         </h1>
 
         <div className="bg-bg-subtle rounded-[var(--radius-lg)] p-6 mb-8">
@@ -29,7 +31,7 @@ export default function ProfilePage() {
         </div>
 
         <h2 className="text-[13px] uppercase tracking-[0.08em] text-text-tertiary mb-4">
-          成就
+          {t("achievements")}
         </h2>
         <div className="flex gap-3 flex-wrap">
           <div className="w-[52px] h-[52px] rounded-[var(--radius-md)] border-2 border-badge-1 text-badge-1 flex items-center justify-center font-heading text-[22px]">

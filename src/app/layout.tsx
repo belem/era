@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ThemeProvider } from "next-themes";
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale, getMessages } from "next-intl/server";
+import { StudentProvider } from "@/hooks/useStudent";
 import "./globals.css";
 
 const inter = Inter({
@@ -15,14 +18,17 @@ export const metadata: Metadata = {
     "A beautifully designed, scientifically-backed poetry memorization platform rooted in traditional Chinese aesthetics.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getLocale();
+  const messages = await getMessages();
+
   return (
     <html
-      lang="zh-CN"
+      lang={locale}
       suppressHydrationWarning
       className={inter.variable}
     >
@@ -35,9 +41,13 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-dvh flex flex-col bg-bg text-text antialiased">
-        <ThemeProvider attribute="data-theme" defaultTheme="system" enableSystem>
-          {children}
-        </ThemeProvider>
+        <NextIntlClientProvider messages={messages}>
+          <ThemeProvider attribute="data-theme" defaultTheme="system" enableSystem>
+            <StudentProvider>
+              {children}
+            </StudentProvider>
+          </ThemeProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

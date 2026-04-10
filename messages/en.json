@@ -1,0 +1,56 @@
+{
+  "home": {
+    "title": "Today's Poems",
+    "streak": "Day {days}",
+    "startReview": "Start Review",
+    "empty": "No poems to review today"
+  },
+  "review": {
+    "card": "Card",
+    "scroll": "Scroll",
+    "reveal": "Show Rating",
+    "revealChar": "Reveal Next",
+    "complete": "Review Complete",
+    "todayCount": "Reviewed {count} poems today",
+    "tomorrow": "See you tomorrow",
+    "scrollDone": "Scroll Complete"
+  },
+  "rating": {
+    "forgot": "Forgot",
+    "hard": "Hard",
+    "good": "Good",
+    "easy": "Easy"
+  },
+  "nav": {
+    "home": "Home",
+    "library": "Library",
+    "gallery": "Gallery",
+    "profile": "Profile"
+  },
+  "library": {
+    "title": "Poetry Library"
+  },
+  "gallery": {
+    "title": "Scroll Gallery",
+    "empty": "Complete reviews to see scrolls here"
+  },
+  "profile": {
+    "title": "Profile",
+    "achievements": "Achievements"
+  },
+  "login": {
+    "title": "Kuibu",
+    "subtitle": "A thousand-mile journey begins with a single step",
+    "or": "or",
+    "emailPlaceholder": "Email address",
+    "signIn": "Sign in",
+    "signUp": "Sign up"
+  },
+  "onboarding": {
+    "createStudent": "Create your first student profile",
+    "name": "Name",
+    "grade": "Grade",
+    "next": "Next",
+    "done": "Start Learning"
+  }
+}

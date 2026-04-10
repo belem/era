@@ -1,21 +1,24 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 interface RatingButtonsProps {
   onRate: (rating: "forgot" | "hard" | "good" | "easy") => void;
 }
 
-const ratings = [
-  { key: "forgot" as const, label: "淡忘", className: "" },
-  { key: "hard" as const, label: "艰难", className: "" },
-  { key: "good" as const, label: "尚可", className: "" },
-  {
-    key: "easy" as const,
-    label: "轻松",
-    className: "bg-success text-white border-success hover:opacity-90",
-  },
-];
-
 export function RatingButtons({ onRate }: RatingButtonsProps) {
+  const t = useTranslations("rating");
+
+  const ratings = [
+    { key: "forgot" as const, label: t("forgot"), className: "" },
+    { key: "hard" as const, label: t("hard"), className: "" },
+    { key: "good" as const, label: t("good"), className: "" },
+    {
+      key: "easy" as const,
+      label: t("easy"),
+      className: "bg-success text-white border-success hover:opacity-90",
+    },
+  ];
   return (
     <div className="flex gap-2">
       {ratings.map((r) => (

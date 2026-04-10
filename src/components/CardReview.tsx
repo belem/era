@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import type { Poem } from "@/data/poems";
 import { PoemBody } from "./PoemBody";
 import { RatingButtons } from "./RatingButtons";
@@ -11,6 +12,7 @@ interface CardReviewProps {
 }
 
 export function CardReview({ poem, onRate }: CardReviewProps) {
+  const t = useTranslations("review");
   const [showPinyin, setShowPinyin] = useState(true);
   const [revealed, setRevealed] = useState(false);
 
@@ -47,7 +49,7 @@ export function CardReview({ poem, onRate }: CardReviewProps) {
           onClick={() => setRevealed(true)}
           className="w-full py-3 bg-primary text-white rounded-[var(--radius-md)] font-ui text-[17px] font-normal cursor-pointer transition-colors hover:bg-primary-hover"
         >
-          显示评分
+          {t("reveal")}
         </button>
       ) : (
         <RatingButtons onRate={(r) => onRate?.(r)} />

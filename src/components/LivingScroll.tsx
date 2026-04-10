@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { useTranslations } from "next-intl";
 import type { Poem } from "@/data/poems";
 import { ChopStamp } from "./ChopStamp";
 import { RatingButtons } from "./RatingButtons";
@@ -11,6 +12,7 @@ interface LivingScrollProps {
 }
 
 export function LivingScroll({ poem, onComplete }: LivingScrollProps) {
+  const t = useTranslations("review");
   const allChars = poem.lines.flatMap((line) => line.chars);
   const [revealedCount, setRevealedCount] = useState(0);
   const [completed, setCompleted] = useState(false);
@@ -70,7 +72,7 @@ export function LivingScroll({ poem, onComplete }: LivingScrollProps) {
       {completed && (
         <div className="space-y-6 animate-[fadeIn_0.4s_ease]">
           <ChopStamp />
-          <p className="text-[12px] text-text-tertiary">卷轴完成</p>
+          <p className="text-[12px] text-text-tertiary">{t("scrollDone")}</p>
           <RatingButtons onRate={handleRate} />
         </div>
       )}
@@ -80,7 +82,7 @@ export function LivingScroll({ poem, onComplete }: LivingScrollProps) {
           onClick={revealNext}
           className="w-full py-3 bg-primary text-white rounded-[var(--radius-md)] font-ui text-[17px] font-normal cursor-pointer transition-colors hover:bg-primary-hover"
         >
-          揭示下一字
+          {t("revealChar")}
         </button>
       )}
     </div>
