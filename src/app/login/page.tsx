@@ -8,7 +8,6 @@ import { useRouter } from "next/navigation";
 export default function LoginPage() {
   const t = useTranslations("login");
   const router = useRouter();
-  const supabase = createClient();
 
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
@@ -18,6 +17,7 @@ export default function LoginPage() {
 
   const handleOAuthSignIn = async (provider: "google" | "apple" | "github" | "azure") => {
     try {
+      const supabase = createClient();
       const { error } = await supabase.auth.signInWithOAuth({
         provider,
         options: {
@@ -36,6 +36,7 @@ export default function LoginPage() {
     setError("");
 
     try {
+      const supabase = createClient();
       if (mode === "signin") {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;

@@ -10,7 +10,6 @@ type Algorithm = "SM2" | "LEITNER" | "FSRS";
 export default function OnboardingPage() {
   const t = useTranslations("onboarding");
   const router = useRouter();
-  const supabase = createClient();
 
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -35,6 +34,7 @@ export default function OnboardingPage() {
     setError("");
 
     try {
+      const supabase = createClient();
       // Get current user
       const { data: { user }, error: userError } = await supabase.auth.getUser();
       if (userError || !user) throw new Error("Not authenticated");
