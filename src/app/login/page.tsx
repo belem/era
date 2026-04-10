@@ -15,7 +15,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleOAuthSignIn = async (provider: "google" | "apple" | "github" | "azure") => {
+  const handleOAuthSignIn = async (provider: "google" | "apple" | "github" | "azure" | "twitter") => {
     try {
       const supabase = createClient();
       const { error } = await supabase.auth.signInWithOAuth({
@@ -74,11 +74,11 @@ export default function LoginPage() {
               <span className="text-base font-medium text-text">G</span>
             </button>
             <button
-              onClick={() => handleOAuthSignIn("apple")}
+              onClick={() => handleOAuthSignIn("twitter")}
               className="flex-1 h-12 flex items-center justify-center bg-bg rounded-[var(--radius-md)] border border-border hover:border-primary transition-colors"
-              aria-label="Sign in with Apple"
+              aria-label="Sign in with X"
             >
-              <span className="text-base font-medium text-text"></span>
+              <span className="text-base font-medium text-text">X</span>
             </button>
             <button
               onClick={() => handleOAuthSignIn("github")}
@@ -88,11 +88,12 @@ export default function LoginPage() {
               <span className="text-base font-medium text-text">GH</span>
             </button>
             <button
-              onClick={() => handleOAuthSignIn("azure")}
-              className="flex-1 h-12 flex items-center justify-center bg-bg rounded-[var(--radius-md)] border border-border hover:border-primary transition-colors"
-              aria-label="Sign in with Microsoft"
+              disabled
+              className="flex-1 h-12 flex items-center justify-center bg-bg rounded-[var(--radius-md)] border border-border opacity-40 cursor-not-allowed"
+              aria-label="Sign in with Apple (coming soon)"
+              title="Coming soon"
             >
-              <span className="text-base font-medium text-text">M</span>
+              <span className="text-base font-medium text-text"></span>
             </button>
           </div>
 
