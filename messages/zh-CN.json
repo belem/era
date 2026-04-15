@@ -31,7 +31,9 @@
     "profile": "我的"
   },
   "library": {
-    "title": "诗库"
+    "title": "诗库",
+    "searchPlaceholder": "搜索诗名、作者、诗句或拼音...",
+    "noResults": "未找到诗词"
   },
   "gallery": {
     "title": "卷轴馆",
@@ -44,7 +46,33 @@
     "title": "我的",
     "achievements": "成就",
     "settings": "设置",
-    "analytics": "学习报告"
+    "analytics": "学习报告",
+    "gradeInfo": "{grade}年级",
+    "unlocked": "已解锁",
+    "locked": "未解锁"
+  },
+  "badges": {
+    "scroll": {
+      "name": "初卷",
+      "desc": "完成你的第一幅卷轴"
+    },
+    "flame": {
+      "name": "七日",
+      "desc": "保持7天连续复习"
+    },
+    "moon": {
+      "name": "明月",
+      "desc": "保持30天连续复习"
+    },
+    "star": {
+      "name": "年级通",
+      "desc": "掌握一个年级的所有诗词"
+    },
+    "seal": {
+      "name": "百篇",
+      "desc": "累计复习100首诗词"
+    },
+    "newBadge": "解锁新成就！去看看吧。"
   },
   "login": {
     "title": "跬步",

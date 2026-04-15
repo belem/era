@@ -11,14 +11,13 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 
 interface Badge {
   id: string;
-  name: string;
-  description: string;
   icon: string;
   unlocked: boolean;
 }
 
 export default function ProfilePage() {
   const t = useTranslations("profile");
+  const tb = useTranslations("badges");
   const { student } = useStudent();
   const [badges, setBadges] = useState<Badge[]>([]);
 
@@ -34,8 +33,6 @@ export default function ProfilePage() {
       setBadges(
         (allBadges ?? []).map((b) => ({
           id: b.id,
-          name: b.name,
-          description: b.description,
           icon: b.icon,
           unlocked: unlockedIds.has(b.id),
         }))
@@ -73,14 +70,14 @@ export default function ProfilePage() {
           <div className="bg-bg-subtle rounded-[var(--radius-lg)] p-6 mb-8 md:mb-0">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-full bg-text text-bg flex items-center justify-center text-lg font-medium">
-                {student?.name.charAt(0) ?? "学"}
+                {student?.name.charAt(0) ?? "?"}
               </div>
               <div>
                 <div className="font-heading font-semibold text-[17px] tracking-tight">
                   {student?.name ?? "---"}
                 </div>
                 <div className="text-[14px] text-text-tertiary tracking-tight">
-                  {student?.grade ?? "--"}年级 · {student?.edition ?? "PEP"}
+                  {t("gradeInfo", { grade: student?.grade ?? "--" })} · {student?.edition ?? "PEP"}
                 </div>
               </div>
             </div>
@@ -92,24 +89,29 @@ export default function ProfilePage() {
               {t("achievements")}
             </h2>
             <div className="grid grid-cols-3 gap-3 lg:grid-cols-5" role="list">
-              {badges.map((badge) => (
-                <div
-                  key={badge.id}
-                  role="listitem"
-                  aria-label={`${badge.name}, ${badge.unlocked ? "unlocked" : "locked"}`}
-                  className={`w-[52px] h-[52px] rounded-[var(--radius-md)] flex items-center justify-center ${
-                    badge.unlocked
-                      ? "border-2 border-badge-1 bg-bg-subtle"
-                      : "border border-border bg-bg-muted opacity-30"
-                  }`}
-                >
-                  <img
-                    src={`/badges/${badge.icon}.svg`}
-                    alt={badge.name}
-                    className={`w-6 h-6 ${badge.unlocked ? "text-text" : "text-text-tertiary"}`}
-                  />
-                </div>
-              ))}
+              {badges.map((badge) => {
+                const badgeName = tb(`${badge.icon}.name`);
+                const status = badge.unlocked ? t("unlocked") : t("locked");
+                return (
+                  <div
+                    key={badge.id}
+                    role="listitem"
+                    aria-label={`${badgeName}, ${status}`}
+                    title={`${badgeName} — ${tb(`${badge.icon}.desc`)}`}
+                    className={`w-[52px] h-[52px] rounded-[var(--radius-md)] flex items-center justify-center ${
+                      badge.unlocked
+                        ? "border-2 border-badge-1 bg-bg-subtle"
+                        : "border border-border bg-bg-muted opacity-30"
+                    }`}
+                  >
+                    <img
+                      src={`/badges/${badge.icon}.svg`}
+                      alt={badgeName}
+                      className={`w-6 h-6 ${badge.unlocked ? "text-text" : "text-text-tertiary"}`}
+                    />
+                  </div>
+                );
+              })}
               {badges.length === 0 && (
                 <>
                   {[1, 2, 3, 4, 5].map((i) => (

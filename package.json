@@ -15,6 +15,7 @@
     "@supabase/supabase-js": "^2.103.0",
     "@upstash/ratelimit": "^2.0.8",
     "@upstash/redis": "^1.37.0",
+    "flexsearch": "^0.8.212",
     "hanzi-writer": "^3.7.3",
     "next": "16.2.2",
     "next-intl": "^4.9.0",

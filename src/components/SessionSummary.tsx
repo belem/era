@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { ChopStamp } from "./ChopStamp";
 import Link from "next/link";
 
@@ -23,8 +24,9 @@ const ratingConfig = {
 } as const;
 
 export function SessionSummary({ studentId, studentName, ratings }: Props) {
+  const tb = useTranslations("badges");
   const [streak, setStreak] = useState<{ current: number; frozen: boolean } | null>(null);
-  const [newBadges, setNewBadges] = useState<{ id: string; name: string }[]>([]);
+  const [newBadges, setNewBadges] = useState<{ id: string; name: string; icon: string }[]>([]);
   const [barsVisible, setBarsVisible] = useState(false);
 
   // Count ratings
@@ -121,7 +123,7 @@ export function SessionSummary({ studentId, studentName, ratings }: Props) {
           href="/profile"
           className="text-[14px] text-text-secondary hover:text-primary transition-colors mb-3"
         >
-          New badge unlocked! Check your profile.
+          {tb("newBadge")}
         </Link>
       )}
 

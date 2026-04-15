@@ -31,7 +31,9 @@
     "profile": "Profile"
   },
   "library": {
-    "title": "Poetry Library"
+    "title": "Poetry Library",
+    "searchPlaceholder": "Search by title, author, verse, or pinyin...",
+    "noResults": "No poems found"
   },
   "gallery": {
     "title": "Scroll Gallery",
@@ -44,7 +46,33 @@
     "title": "Profile",
     "achievements": "Achievements",
     "settings": "Settings",
-    "analytics": "Analytics"
+    "analytics": "Analytics",
+    "gradeInfo": "Grade {grade}",
+    "unlocked": "unlocked",
+    "locked": "locked"
+  },
+  "badges": {
+    "scroll": {
+      "name": "First Scroll",
+      "desc": "Complete your first Living Scroll"
+    },
+    "flame": {
+      "name": "Seven Days",
+      "desc": "Maintain a 7-day review streak"
+    },
+    "moon": {
+      "name": "Bright Moon",
+      "desc": "Maintain a 30-day review streak"
+    },
+    "star": {
+      "name": "Grade Master",
+      "desc": "Master all poems in one grade"
+    },
+    "seal": {
+      "name": "Hundred Poems",
+      "desc": "Review 100 poems total"
+    },
+    "newBadge": "New badge unlocked! Check your profile."
   },
   "login": {
     "title": "Kuibu",

@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState, useCallback, useRef } from "react";
-import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useStudent } from "@/hooks/useStudent";
+import { usePoetrySearch } from "@/hooks/usePoetrySearch";
 import { AppHeader } from "@/components/AppHeader";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
@@ -39,7 +39,7 @@ export default function CustomPoemsPage() {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [generating, setGenerating] = useState(false);
   const [pinyinMap, setPinyinMap] = useState<string[]>([]);
-  const searchRef = useRef<any>(null);
+  const { search } = usePoetrySearch();
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const fetchPoems = useCallback(async () => {
@@ -52,34 +52,16 @@ export default function CustomPoemsPage() {
 
   useEffect(() => { fetchPoems(); }, [fetchPoems]);
 
-  // Lazy-load flexsearch index from chinese-poetry dataset
-  const searchPoems = useCallback(async (query: string) => {
+  const searchPoems = useCallback((query: string) => {
     if (query.length < 1) { setSuggestions([]); return; }
-
-    // If flexsearch not loaded, try simple fetch from a static index
-    // For now, search from the curated poems in the database
-    try {
-      // Search curated DB poems by title prefix
-      const { createClient } = await import("@/lib/supabase/client");
-      const supabase = createClient();
-      const { data } = await supabase
-        .from("poems")
-        .select("title, author, dynasty, content_lines")
-        .ilike("title", `%${query}%`)
-        .limit(8);
-
-      if (data) {
-        setSuggestions(data.map((p: any) => ({
-          title: p.title,
-          author: p.author,
-          dynasty: p.dynasty,
-          paragraphs: (p.content_lines as any[]).map(
-            (line: any) => line.chars.map((c: any) => c.char).join("") + (line.punctuation ?? "")
-          ),
-        })));
-      }
-    } catch { /* search failed */ }
-  }, []);
+    const results = search(query, 8);
+    setSuggestions(results.map((p) => ({
+      title: p.title,
+      author: p.author,
+      dynasty: p.dynasty,
+      paragraphs: p.paragraphs,
+    })));
+  }, [search]);
 
   const handleTitleChange = (val: string) => {
     setTitle(val);

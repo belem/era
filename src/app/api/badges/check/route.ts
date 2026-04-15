@@ -24,7 +24,7 @@ export async function POST(request: Request) {
   if (!badges) return NextResponse.json({ newBadges: [] });
 
   const unlockedIds = new Set(unlocked?.map((u) => u.badge_id) ?? []);
-  const newBadges: { id: string; name: string }[] = [];
+  const newBadges: { id: string; name: string; icon: string }[] = [];
 
   for (const badge of badges) {
     if (unlockedIds.has(badge.id)) continue;
@@ -88,7 +88,7 @@ export async function POST(request: Request) {
       await supabase
         .from("badge_unlocks")
         .insert({ student_id: studentId, badge_id: badge.id });
-      newBadges.push({ id: badge.id, name: badge.name });
+      newBadges.push({ id: badge.id, name: badge.name, icon: badge.icon });
     }
   }
 
