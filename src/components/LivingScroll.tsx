@@ -22,6 +22,7 @@ export function LivingScroll({ poem, onComplete }: LivingScrollProps) {
       setRevealedCount((prev) => prev + 1);
       if (revealedCount + 1 === allChars.length) {
         setCompleted(true);
+        navigator.vibrate?.(50);
       }
     }
   }, [revealedCount, allChars.length]);

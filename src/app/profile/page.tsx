@@ -52,12 +52,20 @@ export default function ProfilePage() {
           <h1 className="font-heading font-semibold text-[28px] leading-tight tracking-tight">
             {t("title")}
           </h1>
-          <Link
-            href="/settings"
-            className="text-[14px] text-primary hover:underline"
-          >
-            {t("settings")}
-          </Link>
+          <div className="flex gap-4">
+            <Link
+              href="/analytics"
+              className="text-[14px] text-primary hover:underline"
+            >
+              {t("analytics")}
+            </Link>
+            <Link
+              href="/settings"
+              className="text-[14px] text-primary hover:underline"
+            >
+              {t("settings")}
+            </Link>
+          </div>
         </div>
 
         <div className="md:grid md:grid-cols-2 md:gap-8">

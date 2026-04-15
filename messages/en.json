@@ -3,7 +3,9 @@
     "title": "Today's Poems",
     "streak": "Day {days}",
     "startReview": "Start Review",
-    "empty": "No poems to review today"
+    "empty": "No poems to review today",
+    "listenMode": "Listen",
+    "customPoems": "Custom Poems"
   },
   "review": {
     "card": "Card",
@@ -24,6 +26,7 @@
   "nav": {
     "home": "Home",
     "library": "Library",
+    "fragments": "Cards",
     "gallery": "Gallery",
     "profile": "Profile"
   },
@@ -40,7 +43,8 @@
   "profile": {
     "title": "Profile",
     "achievements": "Achievements",
-    "settings": "Settings"
+    "settings": "Settings",
+    "analytics": "Analytics"
   },
   "login": {
     "title": "Kuibu",
@@ -52,7 +56,15 @@
     "confirmationSent": "Check your email",
     "checkEmail": "We sent a confirmation link to your email. Click it to activate your account, then sign in.",
     "backToSignIn": "Back to sign in",
-    "forgotPassword": "Forgot password?"
+    "forgotPassword": "Forgot password?",
+    "resendEmail": "Resend confirmation email",
+    "resendCooldown": "Resend in {seconds}s",
+    "tooManyAttempts": "Too many attempts. Try again in {seconds}s.",
+    "oauthConflict": "This email is already registered with {provider}. Sign in with that provider, or use a different email.",
+    "tryDifferentMethod": "Try a different sign-in method",
+    "termsConsent": "I agree to the Terms of Service and Privacy Policy",
+    "magicLink": "Sign in with email link instead",
+    "magicLinkSent": "Check your email for a sign-in link"
   },
   "auth": {
     "forgotTitle": "Reset Password",
@@ -117,5 +129,82 @@
     "grade": "Grade",
     "next": "Next",
     "done": "Start Learning"
+  },
+  "fragments": {
+    "title": "Flashcards",
+    "newDeck": "New Deck",
+    "cancel": "Cancel",
+    "deckName": "Deck name",
+    "deckDesc": "Description (optional)",
+    "createDeck": "Create Deck",
+    "empty": "No flashcard decks yet. Create one to get started.",
+    "cardCount": "{count} cards",
+    "dueCount": "{count} due",
+    "review": "Review",
+    "deleteDeck": "Delete deck",
+    "cards": "Cards",
+    "addCard": "Add Card",
+    "frontPlaceholder": "Front (question)",
+    "backPlaceholder": "Back (answer)",
+    "saveCard": "Save Card",
+    "save": "Save",
+    "emptyDeck": "No cards in this deck yet.",
+    "editCard": "Edit",
+    "deleteCard": "Delete",
+    "showAnswer": "Show Answer",
+    "noDue": "No cards due for review",
+    "backToDeck": "Back to deck",
+    "reviewComplete": "Review Complete",
+    "reviewedCount": "Reviewed {count} cards",
+    "done": "Done"
+  },
+  "analytics": {
+    "title": "Analytics",
+    "totalReviews": "Reviews (30d)",
+    "mastered": "Mastered",
+    "currentStreak": "Current Streak",
+    "longestStreak": "Best: {n}",
+    "listeningMinutes": "Listening",
+    "activity": "Activity",
+    "ratingDistribution": "Rating Distribution",
+    "poemProgress": "Poem Progress",
+    "noData": "No review data yet",
+    "gradeN": "Grade {n}",
+    "days": "d"
+  },
+  "listen": {
+    "passiveTitle": "Immersive Listening",
+    "passiveDesc": "Poems play continuously in the background. Low-stability poems repeat more often. Just listen.",
+    "activeTitle": "Listening Review",
+    "activeDesc": "Listen to each poem, then rate your recall by voice, headphone tap, or screen tap.",
+    "noTTS": "Text-to-speech is not available in this browser",
+    "noPoems": "No poems due for review",
+    "backHome": "Back to home",
+    "poemCount": "{count} poems in queue",
+    "startListening": "Start Listening",
+    "stopListening": "Stop",
+    "nowPlaying": "Now Playing",
+    "switchToActive": "Switch to Active Listening",
+    "switchToPassive": "Switch to Passive Listening",
+    "rateNow": "Rate your recall",
+    "autoRateHint": "Auto-rates as Good after 10 seconds",
+    "sessionComplete": "Listening Complete",
+    "reviewedCount": "Reviewed {count} poems",
+    "done": "Done"
+  },
+  "customPoems": {
+    "title": "Custom Poems",
+    "newPoem": "New Poem",
+    "cancel": "Cancel",
+    "titlePlaceholder": "Poem title (start typing to search)",
+    "authorPlaceholder": "Author",
+    "dynastyPlaceholder": "Dynasty",
+    "linesPlaceholder": "Poem text (one line per row)",
+    "generatePinyin": "Generate Pinyin",
+    "generatingPinyin": "Generating...",
+    "pinyinGenerated": "{count} characters",
+    "savePoem": "Save Poem",
+    "empty": "No custom poems yet",
+    "requiresPro": "Custom poems require a Pro or Max subscription"
   }
 }

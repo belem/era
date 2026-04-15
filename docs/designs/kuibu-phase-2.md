@@ -41,7 +41,7 @@ That's an ocean, flagged for future.
 ## Accepted Scope (added to this plan)
 
 ### Priority tier: MUST HAVE (drop last items first if time-boxed)
-1. Leitner + FSRS algorithms (+ factory, migration; FSRS: paid tier per design doc DD#4)
+1. Leitner + FSRS algorithms (+ factory, migration; FSRS available to all tiers per eng review)
 2. Configurable session size (new poems/day + max reviews/session in settings_json)
 3. Complete auth flow (see Auth Flow section below)
 4. Responsive layouts (3-tier: mobile <768px, tablet 768-1024px, desktop >1024px)
@@ -62,32 +62,32 @@ OAuth callback handler, login page with email+password. Phase 2 fills the gaps:
 ### Sign Up & Onboarding
 - [x] Sign up (email + password) — Phase 1
 - [x] Email verification pending screen — Phase 1
-- [ ] Resend verification email (button on pending screen, rate-limited to 1/60s)
+- [x] Resend verification email (button on pending screen, rate-limited to 1/60s)
 - [x] OAuth sign up (Google, GitHub, X) — Phase 1
 - [x] Welcome / onboarding (post-verification first-time flow) — Phase 1
 
 ### Log In
 - [x] Log in (email + password) — Phase 1
 - [x] OAuth redirect + callback — Phase 1
-- [ ] Login error states: wrong password, unverified email, account locked
-- [ ] Already logged in redirect (/login redirects to / if session exists)
+- [x] Login error states: wrong password, unverified email, account locked
+- [x] Already logged in redirect (/login redirects to / if session exists)
 
 ### Password Management
-- [ ] Forgot password screen (enter email, triggers Supabase resetPasswordForEmail)
-- [ ] Reset password email sent (confirmation screen)
-- [ ] Reset password page (new password input, from email link with token)
-- [ ] Reset token expired (graceful error with "request new link" button)
-- [ ] Change password (logged-in, in settings/profile page)
+- [x] Forgot password screen (enter email, triggers Supabase resetPasswordForEmail)
+- [x] Reset password email sent (confirmation screen)
+- [x] Reset password page (new password input, from email link with token)
+- [x] Reset token expired (graceful error with "request new link" button)
+- [x] Change password (logged-in, in settings/profile page)
 
 ### Session & Account
-- [ ] Log out (action in profile/settings, clears session, redirects to /login)
-- [ ] Session expired handling (Supabase onAuthStateChange detects expiry, shows notice, redirects)
-- [ ] Account settings page (manage email, password, linked OAuth providers)
+- [x] Log out (action in profile/settings, clears session, redirects to /login)
+- [x] Session expired handling (Supabase onAuthStateChange detects expiry, shows notice, redirects)
+- [x] Account settings page (manage email, password, linked OAuth providers)
 
 ### Edge Cases & Security
-- [ ] Account locked / too many attempts (Supabase handles rate limiting, surface the error)
-- [ ] OAuth account conflict (email already registered with different provider, offer to link)
-- [ ] Terms & privacy consent (checkbox on signup, stored in users.accepted_terms_at — column added in updated schema)
+- [x] Account locked / too many attempts (Supabase handles rate limiting, surface the error)
+- [x] OAuth account conflict (email already registered with different provider, offer to link)
+- [x] Terms & privacy consent (checkbox on signup, stored in users.accepted_terms_at — column added in updated schema)
 
 ### NOT implementing in Phase 2
 - Magic link login (passwordless) — defer, adds UX complexity for minimal gain
@@ -178,11 +178,10 @@ ALTER TABLE poem_reviews ADD COLUMN fsrs_reps INT DEFAULT 0;
 - Leitner: new `src/lib/srs/leitner.ts` (~30 LOC, 5 boxes, fixed intervals)
 - FSRS: new `src/lib/srs/fsrs.ts` (wraps `ts-fsrs` npm package)
 
-**FSRS tier gating:** FSRS selectable only for PRO/MAX tier users. FREE users see
-FSRS in picker with lock icon + upgrade prompt. Enforced in both frontend (UI gating)
-and backend: `/api/schedule` route must JOIN `students` → `student_guardians` → `users`
-to check `users.plan`. Currently the route has no tier checking; this is new logic.
-Reject FSRS ratings from FREE users with 403 + error message.
+**FSRS tier gating:** ~~Removed by eng review.~~ FSRS is available to all tiers. No lock
+icon, no 403, no tier checking. The original design doc DD#4 had paid-tier gating, but
+the eng review recommended unlocking it for all users to reduce complexity and improve
+the algorithm comparison experience.
 
 **Algorithm switching (all algorithms):** When guardian changes algorithm, the new
 algorithm recalculates scheduling state from `review_events` (the append-only log).

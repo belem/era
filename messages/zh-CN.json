@@ -3,7 +3,9 @@
     "title": "今日诗词",
     "streak": "连续 {days} 天",
     "startReview": "开始复习",
-    "empty": "今日无诗可复习"
+    "empty": "今日无诗可复习",
+    "listenMode": "听诵",
+    "customPoems": "诗心"
   },
   "review": {
     "card": "卡片",
@@ -24,6 +26,7 @@
   "nav": {
     "home": "晨光",
     "library": "诗库",
+    "fragments": "集雅",
     "gallery": "卷轴馆",
     "profile": "我的"
   },
@@ -40,7 +43,8 @@
   "profile": {
     "title": "我的",
     "achievements": "成就",
-    "settings": "设置"
+    "settings": "设置",
+    "analytics": "学习报告"
   },
   "login": {
     "title": "跬步",
@@ -52,7 +56,15 @@
     "confirmationSent": "确认邮件已发送",
     "checkEmail": "请查收邮箱中的确认链接，确认后即可登录。",
     "backToSignIn": "返回登录",
-    "forgotPassword": "忘记密码？"
+    "forgotPassword": "忘记密码？",
+    "resendEmail": "重新发送确认邮件",
+    "resendCooldown": "{seconds}秒后可重发",
+    "tooManyAttempts": "尝试次数过多，请{seconds}秒后再试。",
+    "oauthConflict": "此邮箱已通过 {provider} 注册。请使用该方式登录，或换用其他邮箱。",
+    "tryDifferentMethod": "尝试其他登录方式",
+    "termsConsent": "我同意服务条款和隐私政策",
+    "magicLink": "使用邮箱链接登录",
+    "magicLinkSent": "请查收邮箱中的登录链接"
   },
   "auth": {
     "forgotTitle": "重置密码",
@@ -117,5 +129,82 @@
     "grade": "年级",
     "next": "下一步",
     "done": "开始学习"
+  },
+  "fragments": {
+    "title": "集雅",
+    "newDeck": "新建牌组",
+    "cancel": "取消",
+    "deckName": "牌组名称",
+    "deckDesc": "描述（可选）",
+    "createDeck": "创建牌组",
+    "empty": "还没有牌组，创建一个开始吧。",
+    "cardCount": "{count} 张卡片",
+    "dueCount": "{count} 待复习",
+    "review": "复习",
+    "deleteDeck": "删除牌组",
+    "cards": "卡片",
+    "addCard": "添加卡片",
+    "frontPlaceholder": "正面（问题）",
+    "backPlaceholder": "背面（答案）",
+    "saveCard": "保存卡片",
+    "save": "保存",
+    "emptyDeck": "这个牌组还没有卡片。",
+    "editCard": "编辑",
+    "deleteCard": "删除",
+    "showAnswer": "显示答案",
+    "noDue": "没有待复习的卡片",
+    "backToDeck": "返回牌组",
+    "reviewComplete": "复习完成",
+    "reviewedCount": "复习了 {count} 张卡片",
+    "done": "完成"
+  },
+  "analytics": {
+    "title": "学习报告",
+    "totalReviews": "复习次数（30天）",
+    "mastered": "已掌握",
+    "currentStreak": "当前连续",
+    "longestStreak": "最长: {n}",
+    "listeningMinutes": "听诵时长",
+    "activity": "学习活动",
+    "ratingDistribution": "评分分布",
+    "poemProgress": "诗词进度",
+    "noData": "暂无复习数据",
+    "gradeN": "{n}年级",
+    "days": "天"
+  },
+  "listen": {
+    "passiveTitle": "沉浸听诵",
+    "passiveDesc": "诗词连续播放，记忆薄弱的诗会更频繁出现。安静聆听即可。",
+    "activeTitle": "听诵复习",
+    "activeDesc": "听完每首诗后，通过语音、耳机按键或屏幕点击评价你的记忆程度。",
+    "noTTS": "此浏览器不支持语音合成",
+    "noPoems": "没有待复习的诗词",
+    "backHome": "返回首页",
+    "poemCount": "队列中有 {count} 首诗",
+    "startListening": "开始听诵",
+    "stopListening": "停止",
+    "nowPlaying": "正在播放",
+    "switchToActive": "切换到听诵复习",
+    "switchToPassive": "切换到沉浸听诵",
+    "rateNow": "评价你的记忆",
+    "autoRateHint": "10秒后自动评为「尚可」",
+    "sessionComplete": "听诵完成",
+    "reviewedCount": "复习了 {count} 首诗",
+    "done": "完成"
+  },
+  "customPoems": {
+    "title": "诗心",
+    "newPoem": "添加诗词",
+    "cancel": "取消",
+    "titlePlaceholder": "诗名（输入可搜索）",
+    "authorPlaceholder": "作者",
+    "dynastyPlaceholder": "朝代",
+    "linesPlaceholder": "诗词内容（每行一句）",
+    "generatePinyin": "生成拼音",
+    "generatingPinyin": "生成中...",
+    "pinyinGenerated": "{count} 个字",
+    "savePoem": "保存诗词",
+    "empty": "还没有自定义诗词",
+    "requiresPro": "自定义诗词需要Pro或Max订阅"
   }
 }

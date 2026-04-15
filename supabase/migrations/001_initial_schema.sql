@@ -228,6 +228,151 @@ CREATE POLICY invitations_insert ON guardian_invitations FOR INSERT
 CREATE POLICY invitations_select_by_email ON guardian_invitations FOR SELECT
   USING (invited_email = (SELECT email FROM auth.users WHERE id = auth.uid()));
 
+-- Fragments (general flashcards — 集雅 module)
+CREATE TABLE fragment_decks (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  student_id UUID NOT NULL REFERENCES students ON DELETE CASCADE,
+  name TEXT NOT NULL,
+  description TEXT,
+  color TEXT DEFAULT '#0071e3',
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ DEFAULT now()
+);
+
+CREATE TABLE fragments (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  deck_id UUID NOT NULL REFERENCES fragment_decks ON DELETE CASCADE,
+  student_id UUID NOT NULL REFERENCES students ON DELETE CASCADE,
+  front TEXT NOT NULL,
+  back TEXT NOT NULL,
+  tags TEXT[] DEFAULT '{}',
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- Fragment reviews (SRS state per student per fragment, mirrors poem_reviews)
+CREATE TABLE fragment_reviews (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  student_id UUID NOT NULL REFERENCES students ON DELETE CASCADE,
+  fragment_id UUID NOT NULL REFERENCES fragments ON DELETE CASCADE,
+  rating TEXT CHECK (rating IN ('forgot', 'hard', 'good', 'easy')),
+  repetitions INTEGER DEFAULT 0,
+  ease_factor REAL DEFAULT 2.5,
+  interval_days INTEGER DEFAULT 0,
+  leitner_box INTEGER DEFAULT 0,
+  fsrs_stability FLOAT,
+  fsrs_difficulty FLOAT,
+  fsrs_reps INTEGER DEFAULT 0,
+  next_review_at TIMESTAMPTZ DEFAULT now(),
+  last_reviewed_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ DEFAULT now(),
+  UNIQUE (student_id, fragment_id)
+);
+
+-- Fragment review events (append-only log, mirrors review_events)
+CREATE TABLE fragment_review_events (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  student_id UUID NOT NULL REFERENCES students ON DELETE CASCADE,
+  fragment_id UUID NOT NULL REFERENCES fragments ON DELETE CASCADE,
+  algorithm srs_algorithm NOT NULL,
+  rating TEXT NOT NULL CHECK (rating IN ('forgot', 'hard', 'good', 'easy')),
+  reviewed_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX idx_fragment_review_events_student_date
+  ON fragment_review_events(student_id, reviewed_at);
+
+-- Custom poems (诗心 — paid tier)
+CREATE TABLE custom_poems (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  created_by UUID NOT NULL REFERENCES auth.users ON DELETE CASCADE,
+  student_id UUID NOT NULL REFERENCES students ON DELETE CASCADE,
+  title TEXT NOT NULL,
+  author TEXT,
+  dynasty TEXT,
+  content_lines JSONB NOT NULL,
+  source_poem_id TEXT, -- reference to chinese-poetry dataset ID if autocompleted
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- Listening sessions (ear training analytics)
+CREATE TABLE listening_sessions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  student_id UUID NOT NULL REFERENCES students ON DELETE CASCADE,
+  mode TEXT NOT NULL CHECK (mode IN ('passive', 'active')),
+  started_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  ended_at TIMESTAMPTZ,
+  poems_played INTEGER DEFAULT 0,
+  poems_rated INTEGER DEFAULT 0,
+  duration_seconds INTEGER DEFAULT 0
+);
+
+CREATE INDEX idx_listening_sessions_student
+  ON listening_sessions(student_id, started_at);
+
+-- ========== RLS: PHASE 3 TABLES ==========
+
+ALTER TABLE fragment_decks ENABLE ROW LEVEL SECURITY;
+ALTER TABLE fragments ENABLE ROW LEVEL SECURITY;
+ALTER TABLE fragment_reviews ENABLE ROW LEVEL SECURITY;
+ALTER TABLE fragment_review_events ENABLE ROW LEVEL SECURITY;
+ALTER TABLE custom_poems ENABLE ROW LEVEL SECURITY;
+ALTER TABLE listening_sessions ENABLE ROW LEVEL SECURITY;
+
+-- Fragment decks: guardian access via student link
+CREATE POLICY fragment_decks_select ON fragment_decks FOR SELECT
+  USING (EXISTS (SELECT 1 FROM student_guardians sg WHERE sg.student_id = fragment_decks.student_id AND sg.guardian_id = auth.uid()));
+CREATE POLICY fragment_decks_insert ON fragment_decks FOR INSERT
+  WITH CHECK (EXISTS (SELECT 1 FROM student_guardians sg WHERE sg.student_id = fragment_decks.student_id AND sg.guardian_id = auth.uid()));
+CREATE POLICY fragment_decks_update ON fragment_decks FOR UPDATE
+  USING (EXISTS (SELECT 1 FROM student_guardians sg WHERE sg.student_id = fragment_decks.student_id AND sg.guardian_id = auth.uid()));
+CREATE POLICY fragment_decks_delete ON fragment_decks FOR DELETE
+  USING (EXISTS (SELECT 1 FROM student_guardians sg WHERE sg.student_id = fragment_decks.student_id AND sg.guardian_id = auth.uid()));
+
+-- Fragments: same guardian pattern
+CREATE POLICY fragments_select ON fragments FOR SELECT
+  USING (EXISTS (SELECT 1 FROM student_guardians sg WHERE sg.student_id = fragments.student_id AND sg.guardian_id = auth.uid()));
+CREATE POLICY fragments_insert ON fragments FOR INSERT
+  WITH CHECK (EXISTS (SELECT 1 FROM student_guardians sg WHERE sg.student_id = fragments.student_id AND sg.guardian_id = auth.uid()));
+CREATE POLICY fragments_update ON fragments FOR UPDATE
+  USING (EXISTS (SELECT 1 FROM student_guardians sg WHERE sg.student_id = fragments.student_id AND sg.guardian_id = auth.uid()));
+CREATE POLICY fragments_delete ON fragments FOR DELETE
+  USING (EXISTS (SELECT 1 FROM student_guardians sg WHERE sg.student_id = fragments.student_id AND sg.guardian_id = auth.uid()));
+
+-- Fragment reviews: same guardian pattern
+CREATE POLICY fragment_reviews_select ON fragment_reviews FOR SELECT
+  USING (EXISTS (SELECT 1 FROM student_guardians sg WHERE sg.student_id = fragment_reviews.student_id AND sg.guardian_id = auth.uid()));
+CREATE POLICY fragment_reviews_insert ON fragment_reviews FOR INSERT
+  WITH CHECK (EXISTS (SELECT 1 FROM student_guardians sg WHERE sg.student_id = fragment_reviews.student_id AND sg.guardian_id = auth.uid()));
+CREATE POLICY fragment_reviews_update ON fragment_reviews FOR UPDATE
+  USING (EXISTS (SELECT 1 FROM student_guardians sg WHERE sg.student_id = fragment_reviews.student_id AND sg.guardian_id = auth.uid()));
+
+-- Fragment review events: same pattern
+CREATE POLICY fragment_review_events_select ON fragment_review_events FOR SELECT
+  USING (EXISTS (SELECT 1 FROM student_guardians sg WHERE sg.student_id = fragment_review_events.student_id AND sg.guardian_id = auth.uid()));
+CREATE POLICY fragment_review_events_insert ON fragment_review_events FOR INSERT
+  WITH CHECK (EXISTS (SELECT 1 FROM student_guardians sg WHERE sg.student_id = fragment_review_events.student_id AND sg.guardian_id = auth.uid()));
+
+-- Custom poems: creator + linked guardians
+CREATE POLICY custom_poems_select ON custom_poems FOR SELECT
+  USING (EXISTS (SELECT 1 FROM student_guardians sg WHERE sg.student_id = custom_poems.student_id AND sg.guardian_id = auth.uid()));
+CREATE POLICY custom_poems_insert ON custom_poems FOR INSERT
+  WITH CHECK (created_by = auth.uid());
+CREATE POLICY custom_poems_update ON custom_poems FOR UPDATE
+  USING (created_by = auth.uid());
+CREATE POLICY custom_poems_delete ON custom_poems FOR DELETE
+  USING (created_by = auth.uid());
+
+-- Listening sessions: guardian access
+CREATE POLICY listening_sessions_select ON listening_sessions FOR SELECT
+  USING (EXISTS (SELECT 1 FROM student_guardians sg WHERE sg.student_id = listening_sessions.student_id AND sg.guardian_id = auth.uid()));
+CREATE POLICY listening_sessions_insert ON listening_sessions FOR INSERT
+  WITH CHECK (EXISTS (SELECT 1 FROM student_guardians sg WHERE sg.student_id = listening_sessions.student_id AND sg.guardian_id = auth.uid()));
+CREATE POLICY listening_sessions_update ON listening_sessions FOR UPDATE
+  USING (EXISTS (SELECT 1 FROM student_guardians sg WHERE sg.student_id = listening_sessions.student_id AND sg.guardian_id = auth.uid()));
+
 -- ========== SEED: BADGES ==========
 
 INSERT INTO badges (name, description, criteria_type, criteria_value, icon) VALUES
@@ -244,7 +389,11 @@ CREATE OR REPLACE FUNCTION handle_new_user()
 RETURNS trigger AS $$
 BEGIN
   INSERT INTO profiles (id) VALUES (new.id);
-  INSERT INTO users (id) VALUES (new.id);
+  INSERT INTO users (id, accepted_terms_at)
+  VALUES (
+    new.id,
+    (new.raw_user_meta_data->>'accepted_terms_at')::TIMESTAMPTZ
+  );
   RETURN new;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -265,3 +414,7 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER profiles_updated_at BEFORE UPDATE ON profiles FOR EACH ROW EXECUTE FUNCTION update_updated_at();
 CREATE TRIGGER students_updated_at BEFORE UPDATE ON students FOR EACH ROW EXECUTE FUNCTION update_updated_at();
 CREATE TRIGGER reviews_updated_at BEFORE UPDATE ON poem_reviews FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+CREATE TRIGGER fragment_decks_updated_at BEFORE UPDATE ON fragment_decks FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+CREATE TRIGGER fragments_updated_at BEFORE UPDATE ON fragments FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+CREATE TRIGGER fragment_reviews_updated_at BEFORE UPDATE ON fragment_reviews FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+CREATE TRIGGER custom_poems_updated_at BEFORE UPDATE ON custom_poems FOR EACH ROW EXECUTE FUNCTION update_updated_at();

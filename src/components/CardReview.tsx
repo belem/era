@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import type { Poem } from "@/types/poem";
 import { PoemBody } from "./PoemBody";
 import { RatingButtons } from "./RatingButtons";
+import { PlayButton } from "./PlayButton";
 
 interface CardReviewProps {
   poem: Poem;
@@ -36,9 +37,12 @@ export function CardReview({ poem, onRate }: CardReviewProps) {
       <h2 className="font-heading font-semibold text-[21px] tracking-tight mb-1">
         {poem.title}
       </h2>
-      <p className="text-[14px] text-text-tertiary tracking-tight mb-10">
-        〔{poem.dynasty}〕{poem.author}
-      </p>
+      <div className="flex items-center justify-center gap-2 mb-10">
+        <p className="text-[14px] text-text-tertiary tracking-tight">
+          〔{poem.dynasty}〕{poem.author}
+        </p>
+        <PlayButton poem={poem} />
+      </div>
 
       <div className="mb-12 leading-[2.4]">
         <PoemBody poem={poem} />

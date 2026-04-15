@@ -2,7 +2,7 @@
 
 import { createClient } from "@/lib/supabase/client";
 import { useTranslations } from "next-intl";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -17,6 +17,14 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [errorField, setErrorField] = useState<"email" | "password" | null>(null);
   const [confirmationSent, setConfirmationSent] = useState(false);
+  const [resendCooldown, setResendCooldown] = useState(0);
+  const [lockedUntil, setLockedUntil] = useState(0);
+  const [oauthConflictProvider, setOauthConflictProvider] = useState<string | null>(null);
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [magicLinkSent, setMagicLinkSent] = useState(false);
+  const [magicLinkLoading, setMagicLinkLoading] = useState(false);
+  const cooldownRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const lockRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Redirect if already logged in
   useEffect(() => {
@@ -25,6 +33,43 @@ export default function LoginPage() {
       if (user) router.push("/");
     });
   }, [router]);
+
+  // Resend cooldown timer
+  useEffect(() => {
+    if (resendCooldown <= 0) return;
+    cooldownRef.current = setInterval(() => {
+      setResendCooldown((prev) => {
+        if (prev <= 1) {
+          if (cooldownRef.current) clearInterval(cooldownRef.current);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => { if (cooldownRef.current) clearInterval(cooldownRef.current); };
+  }, [resendCooldown > 0]);
+
+  // Lock timer
+  useEffect(() => {
+    if (lockedUntil <= 0) return;
+    lockRef.current = setInterval(() => {
+      setLockedUntil((prev) => {
+        if (prev <= 1) {
+          if (lockRef.current) clearInterval(lockRef.current);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => { if (lockRef.current) clearInterval(lockRef.current); };
+  }, [lockedUntil > 0]);
+
+  const handleResendConfirmation = useCallback(async () => {
+    if (resendCooldown > 0) return;
+    const supabase = createClient();
+    await supabase.auth.resend({ type: "signup", email });
+    setResendCooldown(60);
+  }, [email, resendCooldown]);
 
   const handleOAuthSignIn = async (provider: "google" | "apple" | "github" | "azure" | "twitter") => {
     try {
@@ -53,17 +98,30 @@ export default function LoginPage() {
         if (error) throw error;
         router.push("/");
       } else {
-        const { error } = await supabase.auth.signUp({ email, password });
+        const { error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: { data: { accepted_terms_at: new Date().toISOString() } },
+        });
         if (error) throw error;
         setConfirmationSent(true);
       }
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Authentication error";
       setError(msg);
+      setOauthConflictProvider(null);
       // Map Supabase error messages to field hints
       if (msg.includes("Invalid login") || msg.includes("invalid_credentials")) {
         setErrorField("password");
       } else if (msg.includes("not confirmed") || msg.includes("Email not confirmed")) {
+        setErrorField("email");
+      } else if (msg.includes("rate limit") || msg.includes("too many requests") || msg.includes("Too many requests")) {
+        setErrorField(null);
+        setLockedUntil(60);
+      } else if (msg.includes("already registered") || msg.includes("already been registered")) {
+        // OAuth conflict: email exists with a different provider
+        const providerMatch = msg.match(/provider[:\s]+(\w+)/i);
+        setOauthConflictProvider(providerMatch?.[1] ?? "another provider");
         setErrorField("email");
       } else {
         setErrorField(null);
@@ -96,21 +154,50 @@ export default function LoginPage() {
         <div className="bg-bg-subtle rounded-[var(--radius-lg)] p-8 lg:bg-transparent lg:p-0">
           {confirmationSent ? (
             <div className="text-center space-y-4">
-              <div className="text-4xl mb-2">✉️</div>
+              <svg className="w-10 h-10 mx-auto text-text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+              </svg>
               <h2 className="text-lg font-heading text-text">{t("confirmationSent")}</h2>
               <p className="text-text-secondary text-sm">{t("checkEmail")}</p>
+              <button
+                onClick={handleResendConfirmation}
+                disabled={resendCooldown > 0}
+                className="text-primary text-sm hover:underline disabled:opacity-50 disabled:no-underline"
+              >
+                {resendCooldown > 0
+                  ? t("resendCooldown", { seconds: resendCooldown })
+                  : t("resendEmail")}
+              </button>
+              <br />
               <button
                 onClick={() => {
                   setConfirmationSent(false);
                   setMode("signin");
                   setError("");
                 }}
-                className="text-primary text-sm hover:underline"
+                className="text-text-secondary text-sm hover:text-primary transition-colors"
               >
                 {t("backToSignIn")}
               </button>
             </div>
           ) : (<>
+          {/* OAuth conflict banner */}
+          {oauthConflictProvider && (
+            <div className="bg-bg rounded-[var(--radius-md)] border border-border p-4 mb-6 text-center">
+              <p className="text-[14px] text-text mb-2">{t("oauthConflict", { provider: oauthConflictProvider })}</p>
+              <button
+                onClick={() => {
+                  setOauthConflictProvider(null);
+                  setError("");
+                  setErrorField(null);
+                }}
+                className="text-primary text-[14px] hover:underline"
+              >
+                {t("tryDifferentMethod")}
+              </button>
+            </div>
+          )}
+
           {/* OAuth Row */}
           <div className="flex gap-3 mb-6">
             <button
@@ -194,11 +281,17 @@ export default function LoginPage() {
               )}
             </div>
 
-            {error && !errorField && (
+            {error && !errorField && lockedUntil <= 0 && (
               <p className="text-error text-[14px] text-center" role="alert">{error}</p>
             )}
 
-            {mode === "signin" && !error && (
+            {lockedUntil > 0 && (
+              <p className="text-error text-[14px] text-center" role="alert">
+                {t("tooManyAttempts", { seconds: lockedUntil })}
+              </p>
+            )}
+
+            {mode === "signin" && !error && lockedUntil <= 0 && (
               <div className="text-right">
                 <Link href="/forgot-password" className="text-text-secondary text-[14px] hover:text-primary transition-colors">
                   {t("forgotPassword")}
@@ -206,9 +299,23 @@ export default function LoginPage() {
               </div>
             )}
 
+            {mode === "signup" && (
+              <label className="flex items-start gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={termsAccepted}
+                  onChange={(e) => setTermsAccepted(e.target.checked)}
+                  className="mt-0.5 accent-primary"
+                />
+                <span className="text-[13px] text-text-secondary leading-tight">
+                  {t("termsConsent")}
+                </span>
+              </label>
+            )}
+
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || lockedUntil > 0 || (mode === "signup" && !termsAccepted)}
               className="w-full bg-primary text-white rounded-[var(--radius-pill)] py-3 font-medium hover:bg-primary-hover transition-colors disabled:opacity-50"
             >
               {loading ? "..." : mode === "signin" ? t("signIn") : t("signUp")}
@@ -217,11 +324,45 @@ export default function LoginPage() {
             {/* Toggle mode */}
             <button
               type="button"
-              onClick={() => setMode(mode === "signin" ? "signup" : "signin")}
+              onClick={() => {
+                setMode(mode === "signin" ? "signup" : "signin");
+                setOauthConflictProvider(null);
+                setError("");
+                setErrorField(null);
+                setLockedUntil(0);
+              }}
               className="w-full text-center text-text-secondary text-sm hover:text-primary transition-colors"
             >
               {mode === "signin" ? t("signUp") : t("signIn")}
             </button>
+
+            {/* Magic Link */}
+            {mode === "signin" && (
+              <div className="pt-2 border-t border-border mt-2">
+                {magicLinkSent ? (
+                  <p className="text-text-secondary text-sm text-center">{t("magicLinkSent")}</p>
+                ) : (
+                  <button
+                    type="button"
+                    disabled={magicLinkLoading || !email}
+                    onClick={async () => {
+                      if (!email) return;
+                      setMagicLinkLoading(true);
+                      const supabase = createClient();
+                      await supabase.auth.signInWithOtp({
+                        email,
+                        options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
+                      });
+                      setMagicLinkSent(true);
+                      setMagicLinkLoading(false);
+                    }}
+                    className="w-full text-center text-text-tertiary text-sm hover:text-primary transition-colors disabled:opacity-50"
+                  >
+                    {magicLinkLoading ? "..." : t("magicLink")}
+                  </button>
+                )}
+              </div>
+            )}
           </form>
           </>)}
         </div>

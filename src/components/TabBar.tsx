@@ -11,6 +11,7 @@ export function TabBar() {
   const tabs = [
     { href: "/", label: t("home"), icon: "☀" },
     { href: "/library", label: t("library"), icon: "📖" },
+    { href: "/fragments", label: t("fragments"), icon: "雅" },
     { href: "/gallery", label: t("gallery"), icon: "📜" },
     { href: "/profile", label: t("profile"), icon: "👤" },
   ];

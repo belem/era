@@ -4,6 +4,7 @@ import { ThemeProvider } from "next-themes";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import { StudentProvider } from "@/hooks/useStudent";
+import { ServiceWorkerRegistrar } from "@/components/ServiceWorkerRegistrar";
 import "./globals.css";
 
 const inter = Inter({
@@ -39,12 +40,18 @@ export default async function RootLayout({
           href="https://fonts.googleapis.com/css2?family=LXGW+WenKai:wght@300;400&family=Noto+Serif+SC:wght@400;600&display=swap"
           rel="stylesheet"
         />
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#0071e3" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <link rel="apple-touch-icon" href="/icons/icon-192.svg" />
       </head>
       <body className="min-h-dvh flex flex-col bg-bg text-text antialiased">
         <NextIntlClientProvider messages={messages}>
           <ThemeProvider attribute="data-theme" defaultTheme="system" enableSystem>
             <StudentProvider>
               {children}
+              <ServiceWorkerRegistrar />
             </StudentProvider>
           </ThemeProvider>
         </NextIntlClientProvider>
