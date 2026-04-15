@@ -3,7 +3,11 @@
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
-export function ThemeToggle() {
+interface ThemeToggleProps {
+  inline?: boolean;
+}
+
+export function ThemeToggle({ inline = false }: ThemeToggleProps) {
   const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
@@ -12,7 +16,9 @@ export function ThemeToggle() {
   if (!mounted) {
     return (
       <button
-        className="fixed top-2.5 right-5 z-50 w-8 h-8 rounded-full flex items-center justify-center text-sm opacity-0"
+        className={`w-8 h-8 rounded-full flex items-center justify-center text-sm opacity-0 ${
+          inline ? "" : "fixed top-2.5 right-14 z-50 md:hidden"
+        }`}
         aria-label="Toggle theme"
       />
     );
@@ -21,7 +27,11 @@ export function ThemeToggle() {
   return (
     <button
       onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
-      className="fixed top-2.5 right-14 z-50 w-8 h-8 rounded-full text-white/80 hover:text-white flex items-center justify-center text-sm transition-colors"
+      className={`w-8 h-8 rounded-full flex items-center justify-center text-sm transition-colors ${
+        inline
+          ? "text-white/80 hover:text-white"
+          : "fixed top-2.5 right-14 z-50 text-white/80 hover:text-white md:hidden"
+      }`}
       aria-label={`Switch to ${resolvedTheme === "dark" ? "light" : "dark"} mode`}
     >
       {resolvedTheme === "dark" ? "☀" : "☽"}

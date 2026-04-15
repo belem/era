@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from "react";
 import { useTranslations } from "next-intl";
-import type { Poem } from "@/data/poems";
+import type { Poem } from "@/types/poem";
 import { ChopStamp } from "./ChopStamp";
 import { RatingButtons } from "./RatingButtons";
 

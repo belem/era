@@ -32,11 +32,15 @@
   },
   "gallery": {
     "title": "卷轴馆",
-    "empty": "完成复习后，卷轴将在此展示"
+    "empty": "完成复习后，卷轴将在此展示",
+    "emptyTitle": "你的卷轴馆等待着",
+    "emptyDesc": "完成一次卷轴复习，你的首幅墨宝将在此展出",
+    "startScroll": "开始卷轴"
   },
   "profile": {
     "title": "我的",
-    "achievements": "成就"
+    "achievements": "成就",
+    "settings": "设置"
   },
   "login": {
     "title": "跬步",
@@ -47,7 +51,65 @@
     "signUp": "注册",
     "confirmationSent": "确认邮件已发送",
     "checkEmail": "请查收邮箱中的确认链接，确认后即可登录。",
-    "backToSignIn": "返回登录"
+    "backToSignIn": "返回登录",
+    "forgotPassword": "忘记密码？"
+  },
+  "auth": {
+    "forgotTitle": "重置密码",
+    "forgotSubtitle": "输入邮箱，我们将发送重置链接",
+    "emailPlaceholder": "邮箱地址",
+    "sendResetLink": "发送重置链接",
+    "backToLogin": "返回登录",
+    "resetSent": "请查收邮件",
+    "resetSentDesc": "我们已发送密码重置链接至你的邮箱。",
+    "resetTitle": "设置新密码",
+    "resetSubtitle": "请输入新密码",
+    "newPassword": "新密码",
+    "confirmPassword": "确认密码",
+    "resetPassword": "重置密码",
+    "passwordMismatch": "两次输入的密码不一致",
+    "tokenExpired": "链接已过期",
+    "tokenExpiredDesc": "此重置链接已过期，请重新获取。",
+    "requestNewLink": "重新获取链接",
+    "passwordChanged": "密码已更新",
+    "redirectingToLogin": "正在跳转至登录...",
+    "redirectingToSettings": "正在跳转至设置...",
+    "changePasswordTitle": "修改密码",
+    "changePassword": "修改密码"
+  },
+  "settings": {
+    "tabs": {
+      "learning": "学习",
+      "account": "账户",
+      "family": "家庭"
+    },
+    "algorithm": "算法",
+    "sm2Desc": "经典间隔重复算法，根据记忆程度自动调整复习间隔，稳定可靠。",
+    "leitnerDesc": "五箱法，规则简单。答对前进一箱，答错回到第一箱。",
+    "fsrsDesc": "基于机器学习的现代算法，根据个人记忆模式优化复习时机。",
+    "algorithmConfirm": "这将重新计算复习计划，确认切换？",
+    "switchTo": "切换到 {algo}",
+    "migrating": "正在重新计算...",
+    "session": "学习设置",
+    "newPoemsPerDay": "每日新诗数量",
+    "maxReviewsPerSession": "每次最多复习数量",
+    "streak": "连续打卡",
+    "streakFreeze": "打卡保护",
+    "freezeCaption": "每周可免费保护一次",
+    "email": "邮箱",
+    "password": "密码",
+    "changePassword": "修改密码",
+    "linkedProviders": "已关联账号",
+    "connected": "已连接",
+    "link": "关联",
+    "logout": "退出登录",
+    "guardians": "监护人",
+    "noGuardians": "暂无其他监护人。邀请他人帮助管理{name}的学习。",
+    "unknownGuardian": "监护人",
+    "inviteGuardian": "邀请监护人",
+    "inviteEmailPlaceholder": "监护人邮箱地址",
+    "inviteSent": "邀请已发送！",
+    "sendInvite": "发送邀请"
   },
   "onboarding": {
     "createStudent": "创建第一个学生档案",

@@ -1,4 +1,4 @@
-import type { Poem } from "@/data/poems";
+import type { Poem } from "@/types/poem";
 
 export function PoemBody({ poem }: { poem: Poem }) {
   return (

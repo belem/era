@@ -16,7 +16,7 @@ export function TabBar() {
   ];
 
   return (
-    <nav className="glass-nav sticky bottom-0 z-40">
+    <nav className="glass-nav sticky bottom-0 z-40 md:hidden">
       <div className="flex py-2 pb-3">
         {tabs.map((tab) => {
           const isActive =

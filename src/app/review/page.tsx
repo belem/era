@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useState, useEffect } from "react";
+import { Suspense, useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useReviewQueue } from "@/hooks/useReviewQueue";
@@ -9,6 +9,12 @@ import { AppHeader } from "@/components/AppHeader";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { CardReview } from "@/components/CardReview";
 import { LivingScroll } from "@/components/LivingScroll";
+import { SessionSummary } from "@/components/SessionSummary";
+
+interface SessionRating {
+  poemId: string;
+  rating: "forgot" | "hard" | "good" | "easy";
+}
 
 function ReviewContent() {
   const t = useTranslations("review");
@@ -20,6 +26,7 @@ function ReviewContent() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [mode, setMode] = useState<"card" | "scroll">("card");
   const [sessionComplete, setSessionComplete] = useState(false);
+  const [sessionRatings, setSessionRatings] = useState<SessionRating[]>([]);
 
   // Set initial index when poems load and poemId is present
   useEffect(() => {
@@ -33,8 +40,9 @@ function ReviewContent() {
 
   const poem = poems[currentIndex];
 
-  const handleRate = async (rating: "forgot" | "hard" | "good" | "easy") => {
+  const handleRate = useCallback(async (rating: "forgot" | "hard" | "good" | "easy") => {
     if (student && poem) {
+      setSessionRatings((prev) => [...prev, { poemId: poem.id, rating }]);
       await fetch("/api/schedule", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -50,7 +58,7 @@ function ReviewContent() {
     } else {
       setSessionComplete(true);
     }
-  };
+  }, [student, poem, currentIndex, poems.length]);
 
   if (loading) {
     return (
@@ -76,22 +84,16 @@ function ReviewContent() {
     );
   }
 
-  if (sessionComplete) {
+  if (sessionComplete && student) {
     return (
       <>
         <AppHeader />
-        <ThemeToggle />
-        <main className="flex-1 flex flex-col items-center justify-center px-6 py-20 text-center">
-          <div className="w-16 h-16 mx-auto mb-4 rounded-[4px] border-[3px] border-primary flex items-center justify-center font-heading text-xl text-primary -rotate-[5deg]">
-            成
-          </div>
-          <h2 className="font-heading font-semibold text-[21px] tracking-tight mb-2">
-            {t("complete")}
-          </h2>
-          <p className="text-text-secondary text-[14px] tracking-tight mb-1">
-            {t("todayCount", { count: poems.length })}
-          </p>
-          <p className="text-text-tertiary text-[12px]">{t("tomorrow")}</p>
+        <main className="flex-1 flex items-center justify-center">
+          <SessionSummary
+            studentId={student.id}
+            studentName={student.name}
+            ratings={sessionRatings}
+          />
         </main>
       </>
     );

@@ -25,7 +25,9 @@
       "Bash(python scripts/generate-pinyin.py)",
       "Bash(python scripts/generate-seed-sql.py)",
       "Bash(ls:*)",
-      "Bash(python -c \"import json; poems = json.load\\(open\\('scripts/poems-with-pinyin.json', encoding='utf-8'\\)\\); print\\(f'Total poems: {len\\(poems\\)}'\\); p = poems[0]; print\\(f'Sample: {p[\\\\\"title\\\\\"]} - {len\\(p[\\\\\"content_lines\\\\\"]\\)} lines, first char: {p[\\\\\"content_lines\\\\\"][0][\\\\\"chars\\\\\"][0]}'\\)\")"
+      "Bash(python -c \"import json; poems = json.load\\(open\\('scripts/poems-with-pinyin.json', encoding='utf-8'\\)\\); print\\(f'Total poems: {len\\(poems\\)}'\\); p = poems[0]; print\\(f'Sample: {p[\\\\\"title\\\\\"]} - {len\\(p[\\\\\"content_lines\\\\\"]\\)} lines, first char: {p[\\\\\"content_lines\\\\\"][0][\\\\\"chars\\\\\"][0]}'\\)\")",
+      "Skill(plan-design-review)",
+      "Bash(npx tsc *)"
     ]
   }
 }

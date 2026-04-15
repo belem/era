@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useStudent } from "./useStudent";
-import type { Poem } from "@/data/poems";
+import type { Poem } from "@/types/poem";
 
 export function useReviewQueue() {
   const { student } = useStudent();

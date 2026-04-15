@@ -32,11 +32,15 @@
   },
   "gallery": {
     "title": "Scroll Gallery",
-    "empty": "Complete reviews to see scrolls here"
+    "empty": "Complete reviews to see scrolls here",
+    "emptyTitle": "Your gallery awaits",
+    "emptyDesc": "Complete a Living Scroll to display your first masterpiece here",
+    "startScroll": "Start a scroll"
   },
   "profile": {
     "title": "Profile",
-    "achievements": "Achievements"
+    "achievements": "Achievements",
+    "settings": "Settings"
   },
   "login": {
     "title": "Kuibu",
@@ -47,7 +51,65 @@
     "signUp": "Sign up",
     "confirmationSent": "Check your email",
     "checkEmail": "We sent a confirmation link to your email. Click it to activate your account, then sign in.",
-    "backToSignIn": "Back to sign in"
+    "backToSignIn": "Back to sign in",
+    "forgotPassword": "Forgot password?"
+  },
+  "auth": {
+    "forgotTitle": "Reset Password",
+    "forgotSubtitle": "Enter your email and we'll send a reset link",
+    "emailPlaceholder": "Email address",
+    "sendResetLink": "Send Reset Link",
+    "backToLogin": "Back to sign in",
+    "resetSent": "Check your email",
+    "resetSentDesc": "We sent a password reset link to your email.",
+    "resetTitle": "New Password",
+    "resetSubtitle": "Enter your new password",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm password",
+    "resetPassword": "Reset Password",
+    "passwordMismatch": "Passwords do not match",
+    "tokenExpired": "Link Expired",
+    "tokenExpiredDesc": "This reset link has expired. Request a new one.",
+    "requestNewLink": "Request New Link",
+    "passwordChanged": "Password changed",
+    "redirectingToLogin": "Redirecting to sign in...",
+    "redirectingToSettings": "Redirecting to settings...",
+    "changePasswordTitle": "Change Password",
+    "changePassword": "Change Password"
+  },
+  "settings": {
+    "tabs": {
+      "learning": "Learning",
+      "account": "Account",
+      "family": "Family"
+    },
+    "algorithm": "Algorithm",
+    "sm2Desc": "Classic spaced repetition. Adjusts intervals based on how well you remember each poem. Proven and predictable.",
+    "leitnerDesc": "Five boxes, simple rules. Get a poem right and it moves forward. Forget and it goes back to box one.",
+    "fsrsDesc": "Modern machine learning approach. Optimizes review timing based on your personal memory patterns.",
+    "algorithmConfirm": "This will recalculate your review schedule. Continue?",
+    "switchTo": "Switch to {algo}",
+    "migrating": "Recalculating schedule...",
+    "session": "Session",
+    "newPoemsPerDay": "New poems per day",
+    "maxReviewsPerSession": "Max reviews per session",
+    "streak": "Streak",
+    "streakFreeze": "Streak freeze",
+    "freezeCaption": "1 free freeze per week",
+    "email": "Email",
+    "password": "Password",
+    "changePassword": "Change password",
+    "linkedProviders": "Linked Accounts",
+    "connected": "Connected",
+    "link": "Link",
+    "logout": "Log out",
+    "guardians": "Guardians",
+    "noGuardians": "No other guardians linked. Invite someone to help manage {name}'s learning.",
+    "unknownGuardian": "Guardian",
+    "inviteGuardian": "Invite Guardian",
+    "inviteEmailPlaceholder": "Guardian's email address",
+    "inviteSent": "Invitation sent!",
+    "sendInvite": "Send Invite"
   },
   "onboarding": {
     "createStudent": "Create your first student profile",

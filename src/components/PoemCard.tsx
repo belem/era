@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { Poem } from "@/data/poems";
+import type { Poem } from "@/types/poem";
 
 export function PoemCard({ poem }: { poem: Poem }) {
   const firstLine = poem.lines[0]?.chars.map((c) => c.char).join("") ?? "";

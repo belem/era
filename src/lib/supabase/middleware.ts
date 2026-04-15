@@ -21,7 +21,7 @@ export async function updateSession(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser();
 
   // Redirect unauthenticated users to login (except public pages)
-  const publicPaths = ["/login", "/auth/callback", "/onboarding"];
+  const publicPaths = ["/login", "/auth/callback", "/onboarding", "/forgot-password", "/reset-password", "/invite/accept"];
   const isPublic = publicPaths.some((p) => request.nextUrl.pathname.startsWith(p));
 
   if (!user && !isPublic) {
