@@ -1,10 +1,14 @@
 import { createServerSupabase } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
+import { generalLimiter, checkRateLimit } from "@/lib/ratelimit";
 
 export async function POST(request: Request) {
   const supabase = await createServerSupabase();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  const limited = await checkRateLimit(generalLimiter, user.id);
+  if (limited) return limited;
 
   const { token } = await request.json() as { token: string };
 

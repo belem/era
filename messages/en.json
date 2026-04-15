@@ -121,7 +121,22 @@
     "inviteGuardian": "Invite Guardian",
     "inviteEmailPlaceholder": "Guardian's email address",
     "inviteSent": "Invitation sent!",
-    "sendInvite": "Send Invite"
+    "sendInvite": "Send Invite",
+    "mfa": {
+      "title": "Two-Factor Authentication",
+      "description": "Add an extra layer of security with an authenticator app (Google Authenticator, Authy, etc).",
+      "enable": "Enable 2FA",
+      "scanQR": "Scan this QR code with your authenticator app, then enter the 6-digit code to confirm.",
+      "manualEntry": "Can't scan? Enter code manually",
+      "codePlaceholder": "6-digit code",
+      "verify": "Verify",
+      "cancel": "Cancel",
+      "invalidCode": "Enter a 6-digit code",
+      "wrongCode": "Incorrect code, try again",
+      "enabled": "Enabled",
+      "enabledDesc": "Your account is protected with two-factor authentication.",
+      "disable": "Disable 2FA"
+    }
   },
   "onboarding": {
     "createStudent": "Create your first student profile",
@@ -191,6 +206,13 @@
     "sessionComplete": "Listening Complete",
     "reviewedCount": "Reviewed {count} poems",
     "done": "Done"
+  },
+  "mfa": {
+    "title": "Two-Factor Authentication",
+    "subtitle": "Enter the code from your authenticator app",
+    "codePlaceholder": "6-digit code",
+    "verifyButton": "Verify",
+    "wrongCode": "Incorrect code, try again"
   },
   "customPoems": {
     "title": "Custom Poems",

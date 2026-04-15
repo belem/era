@@ -28,5 +28,17 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
+  // MFA enforcement: if user has enrolled TOTP factors, check AAL level
+  if (user && !request.nextUrl.pathname.startsWith("/auth/mfa")) {
+    const { data: aal } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+    const { data: factors } = await supabase.auth.mfa.listFactors();
+    const hasVerifiedTOTP = (factors?.totp ?? []).some((f) => f.status === "verified");
+
+    if (hasVerifiedTOTP && aal?.currentLevel === "aal1") {
+      // User has MFA enrolled but only completed password auth, needs TOTP challenge
+      return NextResponse.redirect(new URL("/auth/mfa", request.url));
+    }
+  }
+
   return response;
 }

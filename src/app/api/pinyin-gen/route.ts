@@ -1,5 +1,6 @@
 import { createServerSupabase } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
+import { pinyinLimiter, checkRateLimit } from "@/lib/ratelimit";
 
 /**
  * Generate pinyin for Chinese text.
@@ -10,6 +11,9 @@ export async function POST(request: Request) {
   const supabase = await createServerSupabase();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  const limited = await checkRateLimit(pinyinLimiter, user.id);
+  if (limited) return limited;
 
   // Check tier (custom poems is paid)
   const { data: userData } = await supabase

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { MFAEnroll } from "./MFAEnroll";
 
 export function AccountTab() {
   const t = useTranslations("settings");
@@ -60,6 +61,9 @@ export function AccountTab() {
           {t("changePassword")}
         </button>
       </section>
+
+      {/* MFA */}
+      <MFAEnroll />
 
       {/* Linked providers */}
       <section>

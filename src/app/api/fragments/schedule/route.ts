@@ -1,6 +1,7 @@
 import { createServerSupabase } from "@/lib/supabase/server";
 import { getAlgorithm } from "@/lib/srs/algorithm-factory";
 import { NextResponse } from "next/server";
+import { scheduleLimiter, checkRateLimit } from "@/lib/ratelimit";
 import type { Rating, AlgorithmName } from "@/lib/srs/types";
 
 export async function POST(request: Request) {
@@ -13,6 +14,9 @@ export async function POST(request: Request) {
     fragmentId: string;
     rating: Rating;
   };
+
+  const limited = await checkRateLimit(scheduleLimiter, studentId);
+  if (limited) return limited;
 
   const { data: student } = await supabase
     .from("students")

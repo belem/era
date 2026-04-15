@@ -1,12 +1,16 @@
 import { createServerSupabase } from "@/lib/supabase/server";
 import { getAlgorithm } from "@/lib/srs/algorithm-factory";
 import { NextResponse } from "next/server";
+import { generalLimiter, checkRateLimit } from "@/lib/ratelimit";
 import type { AlgorithmName, Rating } from "@/lib/srs/types";
 
 export async function POST(request: Request) {
   const supabase = await createServerSupabase();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  const limited = await checkRateLimit(generalLimiter, user.id);
+  if (limited) return limited;
 
   const { studentId, algorithm: algoName } = await request.json() as {
     studentId: string;
