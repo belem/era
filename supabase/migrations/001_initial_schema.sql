@@ -375,14 +375,12 @@ CREATE POLICY listening_sessions_update ON listening_sessions FOR UPDATE
 
 -- ========== SEED: BADGES ==========
 
--- Badge names are resolved via i18n at runtime using the icon field as key.
--- The name column stores a stable English identifier (not displayed to users).
 INSERT INTO badges (name, description, criteria_type, criteria_value, icon) VALUES
-  ('First Scroll', 'Complete your first Living Scroll', 'scroll_count', 1, 'scroll'),
-  ('Seven Days', 'Maintain a 7-day review streak', 'streak_days', 7, 'flame'),
-  ('Bright Moon', 'Maintain a 30-day review streak', 'streak_days', 30, 'moon'),
-  ('Grade Master', 'Master all poems in one grade', 'grade_mastered', 1, 'star'),
-  ('Hundred Poems', 'Review 100 poems total', 'review_count', 100, 'seal');
+  ('初卷', 'Complete your first Living Scroll', 'scroll_count', 1, 'scroll'),
+  ('七日', 'Maintain a 7-day review streak', 'streak_days', 7, 'flame'),
+  ('明月', 'Maintain a 30-day review streak', 'streak_days', 30, 'moon'),
+  ('年级通', 'Master all poems in one grade', 'grade_mastered', 1, 'star'),
+  ('百篇', 'Review 100 poems total', 'review_count', 100, 'seal');
 
 -- ========== TRIGGERS ==========
 
