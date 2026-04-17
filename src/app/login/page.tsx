@@ -2,11 +2,11 @@
 
 import { createClient } from "@/lib/supabase/client";
 import { useTranslations } from "next-intl";
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
-export default function LoginPage() {
+function LoginForm() {
   const t = useTranslations("login");
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -377,5 +377,17 @@ export default function LoginPage() {
       </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex bg-bg items-center justify-center">
+        <div className="text-text-secondary">Loading...</div>
+      </div>
+    }>
+      <LoginForm />
+    </Suspense>
   );
 }

@@ -299,7 +299,84 @@ def main():
     with open(output_path, "w", encoding="utf-8") as f:
         f.write("\n".join(sql) + "\n")
 
+    # Also write batched files for Supabase SQL Editor (target ~300KB per file)
+    MAX_BATCH_BYTES = 300_000
+    batch_dir = SCRIPT_DIR / "seed-batches"
+    batch_dir.mkdir(exist_ok=True)
+    batch_num = 1
+    current_batch = []
+    current_size = 0
+    poem_idx = 0
+
+    def flush_batch():
+        nonlocal batch_num, current_batch, current_size, poem_idx
+        if not current_batch:
+            return
+        start = poem_idx - len(current_batch) + 1
+        batch_sql = []
+        batch_sql.append(f"-- Batch {batch_num}: poems {start}-{poem_idx} of {len(poems_list)}")
+        batch_sql.append("INSERT INTO poems (title, author, dynasty, content_lines, tags)")
+        batch_sql.append("VALUES")
+        batch_sql.append(",\n".join(current_batch))
+        batch_sql.append(";")
+        batch_file = batch_dir / f"seed-poems-{batch_num:02d}.sql"
+        with open(batch_file, "w", encoding="utf-8") as f:
+            f.write("\n".join(batch_sql) + "\n")
+        batch_num += 1
+        current_batch = []
+        current_size = 0
+
+    for p in poems_list:
+        poem_idx += 1
+        title = escape_sql(p["title"])
+        author = escape_sql(p["author"])
+        dynasty = escape_sql(p["dynasty"])
+        cl_json = json.dumps(p["content_lines"], ensure_ascii=False)
+        cl_json = cl_json.replace("'", "''")
+        tags_arr = "ARRAY[" + ", ".join(f"'{escape_sql(t)}'" for t in p["tags"]) + "]"
+        val = f"  ('{title}', '{author}', '{dynasty}', '{cl_json}'::jsonb, {tags_arr})"
+        val_size = len(val.encode("utf-8"))
+        if current_size + val_size > MAX_BATCH_BYTES and current_batch:
+            flush_batch()
+        current_batch.append(val)
+        current_size += val_size
+    flush_batch()
+
+    # Write editions as the last batch
+    edition_sql = []
+    if with_grade:
+        edition_sql.append("-- Link poems to editions with grade info (部编版)")
+        edition_sql.append("INSERT INTO poem_editions (poem_id, edition, level, grade)")
+        edition_sql.append("SELECT p.id, g.edition, g.level, g.grade")
+        edition_sql.append("FROM (VALUES")
+        vals = []
+        for key, edition, level, grade in with_grade:
+            title = escape_sql(key[0])
+            vals.append(f"  ('{title}', '{edition}', '{level}', {grade})")
+        edition_sql.append(",\n".join(vals))
+        edition_sql.append(") AS g(title, edition, level, grade)")
+        edition_sql.append("JOIN poems p ON p.title = g.title")
+        edition_sql.append("ON CONFLICT DO NOTHING;")
+        edition_sql.append("")
+    if without_grade:
+        edition_sql.append("-- Link poems to editions without grade info (苏教版/沪教版)")
+        edition_sql.append("INSERT INTO poem_editions (poem_id, edition, level, grade)")
+        edition_sql.append("SELECT p.id, g.edition, g.level, NULL")
+        edition_sql.append("FROM (VALUES")
+        vals = []
+        for key, edition, level, _ in without_grade:
+            title = escape_sql(key[0])
+            vals.append(f"  ('{title}', '{edition}', '{level}')")
+        edition_sql.append(",\n".join(vals))
+        edition_sql.append(") AS g(title, edition, level)")
+        edition_sql.append("JOIN poems p ON p.title = g.title")
+        edition_sql.append("ON CONFLICT DO NOTHING;")
+    edition_file = batch_dir / f"seed-poems-{batch_num:02d}-editions.sql"
+    with open(edition_file, "w", encoding="utf-8") as f:
+        f.write("\n".join(edition_sql) + "\n")
+
     print(f"[OK] Generated {output_path}", file=sys.stderr)
+    print(f"[OK] Generated {batch_num} batch files in {batch_dir}/", file=sys.stderr)
     print(f"[OK] {len(poems_list)} poems, {len(unique_editions)} edition placements", file=sys.stderr)
 
 
