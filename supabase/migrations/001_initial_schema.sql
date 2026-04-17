@@ -429,15 +429,15 @@ INSERT INTO badges (name, description, criteria_type, criteria_value, icon) VALU
 CREATE OR REPLACE FUNCTION handle_new_user()
 RETURNS trigger AS $$
 BEGIN
-  INSERT INTO profiles (id) VALUES (new.id);
-  INSERT INTO users (id, accepted_terms_at)
+  INSERT INTO public.profiles (id) VALUES (new.id);
+  INSERT INTO public.users (id, accepted_terms_at)
   VALUES (
     new.id,
     (new.raw_user_meta_data->>'accepted_terms_at')::TIMESTAMPTZ
   );
   RETURN new;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
 
 CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
