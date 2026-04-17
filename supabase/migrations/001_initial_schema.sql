@@ -174,6 +174,15 @@ CREATE TABLE guardian_invitations (
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
+-- ========== HELPER FUNCTIONS ==========
+
+CREATE OR REPLACE FUNCTION is_admin()
+RETURNS boolean AS $$
+  SELECT EXISTS (
+    SELECT 1 FROM users WHERE id = auth.uid() AND role = 'ADMIN'
+  );
+$$ LANGUAGE sql SECURITY DEFINER SET search_path = public;
+
 -- ========== RLS POLICIES ==========
 
 ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
@@ -224,21 +233,17 @@ CREATE POLICY poems_delete ON poems FOR DELETE
 -- Poem editions: public read, admin write
 CREATE POLICY poem_editions_select ON poem_editions FOR SELECT USING (true);
 CREATE POLICY poem_editions_insert ON poem_editions FOR INSERT
-  WITH CHECK (EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'ADMIN'));
+  WITH CHECK (is_admin());
 CREATE POLICY poem_editions_update ON poem_editions FOR UPDATE
-  USING (EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'ADMIN'));
+  USING (is_admin());
 CREATE POLICY poem_editions_delete ON poem_editions FOR DELETE
-  USING (EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'ADMIN'));
+  USING (is_admin());
 
 -- Admin: read all users and profiles
-CREATE POLICY users_select_admin ON users FOR SELECT
-  USING (EXISTS (SELECT 1 FROM users u WHERE u.id = auth.uid() AND u.role = 'ADMIN'));
-CREATE POLICY profiles_select_admin ON profiles FOR SELECT
-  USING (EXISTS (SELECT 1 FROM users u WHERE u.id = auth.uid() AND u.role = 'ADMIN'));
-CREATE POLICY students_select_admin ON students FOR SELECT
-  USING (EXISTS (SELECT 1 FROM users u WHERE u.id = auth.uid() AND u.role = 'ADMIN'));
-CREATE POLICY review_events_select_admin ON review_events FOR SELECT
-  USING (EXISTS (SELECT 1 FROM users u WHERE u.id = auth.uid() AND u.role = 'ADMIN'));
+CREATE POLICY users_select_admin ON users FOR SELECT USING (is_admin());
+CREATE POLICY profiles_select_admin ON profiles FOR SELECT USING (is_admin());
+CREATE POLICY students_select_admin ON students FOR SELECT USING (is_admin());
+CREATE POLICY review_events_select_admin ON review_events FOR SELECT USING (is_admin());
 
 -- Poem reviews: only for linked students
 CREATE POLICY reviews_select ON poem_reviews FOR SELECT

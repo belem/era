@@ -61,8 +61,7 @@ export default function AdminPage() {
     const supabase = createClient();
     supabase.auth.getUser().then(({ data: { user } }) => {
       if (!user) { router.push("/login"); return; }
-      supabase.from("users").select("role").eq("id", user.id).single().then(({ data, error }) => {
-        console.log("admin check:", { userId: user.id, data, error });
+      supabase.from("users").select("role").eq("id", user.id).single().then(({ data }) => {
         if (!data || data.role !== "ADMIN") { setIsAdmin(false); return; }
         setIsAdmin(true);
       });
