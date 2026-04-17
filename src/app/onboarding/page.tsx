@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 type Algorithm = "SM2" | "LEITNER" | "FSRS";
 type Level = "小学" | "初中" | "高中";
 
-const KNOWN_EDITIONS = ["人教", "苏教", "沪教", "北师", "语文", "长春", "鄂教", "鲁教", "河大", "五四", "北京", "粤教", "鲁人", "华师"];
+const KNOWN_EDITIONS = ["部编", "苏教", "沪教", "人教", "北师", "语文", "长春", "鄂教", "鲁教", "河大", "五四", "北京", "粤教", "鲁人", "华师"];
 const MAX_GRADES: Record<Level, number> = { "小学": 6, "初中": 3, "高中": 3 };
 
 export default function OnboardingPage() {
@@ -22,7 +22,7 @@ export default function OnboardingPage() {
   const [name, setName] = useState("");
   const [level, setLevel] = useState<Level>("小学");
   const [grade, setGrade] = useState<number>(1);
-  const [edition, setEdition] = useState("人教");
+  const [edition, setEdition] = useState("部编");
 
   const [algorithm, setAlgorithm] = useState<Algorithm>("SM2");
 

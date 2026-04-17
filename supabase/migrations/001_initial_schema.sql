@@ -30,7 +30,7 @@ CREATE TABLE students (
   name TEXT NOT NULL,
   level TEXT NOT NULL DEFAULT '小学' CHECK (level IN ('小学', '初中', '高中')),
   grade INTEGER NOT NULL CHECK (grade BETWEEN 1 AND 6),
-  edition TEXT NOT NULL DEFAULT '人教',
+  edition TEXT NOT NULL DEFAULT '部编',
   algorithm srs_algorithm DEFAULT 'SM2',
   settings_json JSONB DEFAULT '{"show_pinyin": true}'::jsonb,
   created_by UUID NOT NULL REFERENCES auth.users ON DELETE CASCADE,
@@ -66,8 +66,8 @@ CREATE TABLE poem_editions (
   poem_id UUID NOT NULL REFERENCES poems ON DELETE CASCADE,
   edition TEXT NOT NULL,
   level TEXT NOT NULL CHECK (level IN ('小学', '初中', '高中')),
-  grade INTEGER NOT NULL CHECK (grade BETWEEN 1 AND 6),
-  PRIMARY KEY (poem_id, edition, level, grade)
+  grade INTEGER CHECK (grade BETWEEN 1 AND 6),
+  UNIQUE (poem_id, edition, level, grade)
 );
 
 CREATE INDEX idx_poem_editions_lookup ON poem_editions(edition, level, grade);

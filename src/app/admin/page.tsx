@@ -233,7 +233,7 @@ function OverviewTab({ stats, t }: { stats: Stats; t: any }) {
   );
 }
 
-const KNOWN_EDITIONS = ["人教", "苏教", "沪教", "北师", "语文", "长春", "鄂教", "鲁教", "河大", "五四", "北京", "粤教", "鲁人", "华师"];
+const KNOWN_EDITIONS = ["部编", "苏教", "沪教", "人教", "北师", "语文", "长春", "鄂教", "鲁教", "河大", "五四", "北京", "粤教", "鲁人", "华师"];
 const LEVELS = ["小学", "初中", "高中"];
 
 function PoemsTab({
@@ -417,7 +417,7 @@ function PoemEditor({
   });
 
   const addEdition = () => {
-    setEditions([...editions, { edition: "人教", level: "小学", grade: 1 }]);
+    setEditions([...editions, { edition: "部编", level: "小学", grade: 1 }]);
   };
 
   const removeEdition = (i: number) => {
