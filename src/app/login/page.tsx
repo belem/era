@@ -3,12 +3,14 @@
 import { createClient } from "@/lib/supabase/client";
 import { useTranslations } from "next-intl";
 import { useState, useEffect, useCallback, useRef } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
 export default function LoginPage() {
   const t = useTranslations("login");
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const sessionExpired = searchParams.get("expired") === "1";
 
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
@@ -149,6 +151,12 @@ export default function LoginPage() {
           <h1 className="font-heading text-[28px] text-text mb-2">{t("title")}</h1>
           <p className="font-poetry text-text-secondary text-sm">{t("subtitle")}</p>
         </div>
+
+        {sessionExpired && (
+          <div className="mb-4 px-4 py-3 rounded-[var(--radius-md)] border border-warning bg-warning/10 text-[14px] text-text-secondary">
+            {t("sessionExpired")}
+          </div>
+        )}
 
         {/* Card */}
         <div className="bg-bg-subtle rounded-[var(--radius-lg)] p-8 lg:bg-transparent lg:p-0">

@@ -573,10 +573,7 @@ This feature lets students learn and review poems by voice alone, without lookin
 6. **Quiet gamification** — Scroll gallery, streak counter (home screen only), discoverable badges. No points system. No mid-session interruptions
 7. **集雅 (Fragment) module** — General flashcard CRUD, shared SRS scheduling
 8. **Parent analytics** — Dashboard with charts, retention curves, heatmaps
-9. **Audio/TTS** — Client-side speech synthesis via Transformers.js (WebGPU/WebNN). First real use of the AI inference pipeline. Fallback to Web Speech API
-10. **Ear Training: Passive Listening** — SRS-weighted playlist loop, background audio, Media Session API lock screen controls, Wake Lock API
-11. **Ear Training: Active Listening** — Voice command recognition (Web Speech API), headphone button mapping, screen tap zones, SRS rating integration
-12. **Guardian invitation flow** — Email invite, token validation, family management page
+9. **Guardian invitation flow** — Email invite, token validation, family management page
 
 **Phase 3: Paid Features + Polish**
 
@@ -584,11 +581,17 @@ This feature lets students learn and review poems by voice alone, without lookin
 14. **PWA** — Service worker, cached static assets, install prompt
 15. **Expand poetry library** — Verify and add remaining poems to reach 200-300 via internal QA review and staged releases
 
-**Phase 4: Future**
+**Phase 4: Admin**
 
 14. **Admin dashboard** — Poetry library management and pinyin review (use Supabase admin directly until this ships)
+
+**Future Work (no timeline)**
+
 15. **AI abstraction layer** — Interface design for future WebGPU/WebNN inference
-16. **Native mobile** — React Native or native apps with platform-specific ML runtimes
+16. **Audio/TTS** — Client-side speech synthesis via Transformers.js (WebGPU/WebNN). Fallback to Web Speech API
+17. **Ear Training: Passive Listening** — SRS-weighted playlist loop, background audio, Media Session API lock screen controls, Wake Lock API
+18. **Ear Training: Active Listening** — Voice command recognition (Web Speech API), headphone button mapping, screen tap zones, SRS rating integration
+19. **Native mobile** — React Native or native apps with platform-specific ML runtimes
 
 ## Design Decisions (resolved)
 

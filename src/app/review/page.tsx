@@ -43,14 +43,13 @@ function ReviewContent() {
   const handleRate = useCallback(async (rating: "forgot" | "hard" | "good" | "easy") => {
     if (student && poem) {
       setSessionRatings((prev) => [...prev, { poemId: poem.id, rating }]);
+      const scheduleBody: Record<string, string> = { studentId: student.id, rating };
+      if (poem.isCustom) scheduleBody.customPoemId = poem.id;
+      else scheduleBody.poemId = poem.id;
       await fetch("/api/schedule", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          studentId: student.id,
-          poemId: poem.id,
-          rating,
-        }),
+        body: JSON.stringify(scheduleBody),
       });
     }
     if (currentIndex < poems.length - 1) {

@@ -36,9 +36,6 @@
 - Quiet gamification (scroll gallery, streaks, badges)
 - 集雅 Fragment module (general flashcards, shared SRS)
 - Parent analytics dashboard (charts, retention curves, heatmaps)
-- Audio/TTS (Transformers.js WebGPU/WebNN, Web Speech API fallback)
-- Ear Training: Passive Listening (沉浸听诵)
-- Ear Training: Active Listening (听诵复习)
 - Guardian invitation flow
 
 ---
@@ -54,10 +51,18 @@
 
 ---
 
-## Phase 4: Future
+## Phase 4: Admin
 
 **Plan:** TBD
 **Subsystems:**
-- Admin dashboard
+- Admin dashboard (poetry library management, pinyin review)
+
+---
+
+## Future Work (no timeline)
+
 - AI abstraction layer (WebGPU/WebNN inference pipeline)
+- Audio/TTS via Transformers.js (client-side Chinese speech synthesis)
+- Ear Training: Passive Listening (沉浸听诵)
+- Ear Training: Active Listening (听诵复习)
 - Native mobile apps

@@ -29,7 +29,7 @@ export function usePoetrySearch() {
       const supabase = createClient();
       const { data } = await supabase
         .from("poems")
-        .select("id, title, author, dynasty, grade_level, content_lines");
+        .select("id, title, author, dynasty, content_lines");
 
       if (cancelled) return;
       if (!data || data.length === 0) return;

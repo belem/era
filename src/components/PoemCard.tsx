@@ -13,7 +13,7 @@ export function PoemCard({ poem }: { poem: Poem }) {
         {poem.title}
       </div>
       <div className="text-[14px] text-text-tertiary tracking-tight mb-1.5">
-        〔{poem.dynasty}〕{poem.author} · {poem.grade}年级
+        〔{poem.dynasty}〕{poem.author}
       </div>
       <div className="font-poetry text-[15px] text-text-secondary tracking-wide">
         {firstLine}

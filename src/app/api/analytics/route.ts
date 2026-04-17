@@ -28,7 +28,7 @@ export async function GET(request: Request) {
   // 2. Current SRS state for all poems
   const { data: reviews } = await supabase
     .from("poem_reviews")
-    .select("poem_id, rating, interval_days, ease_factor, next_review_at, poems(title, grade_level)")
+    .select("poem_id, rating, interval_days, ease_factor, next_review_at, poems(title)")
     .eq("student_id", studentId);
 
   // 3. Streak data
@@ -82,7 +82,6 @@ export async function GET(request: Request) {
   const poemMastery = (reviews ?? []).map((r: any) => ({
     poemId: r.poem_id,
     title: r.poems?.title ?? "Unknown",
-    grade: r.poems?.grade_level ?? 0,
     intervalDays: r.interval_days,
     mastered: r.interval_days >= 21,
     nextReview: r.next_review_at,

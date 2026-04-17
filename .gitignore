@@ -5,6 +5,7 @@
 /.claude
 ./AGENTS.md
 ./CLAUDE.md
+/reference
 /node_modules
 /.pnp
 .pnp.*

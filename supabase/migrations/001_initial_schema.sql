@@ -28,8 +28,9 @@ CREATE TYPE srs_algorithm AS ENUM ('SM2', 'LEITNER', 'FSRS');
 CREATE TABLE students (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name TEXT NOT NULL,
-  grade INTEGER NOT NULL CHECK (grade BETWEEN 1 AND 9),
-  edition TEXT DEFAULT 'PEP',
+  level TEXT NOT NULL DEFAULT '小学' CHECK (level IN ('小学', '初中', '高中')),
+  grade INTEGER NOT NULL CHECK (grade BETWEEN 1 AND 6),
+  edition TEXT NOT NULL DEFAULT '人教',
   algorithm srs_algorithm DEFAULT 'SM2',
   settings_json JSONB DEFAULT '{"show_pinyin": true}'::jsonb,
   created_by UUID NOT NULL REFERENCES auth.users ON DELETE CASCADE,
@@ -49,17 +50,40 @@ CREATE TABLE student_guardians (
   PRIMARY KEY (student_id, guardian_id)
 );
 
--- Poems (curated library)
+-- Poems (curated library — content only, edition/grade in poem_editions)
 CREATE TABLE poems (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   title TEXT NOT NULL,
   author TEXT NOT NULL,
   dynasty TEXT NOT NULL,
-  grade_level INTEGER NOT NULL,
-  edition TEXT DEFAULT 'PEP',
   content_lines JSONB NOT NULL, -- [{chars: [{char, pinyin, polyphone?}], punctuation}]
   tags TEXT[] DEFAULT '{}',
   created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- Poem edition placements (which poems appear in which edition at which level/grade)
+CREATE TABLE poem_editions (
+  poem_id UUID NOT NULL REFERENCES poems ON DELETE CASCADE,
+  edition TEXT NOT NULL,
+  level TEXT NOT NULL CHECK (level IN ('小学', '初中', '高中')),
+  grade INTEGER NOT NULL CHECK (grade BETWEEN 1 AND 6),
+  PRIMARY KEY (poem_id, edition, level, grade)
+);
+
+CREATE INDEX idx_poem_editions_lookup ON poem_editions(edition, level, grade);
+
+-- Custom poems (诗心 — paid tier), defined before poem_reviews for FK reference
+CREATE TABLE custom_poems (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  created_by UUID NOT NULL REFERENCES auth.users ON DELETE CASCADE,
+  student_id UUID NOT NULL REFERENCES students ON DELETE CASCADE,
+  title TEXT NOT NULL,
+  author TEXT,
+  dynasty TEXT,
+  content_lines JSONB NOT NULL,
+  source_poem_id TEXT,
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ DEFAULT now()
 );
 
 -- Poem reviews (SRS state per student per poem)
@@ -68,7 +92,8 @@ CREATE TYPE review_source AS ENUM ('SYSTEM', 'CUSTOM');
 CREATE TABLE poem_reviews (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   student_id UUID NOT NULL REFERENCES students ON DELETE CASCADE,
-  poem_id UUID NOT NULL REFERENCES poems ON DELETE CASCADE,
+  poem_id UUID REFERENCES poems ON DELETE CASCADE,
+  custom_poem_id UUID REFERENCES custom_poems ON DELETE CASCADE,
   source review_source DEFAULT 'SYSTEM',
   rating TEXT CHECK (rating IN ('forgot', 'hard', 'good', 'easy')),
   repetitions INTEGER DEFAULT 0,
@@ -82,17 +107,21 @@ CREATE TABLE poem_reviews (
   last_reviewed_at TIMESTAMPTZ,
   created_at TIMESTAMPTZ DEFAULT now(),
   updated_at TIMESTAMPTZ DEFAULT now(),
-  UNIQUE (student_id, poem_id)
+  CHECK (num_nonnulls(poem_id, custom_poem_id) = 1),
+  UNIQUE (student_id, poem_id),
+  UNIQUE (student_id, custom_poem_id)
 );
 
 -- Append-only review event log. poem_reviews stays as current-state snapshot.
 CREATE TABLE review_events (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   student_id UUID NOT NULL REFERENCES students ON DELETE CASCADE,
-  poem_id UUID NOT NULL REFERENCES poems ON DELETE CASCADE,
+  poem_id UUID REFERENCES poems ON DELETE CASCADE,
+  custom_poem_id UUID REFERENCES custom_poems ON DELETE CASCADE,
   algorithm srs_algorithm NOT NULL,
   rating TEXT NOT NULL CHECK (rating IN ('forgot', 'hard', 'good', 'easy')),
-  reviewed_at TIMESTAMPTZ NOT NULL DEFAULT now()
+  reviewed_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  CHECK (num_nonnulls(poem_id, custom_poem_id) = 1)
 );
 
 CREATE INDEX idx_review_events_student_date
@@ -152,6 +181,7 @@ ALTER TABLE users ENABLE ROW LEVEL SECURITY;
 ALTER TABLE students ENABLE ROW LEVEL SECURITY;
 ALTER TABLE student_guardians ENABLE ROW LEVEL SECURITY;
 ALTER TABLE poems ENABLE ROW LEVEL SECURITY;
+ALTER TABLE poem_editions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE poem_reviews ENABLE ROW LEVEL SECURITY;
 ALTER TABLE review_events ENABLE ROW LEVEL SECURITY;
 ALTER TABLE streaks ENABLE ROW LEVEL SECURITY;
@@ -182,8 +212,33 @@ CREATE POLICY sg_select ON student_guardians FOR SELECT
 CREATE POLICY sg_insert ON student_guardians FOR INSERT
   WITH CHECK (guardian_id = auth.uid());
 
--- Poems: public read
+-- Poems: public read, admin write
 CREATE POLICY poems_select ON poems FOR SELECT USING (true);
+CREATE POLICY poems_insert ON poems FOR INSERT
+  WITH CHECK (EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'ADMIN'));
+CREATE POLICY poems_update ON poems FOR UPDATE
+  USING (EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'ADMIN'));
+CREATE POLICY poems_delete ON poems FOR DELETE
+  USING (EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'ADMIN'));
+
+-- Poem editions: public read, admin write
+CREATE POLICY poem_editions_select ON poem_editions FOR SELECT USING (true);
+CREATE POLICY poem_editions_insert ON poem_editions FOR INSERT
+  WITH CHECK (EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'ADMIN'));
+CREATE POLICY poem_editions_update ON poem_editions FOR UPDATE
+  USING (EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'ADMIN'));
+CREATE POLICY poem_editions_delete ON poem_editions FOR DELETE
+  USING (EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'ADMIN'));
+
+-- Admin: read all users and profiles
+CREATE POLICY users_select_admin ON users FOR SELECT
+  USING (EXISTS (SELECT 1 FROM users u WHERE u.id = auth.uid() AND u.role = 'ADMIN'));
+CREATE POLICY profiles_select_admin ON profiles FOR SELECT
+  USING (EXISTS (SELECT 1 FROM users u WHERE u.id = auth.uid() AND u.role = 'ADMIN'));
+CREATE POLICY students_select_admin ON students FOR SELECT
+  USING (EXISTS (SELECT 1 FROM users u WHERE u.id = auth.uid() AND u.role = 'ADMIN'));
+CREATE POLICY review_events_select_admin ON review_events FOR SELECT
+  USING (EXISTS (SELECT 1 FROM users u WHERE u.id = auth.uid() AND u.role = 'ADMIN'));
 
 -- Poem reviews: only for linked students
 CREATE POLICY reviews_select ON poem_reviews FOR SELECT
@@ -282,20 +337,6 @@ CREATE TABLE fragment_review_events (
 
 CREATE INDEX idx_fragment_review_events_student_date
   ON fragment_review_events(student_id, reviewed_at);
-
--- Custom poems (诗心 — paid tier)
-CREATE TABLE custom_poems (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  created_by UUID NOT NULL REFERENCES auth.users ON DELETE CASCADE,
-  student_id UUID NOT NULL REFERENCES students ON DELETE CASCADE,
-  title TEXT NOT NULL,
-  author TEXT,
-  dynasty TEXT,
-  content_lines JSONB NOT NULL,
-  source_poem_id TEXT, -- reference to chinese-poetry dataset ID if autocompleted
-  created_at TIMESTAMPTZ DEFAULT now(),
-  updated_at TIMESTAMPTZ DEFAULT now()
-);
 
 -- Listening sessions (ear training analytics)
 CREATE TABLE listening_sessions (

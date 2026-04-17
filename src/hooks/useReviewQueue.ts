@@ -20,23 +20,25 @@ export function useReviewQueue() {
 
     supabase
       .from("poem_reviews")
-      .select("*, poems(*)")
+      .select("*, poems(*), custom_poems(*)")
       .eq("student_id", student.id)
       .lte("next_review_at", new Date().toISOString())
       .order("next_review_at", { ascending: true })
       .then(({ data }) => {
         if (data) {
-          // Map Supabase response to match existing Poem interface
           const mapped: Poem[] = data
-            .filter((r: any) => r.poems)
-            .map((r: any) => ({
-              id: r.poems.id,
-              title: r.poems.title,
-              author: r.poems.author,
-              dynasty: r.poems.dynasty,
-              grade: r.poems.grade_level,
-              lines: r.poems.content_lines,
-            }));
+            .filter((r: any) => r.poems || r.custom_poems)
+            .map((r: any) => {
+              const p = r.poems ?? r.custom_poems;
+              return {
+                id: p.id,
+                title: p.title,
+                author: p.author ?? "",
+                dynasty: p.dynasty ?? "",
+                lines: p.content_lines,
+                isCustom: !r.poems,
+              };
+            });
           setPoems(mapped);
         }
         setLoading(false);

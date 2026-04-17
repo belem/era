@@ -14,6 +14,6 @@ export interface Poem {
   title: string;
   author: string;
   dynasty: string;
-  grade: number;
   lines: PoemLine[];
+  isCustom?: boolean;
 }

@@ -56,6 +56,7 @@ def generate_tags(poem: dict) -> list[str]:
 def generate_seed_sql(input_path: str, output_path: str):
     """
     Generate SQL INSERT statements from poems-with-pinyin.json.
+    Poems go into the poems table; edition/grade mappings go into poem_editions.
     """
     input_file = Path(input_path)
     output_file = Path(output_path)
@@ -66,22 +67,18 @@ def generate_seed_sql(input_path: str, output_path: str):
     with open(input_file, "r", encoding="utf-8") as f:
         poems = json.load(f)
 
-    # Start building SQL
     sql_lines = [
-        "-- Seed script for poems table",
-        "-- Generated from curated PEP (人教版) elementary school textbook poems",
-        "-- Total: 50 poems from grades 1-6",
+        "-- Seed script for poems + poem_editions tables",
+        f"-- Generated from curated 人教版 elementary school textbook poems",
+        f"-- Total: {len(poems)} poems from grades 1-6",
         "",
-        "-- Clear existing data (optional, comment out if not needed)",
-        "-- TRUNCATE TABLE poems RESTART IDENTITY CASCADE;",
-        "",
-        "-- Insert poems",
-        "INSERT INTO poems (title, author, dynasty, grade_level, edition, content_lines, tags)",
+        "-- Insert poems (without grade_level or edition)",
+        "INSERT INTO poems (title, author, dynasty, content_lines, tags)",
         "VALUES"
     ]
 
-    # Generate INSERT values
     values = []
+    edition_pairs = []
     for poem in poems:
         title = escape_sql_string(poem["title"])
         author = escape_sql_string(poem["author"])
@@ -91,16 +88,26 @@ def generate_seed_sql(input_path: str, output_path: str):
         tags = generate_tags(poem)
         tags_array = "ARRAY[" + ", ".join(f"'{escape_sql_string(tag)}'" for tag in tags) + "]"
 
-        value = f"  ('{title}', '{author}', '{dynasty}', {grade}, 'PEP', '{content_lines_json}'::jsonb, {tags_array})"
+        value = f"  ('{title}', '{author}', '{dynasty}', '{content_lines_json}'::jsonb, {tags_array})"
         values.append(value)
+        edition_pairs.append((title, grade))
 
-    # Join all values with commas
     sql_lines.append(",\n".join(values))
     sql_lines.append(";")
     sql_lines.append("")
-    sql_lines.append(f"-- Inserted {len(poems)} poems")
+    sql_lines.append("-- Link poems to 人教版 小学 with their grades")
+    sql_lines.append("INSERT INTO poem_editions (poem_id, edition, level, grade)")
+    sql_lines.append("SELECT p.id, '人教', '小学', g.grade")
+    sql_lines.append("FROM (VALUES")
 
-    # Write SQL file
+    ed_values = []
+    for title, grade in edition_pairs:
+        ed_values.append(f"  ('{title}', {grade})")
+
+    sql_lines.append(",\n".join(ed_values))
+    sql_lines.append(") AS g(title, grade)")
+    sql_lines.append("JOIN poems p ON p.title = g.title;")
+
     with open(output_file, "w", encoding="utf-8") as f:
         f.write("\n".join(sql_lines))
 

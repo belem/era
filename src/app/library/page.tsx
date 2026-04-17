@@ -24,7 +24,6 @@ export default function LibraryPage() {
     supabase
       .from("poems")
       .select("*")
-      .order("grade_level", { ascending: true })
       .order("title", { ascending: true })
       .then(({ data }) => {
         if (data) {
@@ -34,7 +33,6 @@ export default function LibraryPage() {
               title: p.title,
               author: p.author,
               dynasty: p.dynasty,
-              grade: p.grade_level,
               lines: p.content_lines,
             }))
           );
@@ -65,14 +63,34 @@ export default function LibraryPage() {
           {t("title")}
         </h1>
 
-        <div className="mb-6">
+        <div className="mb-6 relative">
+          <svg
+            className="absolute left-3.5 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-text-tertiary pointer-events-none"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+          </svg>
           <input
             type="text"
             value={query}
             onChange={(e) => handleQueryChange(e.target.value)}
             placeholder={t("searchPlaceholder")}
-            className="w-full border border-border rounded-[var(--radius-md)] bg-bg px-4 py-3 text-text placeholder:text-text-tertiary focus:outline-none focus:ring-2 focus:ring-primary"
+            className="w-full border border-border rounded-[var(--radius-md)] bg-bg pl-10 pr-10 py-3 text-text placeholder:text-text-tertiary focus:outline-none focus:ring-2 focus:ring-primary"
           />
+          {query && (
+            <button
+              onClick={() => { setQuery(""); setDebouncedQuery(""); }}
+              className="absolute right-3.5 top-1/2 -translate-y-1/2 w-5 h-5 flex items-center justify-center rounded-full bg-bg-muted hover:bg-border transition-colors"
+              aria-label="Clear search"
+            >
+              <svg className="w-3 h-3 text-text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          )}
         </div>
 
         {loading ? (

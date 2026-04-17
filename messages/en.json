@@ -51,6 +51,12 @@
     "unlocked": "unlocked",
     "locked": "locked"
   },
+  "session": {
+    "poemsReviewed": "{count} poems reviewed",
+    "streakFrozen": "Streak frozen",
+    "streakDay": "Day {days}",
+    "done": "Done"
+  },
   "badges": {
     "scroll": {
       "name": "First Scroll",
@@ -92,7 +98,8 @@
     "tryDifferentMethod": "Try a different sign-in method",
     "termsConsent": "I agree to the Terms of Service and Privacy Policy",
     "magicLink": "Sign in with email link instead",
-    "magicLinkSent": "Check your email for a sign-in link"
+    "magicLinkSent": "Check your email for a sign-in link",
+    "sessionExpired": "Your session has expired. Please sign in again."
   },
   "auth": {
     "forgotTitle": "Reset Password",
@@ -169,7 +176,9 @@
   "onboarding": {
     "createStudent": "Create your first student profile",
     "name": "Name",
+    "level": "Level",
     "grade": "Grade",
+    "edition": "Textbook Edition",
     "next": "Next",
     "done": "Start Learning"
   },
@@ -241,6 +250,37 @@
     "codePlaceholder": "6-digit code",
     "verifyButton": "Verify",
     "wrongCode": "Incorrect code, try again"
+  },
+  "admin": {
+    "title": "Admin",
+    "poems": "Poetry Library",
+    "users": "Users",
+    "overview": "Overview",
+    "totalPoems": "Total Poems",
+    "totalUsers": "Total Users",
+    "totalStudents": "Total Students",
+    "totalReviews": "Total Reviews",
+    "addPoem": "Add Poem",
+    "editPoem": "Edit Poem",
+    "deletePoem": "Delete Poem",
+    "deleteConfirm": "Delete this poem? This cannot be undone.",
+    "save": "Save",
+    "cancel": "Cancel",
+    "search": "Search poems...",
+    "allGrades": "All Grades",
+    "gradeN": "Grade {n}",
+    "noPoems": "No poems found",
+    "poemTitle": "Title",
+    "poemAuthor": "Author",
+    "poemDynasty": "Dynasty",
+    "poemGrade": "Grade",
+    "poemEdition": "Edition",
+    "poemTags": "Tags",
+    "poemLines": "Content Lines",
+    "pinyin": "Pinyin",
+    "char": "Character",
+    "forbidden": "Admin access required",
+    "loading": "Loading..."
   },
   "customPoems": {
     "title": "Custom Poems",

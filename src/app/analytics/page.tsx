@@ -10,7 +10,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 interface AnalyticsData {
   heatmap: { date: string; count: number }[];
   ratingDist: { forgot: number; hard: number; good: number; easy: number };
-  poemMastery: { poemId: string; title: string; grade: number; intervalDays: number; mastered: boolean; nextReview: string }[];
+  poemMastery: { poemId: string; title: string; intervalDays: number; mastered: boolean; nextReview: string }[];
   masteredCount: number;
   totalPoems: number;
   streak: { current_streak: number; longest_streak: number };
@@ -95,7 +95,6 @@ function MasteryList({ poems }: { poems: AnalyticsData["poemMastery"] }) {
           />
           <div className="flex-1 min-w-0">
             <span className="text-[14px] text-text">{p.title}</span>
-            <span className="text-[12px] text-text-tertiary ml-2">{t("gradeN", { n: p.grade })}</span>
           </div>
           <span className="text-[12px] text-text-tertiary flex-shrink-0">
             {p.intervalDays}{t("days")}

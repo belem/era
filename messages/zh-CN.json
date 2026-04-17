@@ -51,6 +51,12 @@
     "unlocked": "已解锁",
     "locked": "未解锁"
   },
+  "session": {
+    "poemsReviewed": "复习了 {count} 首诗",
+    "streakFrozen": "连续打卡已保护",
+    "streakDay": "连续 {days} 天",
+    "done": "完成"
+  },
   "badges": {
     "scroll": {
       "name": "初卷",
@@ -92,7 +98,8 @@
     "tryDifferentMethod": "尝试其他登录方式",
     "termsConsent": "我同意服务条款和隐私政策",
     "magicLink": "使用邮箱链接登录",
-    "magicLinkSent": "请查收邮箱中的登录链接"
+    "magicLinkSent": "请查收邮箱中的登录链接",
+    "sessionExpired": "登录已过期，请重新登录。"
   },
   "auth": {
     "forgotTitle": "重置密码",
@@ -169,7 +176,9 @@
   "onboarding": {
     "createStudent": "创建第一个学生档案",
     "name": "姓名",
+    "level": "学段",
     "grade": "年级",
+    "edition": "教材版本",
     "next": "下一步",
     "done": "开始学习"
   },
@@ -241,6 +250,37 @@
     "codePlaceholder": "6位验证码",
     "verifyButton": "验证",
     "wrongCode": "验证码错误，请重试"
+  },
+  "admin": {
+    "title": "管理后台",
+    "poems": "诗词库",
+    "users": "用户",
+    "overview": "概览",
+    "totalPoems": "诗词总数",
+    "totalUsers": "用户总数",
+    "totalStudents": "学生总数",
+    "totalReviews": "复习总数",
+    "addPoem": "添加诗词",
+    "editPoem": "编辑诗词",
+    "deletePoem": "删除诗词",
+    "deleteConfirm": "确认删除此诗词？此操作无法撤销。",
+    "save": "保存",
+    "cancel": "取消",
+    "search": "搜索诗词...",
+    "allGrades": "所有年级",
+    "gradeN": "{n}年级",
+    "noPoems": "未找到诗词",
+    "poemTitle": "标题",
+    "poemAuthor": "作者",
+    "poemDynasty": "朝代",
+    "poemGrade": "年级",
+    "poemEdition": "版本",
+    "poemTags": "标签",
+    "poemLines": "内容",
+    "pinyin": "拼音",
+    "char": "汉字",
+    "forbidden": "需要管理员权限",
+    "loading": "加载中..."
   },
   "customPoems": {
     "title": "诗心",

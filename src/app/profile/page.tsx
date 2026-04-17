@@ -77,7 +77,7 @@ export default function ProfilePage() {
                   {student?.name ?? "---"}
                 </div>
                 <div className="text-[14px] text-text-tertiary tracking-tight">
-                  {t("gradeInfo", { grade: student?.grade ?? "--" })} · {student?.edition ?? "PEP"}
+                  {student?.level ?? ""}{t("gradeInfo", { grade: student?.grade ?? "--" })} · {student?.edition ?? "人教"}版
                 </div>
               </div>
             </div>

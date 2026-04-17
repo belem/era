@@ -6,6 +6,10 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 type Algorithm = "SM2" | "LEITNER" | "FSRS";
+type Level = "小学" | "初中" | "高中";
+
+const KNOWN_EDITIONS = ["人教", "苏教", "沪教", "北师", "语文", "长春", "鄂教", "鲁教", "河大", "五四", "北京", "粤教", "鲁人", "华师"];
+const MAX_GRADES: Record<Level, number> = { "小学": 6, "初中": 3, "高中": 3 };
 
 export default function OnboardingPage() {
   const t = useTranslations("onboarding");
@@ -15,13 +19,17 @@ export default function OnboardingPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Step 1: Student profile
   const [name, setName] = useState("");
+  const [level, setLevel] = useState<Level>("小学");
   const [grade, setGrade] = useState<number>(1);
-  const [edition] = useState("PEP");
+  const [edition, setEdition] = useState("人教");
 
-  // Step 2: Algorithm selection
   const [algorithm, setAlgorithm] = useState<Algorithm>("SM2");
+
+  const handleLevelChange = (newLevel: Level) => {
+    setLevel(newLevel);
+    if (grade > MAX_GRADES[newLevel]) setGrade(1);
+  };
 
   const handleNext = () => {
     if (step === 1 && name.trim()) {
@@ -35,15 +43,14 @@ export default function OnboardingPage() {
 
     try {
       const supabase = createClient();
-      // Get current user
       const { data: { user }, error: userError } = await supabase.auth.getUser();
       if (userError || !user) throw new Error("Not authenticated");
 
-      // Create student
       const { data: student, error: studentError } = await supabase
         .from("students")
         .insert({
           name: name.trim(),
+          level,
           grade,
           edition,
           algorithm,
@@ -55,7 +62,6 @@ export default function OnboardingPage() {
       if (studentError) throw studentError;
       if (!student) throw new Error("Failed to create student");
 
-      // Create student-guardian relationship
       const { error: guardianError } = await supabase
         .from("student_guardians")
         .insert({
@@ -67,7 +73,6 @@ export default function OnboardingPage() {
 
       if (guardianError) throw guardianError;
 
-      // Mark onboarding as complete
       const { error: profileError } = await supabase
         .from("profiles")
         .update({ onboarding_completed: true })
@@ -75,7 +80,6 @@ export default function OnboardingPage() {
 
       if (profileError) throw profileError;
 
-      // Redirect to home
       router.push("/");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to complete onboarding");
@@ -87,7 +91,6 @@ export default function OnboardingPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-bg p-6">
       <div className="w-full max-w-md">
-        {/* Steps indicator */}
         <div className="flex justify-center gap-2 mb-8">
           <div
             className={`h-2 w-8 rounded-full transition-colors ${
@@ -101,7 +104,6 @@ export default function OnboardingPage() {
           />
         </div>
 
-        {/* Card */}
         <div className="bg-bg-subtle rounded-[var(--radius-lg)] p-8">
           {step === 1 && (
             <>
@@ -125,26 +127,61 @@ export default function OnboardingPage() {
 
                 <div>
                   <label className="block text-text-secondary text-sm mb-2">
-                    {t("grade")}
+                    {t("level")}
                   </label>
-                  <select
-                    value={grade}
-                    onChange={(e) => setGrade(parseInt(e.target.value, 10))}
-                    className="w-full border border-border rounded-[var(--radius-md)] bg-bg px-4 py-3 text-text focus:outline-none focus:ring-2 focus:ring-primary"
-                  >
-                    {[1, 2, 3, 4, 5, 6].map((g) => (
-                      <option key={g} value={g}>
-                        {g}
-                      </option>
+                  <div className="grid grid-cols-3 gap-2">
+                    {(["小学", "初中", "高中"] as Level[]).map((lv) => (
+                      <button
+                        key={lv}
+                        type="button"
+                        onClick={() => handleLevelChange(lv)}
+                        className={`py-2.5 rounded-[var(--radius-md)] text-[14px] font-medium transition-colors ${
+                          level === lv
+                            ? "bg-primary text-white"
+                            : "border border-border bg-bg text-text hover:border-primary"
+                        }`}
+                      >
+                        {lv}
+                      </button>
                     ))}
-                  </select>
+                  </div>
                 </div>
 
                 <div>
-                  <label className="block text-text-secondary text-sm mb-2">教材版本</label>
-                  <div className="w-full border border-border rounded-[var(--radius-md)] bg-bg-muted px-4 py-3 text-text">
-                    人教版 (PEP)
+                  <label className="block text-text-secondary text-sm mb-2">
+                    {t("grade")}
+                  </label>
+                  <div className="grid grid-cols-6 gap-2">
+                    {Array.from({ length: MAX_GRADES[level] }, (_, i) => i + 1).map((g) => (
+                      <button
+                        key={g}
+                        type="button"
+                        onClick={() => setGrade(g)}
+                        className={`py-2 rounded-[var(--radius-md)] text-[14px] font-medium transition-colors ${
+                          grade === g
+                            ? "bg-primary text-white"
+                            : "border border-border bg-bg text-text hover:border-primary"
+                        }`}
+                      >
+                        {g}
+                      </button>
+                    ))}
                   </div>
+                </div>
+
+                <div>
+                  <label className="block text-text-secondary text-sm mb-2">
+                    {t("edition")}
+                  </label>
+                  <select
+                    value={edition}
+                    onChange={(e) => setEdition(e.target.value)}
+                    className="w-full border border-border rounded-[var(--radius-md)] bg-bg px-4 py-3 text-text focus:outline-none focus:ring-2 focus:ring-primary"
+                  >
+                    {KNOWN_EDITIONS.map((ed) => (
+                      <option key={ed} value={ed}>{ed}版</option>
+                    ))}
+                  </select>
                 </div>
 
                 {error && (
@@ -167,7 +204,6 @@ export default function OnboardingPage() {
               <h2 className="text-2xl font-heading text-text mb-6 text-center">选择记忆算法</h2>
 
               <div className="space-y-3 mb-6">
-                {/* SM-2 */}
                 <button
                   onClick={() => setAlgorithm("SM2")}
                   className={`w-full text-left border rounded-[var(--radius-md)] p-4 transition-colors ${
@@ -182,7 +218,6 @@ export default function OnboardingPage() {
                   </div>
                 </button>
 
-                {/* Leitner */}
                 <button
                   onClick={() => setAlgorithm("LEITNER")}
                   className={`w-full text-left border rounded-[var(--radius-md)] p-4 transition-colors ${
@@ -197,7 +232,6 @@ export default function OnboardingPage() {
                   </div>
                 </button>
 
-                {/* FSRS (locked) */}
                 <div className="w-full text-left border border-border bg-bg-muted rounded-[var(--radius-md)] p-4 opacity-60 cursor-not-allowed">
                   <div className="font-medium text-text mb-1 flex items-center gap-2">
                     FSRS

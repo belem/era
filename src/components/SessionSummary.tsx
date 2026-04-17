@@ -16,15 +16,17 @@ interface Props {
   ratings: SessionRating[];
 }
 
-const ratingConfig = {
-  easy: { label: "Easy", labelZh: "轻松", color: "bg-success" },
-  good: { label: "Good", labelZh: "尚可", color: "bg-primary" },
-  hard: { label: "Hard", labelZh: "艰难", color: "bg-warning" },
-  forgot: { label: "Forgot", labelZh: "淡忘", color: "bg-error" },
+const ratingColors = {
+  easy: "bg-success",
+  good: "bg-primary",
+  hard: "bg-warning",
+  forgot: "bg-error",
 } as const;
 
 export function SessionSummary({ studentId, studentName, ratings }: Props) {
   const tb = useTranslations("badges");
+  const tr = useTranslations("rating");
+  const ts = useTranslations("session");
   const [streak, setStreak] = useState<{ current: number; frozen: boolean } | null>(null);
   const [newBadges, setNewBadges] = useState<{ id: string; name: string; icon: string }[]>([]);
   const [barsVisible, setBarsVisible] = useState(false);
@@ -71,7 +73,7 @@ export function SessionSummary({ studentId, studentName, ratings }: Props) {
 
       {/* Poem count */}
       <p className="text-[17px] text-text mb-4">
-        {ratings.length} poems reviewed
+        {ts("poemsReviewed", { count: ratings.length })}
       </p>
 
       {/* Streak hero */}
@@ -81,14 +83,14 @@ export function SessionSummary({ studentId, studentName, ratings }: Props) {
             <>
               <img src="/icons/snowflake.svg" alt="" className="w-5 h-5 text-primary" />
               <span className="font-heading font-semibold text-[28px] text-text">
-                Streak frozen
+                {ts("streakFrozen")}
               </span>
             </>
           ) : (
             <>
               <img src="/icons/flame.svg" alt="" className="w-5 h-5 text-warning" />
               <span className="font-heading font-semibold text-[28px] text-text">
-                Day {streak.current}
+                {ts("streakDay", { days: streak.current })}
               </span>
             </>
           )}
@@ -98,16 +100,16 @@ export function SessionSummary({ studentId, studentName, ratings }: Props) {
       {/* Rating breakdown bars */}
       <div className="w-full space-y-3 mb-8" aria-label="Rating breakdown">
         {(["easy", "good", "hard", "forgot"] as const).map((key) => {
-          const config = ratingConfig[key];
           const count = counts[key];
           const width = maxCount > 0 ? (count / maxCount) * 100 : 0;
+          const label = tr(key);
 
           return (
-            <div key={key} className="flex items-center gap-3" aria-label={`${config.label}: ${count} poems`}>
-              <span className="text-[14px] text-text-secondary w-14 text-right">{config.label}</span>
+            <div key={key} className="flex items-center gap-3" aria-label={`${label}: ${count}`}>
+              <span className="text-[14px] text-text-secondary w-14 text-right">{label}</span>
               <div className="flex-1 h-2 bg-bg-muted rounded-full overflow-hidden">
                 <div
-                  className={`h-full rounded-full ${config.color} transition-all duration-[400ms] ease-out`}
+                  className={`h-full rounded-full ${ratingColors[key]} transition-all duration-[400ms] ease-out`}
                   style={{ width: barsVisible ? `${width}%` : "0%" }}
                 />
               </div>
@@ -132,7 +134,7 @@ export function SessionSummary({ studentId, studentName, ratings }: Props) {
         href="/"
         className="px-8 py-3 border border-primary text-primary rounded-[var(--radius-pill)] text-[17px] font-medium hover:bg-primary hover:text-white transition-colors"
       >
-        Done
+        {ts("done")}
       </Link>
     </div>
   );

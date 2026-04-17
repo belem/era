@@ -6,7 +6,6 @@ export interface SearchablePoem {
   title: string;
   author: string;
   dynasty: string;
-  grade: number;
   content: string;
   pinyin: string;
   paragraphs: string[];
@@ -30,7 +29,7 @@ export function createPoemIndex(): PoemIndex {
         { field: "content", tokenize: "full", encoder: cjkEncoder },
         { field: "pinyin", tokenize: "forward", encoder: "LatinBalance" },
       ],
-      store: ["id", "title", "author", "dynasty", "grade", "paragraphs"],
+      store: ["id", "title", "author", "dynasty", "paragraphs"],
     },
   });
 }
@@ -42,7 +41,6 @@ export function buildIndex(
     title: string;
     author: string;
     dynasty: string;
-    grade_level: number;
     content_lines: any[];
   }>,
 ): PoemIndex {
@@ -67,7 +65,6 @@ export function buildIndex(
       title: row.title,
       author: row.author,
       dynasty: row.dynasty,
-      grade: row.grade_level,
       content,
       pinyin,
       paragraphs,

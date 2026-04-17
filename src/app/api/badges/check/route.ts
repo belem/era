@@ -59,19 +59,19 @@ export async function POST(request: Request) {
         break;
       }
       case "grade_mastered": {
-        // Check if all poems in any single grade have been reviewed with "good" or "easy" at least once
-        // Simplified: count distinct poems reviewed vs total poems per grade
         const { data: student } = await supabase
           .from("students")
-          .select("grade")
+          .select("grade, level, edition")
           .eq("id", studentId)
           .single();
         if (student) {
           const [{ count: totalPoems }, { count: reviewedPoems }] = await Promise.all([
             supabase
-              .from("poems")
-              .select("id", { count: "exact", head: true })
-              .eq("grade_level", student.grade),
+              .from("poem_editions")
+              .select("poem_id", { count: "exact", head: true })
+              .eq("edition", student.edition)
+              .eq("level", student.level)
+              .eq("grade", student.grade),
             supabase
               .from("poem_reviews")
               .select("poem_id", { count: "exact", head: true })

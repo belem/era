@@ -622,7 +622,8 @@ color tokens.
 
 - **Phase 2** (this plan): Algorithms + Auth + Gamification + Responsive + Invites
 - **Phase 3**: Fragments + Audio/TTS + Ear Training + Custom Poems + PWA + Analytics + Library expansion
-- **Phase 4**: Admin + AI abstraction layer + Native mobile
+- **Phase 4**: Admin dashboard
+- **Future**: AI abstraction layer + Audio/TTS + Ear Training + Native mobile
 
 ## Design Review: NOT in scope
 - Onboarding page redesign (Phase 1, works, not changing in Phase 2)

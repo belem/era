@@ -9,11 +9,16 @@ export async function POST(request: Request) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const { studentId, poemId, rating } = await request.json() as {
+  const { studentId, poemId, customPoemId, rating } = await request.json() as {
     studentId: string;
-    poemId: string;
+    poemId?: string;
+    customPoemId?: string;
     rating: Rating;
   };
+
+  if (!poemId && !customPoemId) {
+    return NextResponse.json({ error: "Missing poemId or customPoemId" }, { status: 400 });
+  }
 
   const limited = await checkRateLimit(scheduleLimiter, studentId);
   if (limited) return limited;
@@ -32,13 +37,15 @@ export async function POST(request: Request) {
   const algorithmName = student.algorithm as AlgorithmName;
   const algorithm = getAlgorithm(algorithmName);
 
-  // Fetch current review state (or create fresh)
-  const { data: existing } = await supabase
+  const reviewQuery = supabase
     .from("poem_reviews")
     .select("*")
-    .eq("student_id", studentId)
-    .eq("poem_id", poemId)
-    .single();
+    .eq("student_id", studentId);
+
+  if (poemId) reviewQuery.eq("poem_id", poemId);
+  else reviewQuery.eq("custom_poem_id", customPoemId!);
+
+  const { data: existing } = await reviewQuery.single();
 
   const currentState = existing
     ? {
@@ -58,35 +65,36 @@ export async function POST(request: Request) {
 
   const { nextReviewAt, updatedState } = algorithm.schedule(currentState, rating, lastReview);
 
-  // Dual write: append to review_events + upsert poem_reviews
-  const eventInsert = supabase
-    .from("review_events")
-    .insert({
-      student_id: studentId,
-      poem_id: poemId,
-      algorithm: algorithmName,
-      rating,
-    });
+  const eventData: Record<string, unknown> = {
+    student_id: studentId,
+    algorithm: algorithmName,
+    rating,
+  };
+  if (poemId) eventData.poem_id = poemId;
+  else eventData.custom_poem_id = customPoemId;
 
+  const eventInsert = supabase.from("review_events").insert(eventData);
+
+  const reviewData: Record<string, unknown> = {
+    student_id: studentId,
+    rating,
+    repetitions: updatedState.repetitions as number,
+    ease_factor: updatedState.ease_factor as number,
+    interval_days: updatedState.interval_days as number,
+    leitner_box: updatedState.leitner_box as number,
+    fsrs_stability: updatedState.fsrs_stability as number | null,
+    fsrs_difficulty: updatedState.fsrs_difficulty as number | null,
+    fsrs_reps: updatedState.fsrs_reps as number,
+    next_review_at: nextReviewAt.toISOString(),
+    last_reviewed_at: new Date().toISOString(),
+  };
+  if (poemId) reviewData.poem_id = poemId;
+  else reviewData.custom_poem_id = customPoemId;
+
+  const conflictKey = poemId ? "student_id,poem_id" : "student_id,custom_poem_id";
   const reviewUpsert = supabase
     .from("poem_reviews")
-    .upsert(
-      {
-        student_id: studentId,
-        poem_id: poemId,
-        rating,
-        repetitions: updatedState.repetitions as number,
-        ease_factor: updatedState.ease_factor as number,
-        interval_days: updatedState.interval_days as number,
-        leitner_box: updatedState.leitner_box as number,
-        fsrs_stability: updatedState.fsrs_stability as number | null,
-        fsrs_difficulty: updatedState.fsrs_difficulty as number | null,
-        fsrs_reps: updatedState.fsrs_reps as number,
-        next_review_at: nextReviewAt.toISOString(),
-        last_reviewed_at: new Date().toISOString(),
-      },
-      { onConflict: "student_id,poem_id" }
-    );
+    .upsert(reviewData, { onConflict: conflictKey });
 
   const [eventResult, reviewResult] = await Promise.all([eventInsert, reviewUpsert]);
 

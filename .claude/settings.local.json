@@ -28,7 +28,17 @@
       "Bash(python -c \"import json; poems = json.load\\(open\\('scripts/poems-with-pinyin.json', encoding='utf-8'\\)\\); print\\(f'Total poems: {len\\(poems\\)}'\\); p = poems[0]; print\\(f'Sample: {p[\\\\\"title\\\\\"]} - {len\\(p[\\\\\"content_lines\\\\\"]\\)} lines, first char: {p[\\\\\"content_lines\\\\\"][0][\\\\\"chars\\\\\"][0]}'\\)\")",
       "Skill(plan-design-review)",
       "Bash(npx tsc *)",
-      "Bash(xargs grep *)"
+      "Bash(xargs grep *)",
+      "WebFetch(domain:haitang.app)",
+      "Bash(curl -s 'https://haitang.app/works?c=445')",
+      "Bash(grep -oE '\\(小学|初中|高中\\)[^\"<>\\\\\\\\]{1,20}' /tmp/haitang_page.html)",
+      "Bash(grep -oE '.{0,50}小学人教版.{0,50}' /tmp/haitang_page.html)",
+      "Bash(sort -t'\"' -k6)",
+      "Bash(grep -oE '\\\\\\\\\"slug\\\\\\\\\":\\\\\\\\\"[0-9]+\\\\\\\\\",\\\\\\\\\"name\\\\\\\\\":\\\\\\\\\"[^\\\\\\\\]*\\\\\\\\\"' /tmp/haitang_page.html)",
+      "Bash(grep -oE '\\\\\\\\\"slug\\\\\\\\\":\\\\\\\\\"[0-9]+\\\\\\\\\",\\\\\\\\\"name\\\\\\\\\":\\\\\\\\\"[^\\\\\\\\]*版[^\\\\\\\\]*\\\\\\\\\"' /tmp/haitang_page.html)",
+      "Bash(sort -t'\"' -k4n -u)",
+      "Bash(python3 *)",
+      "WebFetch(domain:www.renjiaoshe.com)"
     ]
   }
 }

@@ -1,11 +1,13 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
 interface Student {
   id: string;
   name: string;
+  level: string;
   grade: number;
   edition: string;
   algorithm: string;
@@ -23,10 +25,28 @@ const StudentContext = createContext<StudentContextValue>({
   student: null, students: [], switchStudent: () => {}, loading: true,
 });
 
+const PUBLIC_PATHS = ["/login", "/forgot-password", "/reset-password", "/auth", "/invite/accept", "/onboarding"];
+
 export function StudentProvider({ children }: { children: ReactNode }) {
   const [students, setStudents] = useState<Student[]>([]);
   const [currentId, setCurrentId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    const supabase = createClient();
+    const isPublic = PUBLIC_PATHS.some((p) => pathname.startsWith(p));
+    if (isPublic) return;
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "SIGNED_OUT") {
+        router.push("/login?expired=1");
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [router, pathname]);
 
   useEffect(() => {
     const supabase = createClient();

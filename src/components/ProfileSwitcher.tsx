@@ -61,7 +61,7 @@ export function ProfileSwitcher() {
                 <div>
                   <div className="leading-tight">{s.name}</div>
                   <div className="text-[11px] text-text-secondary">
-                    {s.grade}年级 · {s.edition}
+                    {s.level}{s.grade}年级 · {s.edition}版
                   </div>
                 </div>
               </div>

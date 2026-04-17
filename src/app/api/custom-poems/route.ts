@@ -62,10 +62,9 @@ export async function POST(request: Request) {
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-  // Also create a poem_reviews entry so it enters the SRS queue
   await supabase.from("poem_reviews").insert({
     student_id: studentId,
-    poem_id: data.id,
+    custom_poem_id: data.id,
     source: "CUSTOM",
   });
 

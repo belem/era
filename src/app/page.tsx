@@ -45,11 +45,9 @@ function SeasonalTeaser() {
             firstLine: firstLine + (lines?.[0]?.punctuation ?? ""),
           });
         } else {
-          // Fallback: random grade 1 poem
           supabase
             .from("poems")
             .select("id, title, author, content_lines")
-            .eq("grade_level", 1)
             .limit(1)
             .single()
             .then(({ data: fallback }) => {
