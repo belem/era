@@ -1,6 +1,10 @@
-// 24 solar terms with approximate date ranges (month-day)
-// Each solar term maps to poem tags that can be queried from the database
+// Twenty-Four Solar Terms (二十四节气)
+// Based on Sun's ecliptic longitude, not the lunar calendar.
+// Approximate dates are stable year to year (±1 day).
+// Array MUST be sorted chronologically within a calendar year.
 const SOLAR_TERMS: { name: string; nameZh: string; start: string; tags: string[] }[] = [
+  { name: "xiaohan", nameZh: "小寒", start: "01-06", tags: ["xiaohan", "winter"] },
+  { name: "dahan", nameZh: "大寒", start: "01-20", tags: ["dahan", "winter"] },
   { name: "lichun", nameZh: "立春", start: "02-04", tags: ["lichun", "spring"] },
   { name: "yushui", nameZh: "雨水", start: "02-19", tags: ["yushui", "spring"] },
   { name: "jingzhe", nameZh: "惊蛰", start: "03-06", tags: ["jingzhe", "spring"] },
@@ -23,25 +27,18 @@ const SOLAR_TERMS: { name: string; nameZh: string; start: string; tags: string[]
   { name: "xiaoxue", nameZh: "小雪", start: "11-22", tags: ["xiaoxue", "winter"] },
   { name: "daxue", nameZh: "大雪", start: "12-07", tags: ["daxue", "winter"] },
   { name: "dongzhi", nameZh: "冬至", start: "12-22", tags: ["dongzhi", "winter"] },
-  { name: "xiaohan", nameZh: "小寒", start: "01-06", tags: ["xiaohan", "winter"] },
-  { name: "dahan", nameZh: "大寒", start: "01-20", tags: ["dahan", "winter"] },
 ];
 
 export function getCurrentSolarTerm(date: Date = new Date()) {
   const monthDay = `${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
 
-  // Find the current solar term by walking backward from the date
-  // Solar terms are sorted by date within the year (except xiaohan/dahan which are Jan)
-  let current = SOLAR_TERMS[SOLAR_TERMS.length - 1]; // Default to last term
-
   for (let i = SOLAR_TERMS.length - 1; i >= 0; i--) {
     if (monthDay >= SOLAR_TERMS[i].start) {
-      current = SOLAR_TERMS[i];
-      break;
+      return SOLAR_TERMS[i];
     }
   }
-
-  return current;
+  // Jan 1-5: before 小寒, still in 冬至 from previous year
+  return SOLAR_TERMS[SOLAR_TERMS.length - 1];
 }
 
 export function getSeasonalTags(date?: Date): string[] {

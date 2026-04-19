@@ -5,7 +5,8 @@
     "startReview": "开始复习",
     "empty": "今日无诗可复习",
     "listenMode": "听诵",
-    "customPoems": "诗心"
+    "customPoems": "诗心",
+    "seasonal": "季节限定"
   },
   "review": {
     "card": "卡片",

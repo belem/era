@@ -82,6 +82,7 @@ function createTransformersEngine(): TTSEngine {
   let loading = false;
   let currentAudio: HTMLAudioElement | null = null;
   let sharedAudioCtx: AudioContext | null = null;
+  let resolveRef: (() => void) | null = null;
 
   const engine: TTSEngine = {
     backend: "transformers",
@@ -142,15 +143,18 @@ function createTransformersEngine(): TTSEngine {
         const url = URL.createObjectURL(blob);
 
         return new Promise<void>((resolve) => {
+          resolveRef = resolve;
           currentAudio = new Audio(url);
           currentAudio.onended = () => {
             URL.revokeObjectURL(url);
             currentAudio = null;
+            resolveRef = null;
             resolve();
           };
           currentAudio.onerror = () => {
             URL.revokeObjectURL(url);
             currentAudio = null;
+            resolveRef = null;
             resolve();
           };
           currentAudio.play();
@@ -163,7 +167,12 @@ function createTransformersEngine(): TTSEngine {
     stop() {
       if (currentAudio) {
         currentAudio.pause();
+        currentAudio.src = "";
         currentAudio = null;
+      }
+      if (resolveRef) {
+        resolveRef();
+        resolveRef = null;
       }
     },
 
@@ -180,6 +189,7 @@ function createTransformersEngine(): TTSEngine {
  */
 function createWebSpeechEngine(): TTSEngine {
   let speaking = false;
+  let resolveRef: (() => void) | null = null;
 
   const engine: TTSEngine = {
     backend: "webspeech",
@@ -189,12 +199,12 @@ function createWebSpeechEngine(): TTSEngine {
       if (!("speechSynthesis" in window)) return;
 
       return new Promise<void>((resolve) => {
+        resolveRef = resolve;
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = "zh-CN";
-        utterance.rate = 0.85; // Slightly slower for poem recitation
+        utterance.rate = 0.85;
         utterance.pitch = 1.0;
 
-        // Try to find a Chinese voice
         const voices = speechSynthesis.getVoices();
         const zhVoice = voices.find(
           (v) => v.lang.startsWith("zh") && v.localService
@@ -202,8 +212,8 @@ function createWebSpeechEngine(): TTSEngine {
         if (zhVoice) utterance.voice = zhVoice;
 
         utterance.onstart = () => { speaking = true; };
-        utterance.onend = () => { speaking = false; resolve(); };
-        utterance.onerror = () => { speaking = false; resolve(); };
+        utterance.onend = () => { speaking = false; resolveRef = null; resolve(); };
+        utterance.onerror = () => { speaking = false; resolveRef = null; resolve(); };
 
         speechSynthesis.speak(utterance);
       });
@@ -213,6 +223,10 @@ function createWebSpeechEngine(): TTSEngine {
       if ("speechSynthesis" in window) {
         speechSynthesis.cancel();
         speaking = false;
+        if (resolveRef) {
+          resolveRef();
+          resolveRef = null;
+        }
       }
     },
 

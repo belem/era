@@ -5,7 +5,8 @@
     "startReview": "Start Review",
     "empty": "No poems to review today",
     "listenMode": "Listen",
-    "customPoems": "Custom Poems"
+    "customPoems": "Custom Poems",
+    "seasonal": "Seasonal"
   },
   "review": {
     "card": "Card",

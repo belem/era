@@ -44,24 +44,6 @@ function SeasonalTeaser() {
             author: data.author,
             firstLine: firstLine + (lines?.[0]?.punctuation ?? ""),
           });
-        } else {
-          supabase
-            .from("poems")
-            .select("id, title, author, content_lines")
-            .limit(1)
-            .single()
-            .then(({ data: fallback }) => {
-              if (fallback) {
-                const lines = fallback.content_lines as any[];
-                const firstLine = lines?.[0]?.chars?.map((c: any) => c.char).join("") ?? "";
-                setPoem({
-                  id: fallback.id,
-                  title: fallback.title,
-                  author: fallback.author,
-                  firstLine: firstLine + (lines?.[0]?.punctuation ?? ""),
-                });
-              }
-            });
         }
       });
   }, []);
@@ -70,9 +52,14 @@ function SeasonalTeaser() {
 
   return (
     <Link href={`/review?id=${poem.id}`} className="block border-y border-border-subtle py-3 mb-6">
-      <p className="text-[13px] uppercase tracking-[0.08em] text-text-secondary mb-1">
-        {solarTerm.nameZh}
-      </p>
+      <div className="flex items-center gap-2 mb-1">
+        <p className="text-[13px] tracking-[0.08em] text-text-secondary">
+          {solarTerm.nameZh}
+        </p>
+        <span className="text-[11px] px-1.5 py-0.5 rounded-[var(--radius-sm)] bg-primary-soft text-primary">
+          {t("seasonal")}
+        </span>
+      </div>
       <div className="flex items-center justify-between">
         <div className="flex-1 min-w-0">
           <span className="font-heading font-semibold text-[17px] text-text">

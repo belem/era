@@ -26,7 +26,7 @@ export function PlayButton({ poem, className = "" }: PlayButtonProps) {
   return (
     <button
       onClick={handleClick}
-      className={`w-10 h-10 flex items-center justify-center rounded-full border border-border hover:border-primary transition-colors ${className}`}
+      className={`w-10 h-10 flex items-center justify-center transition-colors ${className}`}
       aria-label={playing ? "Stop audio" : "Play poem"}
     >
       {playing ? (
