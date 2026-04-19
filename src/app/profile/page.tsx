@@ -41,6 +41,7 @@ function StudentCard() {
   const [edition, setEdition] = useState("");
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [showResetChoice, setShowResetChoice] = useState(false);
 
   useEffect(() => {
     if (student) {
@@ -51,7 +52,11 @@ function StudentCard() {
     }
   }, [student]);
 
-  const handleSave = async () => {
+  const curriculumChanged = student
+    ? level !== student.level || grade !== student.grade || edition !== student.edition
+    : false;
+
+  const doSave = async (resetProgress: boolean) => {
     if (!student || !name.trim()) return;
     setSaving(true);
     const supabase = createClient();
@@ -59,11 +64,30 @@ function StudentCard() {
       .from("students")
       .update({ name: name.trim(), level, grade, edition })
       .eq("id", student.id);
+
+    if (resetProgress) {
+      await fetch("/api/students/reset-progress", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ studentId: student.id }),
+      });
+    }
+
     setSaving(false);
     setSaved(true);
     setEditing(false);
+    setShowResetChoice(false);
     setTimeout(() => setSaved(false), 2000);
     window.location.reload();
+  };
+
+  const handleSave = async () => {
+    if (!student || !name.trim()) return;
+    if (curriculumChanged) {
+      setShowResetChoice(true);
+      return;
+    }
+    doSave(false);
   };
 
   if (!student) return null;
@@ -123,27 +147,57 @@ function StudentCard() {
           </div>
         </div>
 
-        <div className="flex gap-3 pt-1">
-          <button
-            onClick={handleSave}
-            disabled={saving || !name.trim()}
-            className="px-5 py-2 bg-primary text-white rounded-[var(--radius-pill)] text-[14px] font-medium hover:bg-primary-hover transition-colors disabled:opacity-50"
-          >
-            {t("save")}
-          </button>
-          <button
-            onClick={() => {
-              setEditing(false);
-              setName(student.name);
-              setLevel(student.level);
-              setGrade(student.grade);
-              setEdition(student.edition);
-            }}
-            className="px-5 py-2 border border-border rounded-[var(--radius-pill)] text-[14px] text-text-secondary hover:text-text transition-colors"
-          >
-            {t("cancel")}
-          </button>
-        </div>
+        {!showResetChoice ? (
+          <div className="flex gap-3 pt-1">
+            <button
+              onClick={handleSave}
+              disabled={saving || !name.trim()}
+              className="px-5 py-2 bg-primary text-white rounded-[var(--radius-pill)] text-[14px] font-medium hover:bg-primary-hover transition-colors disabled:opacity-50"
+            >
+              {t("save")}
+            </button>
+            <button
+              onClick={() => {
+                setEditing(false);
+                setShowResetChoice(false);
+                setName(student.name);
+                setLevel(student.level);
+                setGrade(student.grade);
+                setEdition(student.edition);
+              }}
+              className="px-5 py-2 border border-border rounded-[var(--radius-pill)] text-[14px] text-text-secondary hover:text-text transition-colors"
+            >
+              {t("cancel")}
+            </button>
+          </div>
+        ) : (
+          <div className="bg-bg rounded-[var(--radius-lg)] border border-border p-4 space-y-3 mt-1">
+            <p className="text-[14px] text-text font-medium">{t("resetChoiceTitle")}</p>
+            <p className="text-[13px] text-text-tertiary">{t("resetChoiceDesc")}</p>
+            <div className="flex flex-col gap-2">
+              <button
+                onClick={() => doSave(false)}
+                disabled={saving}
+                className="px-4 py-2.5 text-[14px] bg-primary text-white rounded-[var(--radius-pill)] hover:bg-primary-hover transition-colors disabled:opacity-50"
+              >
+                {t("keepProgress")}
+              </button>
+              <button
+                onClick={() => doSave(true)}
+                disabled={saving}
+                className="px-4 py-2.5 text-[14px] text-error border border-error rounded-[var(--radius-pill)] hover:bg-error hover:text-white transition-colors disabled:opacity-50"
+              >
+                {t("resetProgress")}
+              </button>
+              <button
+                onClick={() => setShowResetChoice(false)}
+                className="px-4 py-2 text-[14px] text-text-tertiary hover:text-text transition-colors"
+              >
+                {t("cancel")}
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     );
   }

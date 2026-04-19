@@ -64,7 +64,7 @@ export function LivingScroll({ poem, onComplete }: LivingScrollProps) {
                     : "Hidden character"
               }
             >
-              {isRevealed || isActive ? c.char : "　"}
+              {isRevealed ? c.char : "　"}
             </button>
           );
         })}

@@ -81,3 +81,20 @@ $$;
 CREATE TRIGGER poem_editions_auto_assign
   AFTER INSERT ON poem_editions
   FOR EACH ROW EXECUTE FUNCTION on_poem_edition_insert();
+
+-- Reset all system learning progress for a student, then re-assign poems
+CREATE OR REPLACE FUNCTION reset_student_progress(p_student_id UUID)
+RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+BEGIN
+  DELETE FROM review_events WHERE student_id = p_student_id AND poem_id IS NOT NULL;
+  DELETE FROM scroll_completions WHERE student_id = p_student_id;
+  DELETE FROM poem_reviews WHERE student_id = p_student_id AND source = 'SYSTEM';
+  UPDATE streaks SET current_streak = 0, longest_streak = 0, last_review_date = NULL
+    WHERE student_id = p_student_id;
+  PERFORM assign_poems_for_student(p_student_id);
+END;
+$$;

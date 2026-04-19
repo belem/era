@@ -70,7 +70,11 @@
     "level": "Level",
     "grade": "Grade",
     "edition": "Edition",
-    "saved": "Saved"
+    "saved": "Saved",
+    "resetChoiceTitle": "Curriculum changed",
+    "resetChoiceDesc": "New poems will be added to the review queue automatically. You can keep existing progress or start fresh.",
+    "keepProgress": "Keep existing progress",
+    "resetProgress": "Reset and start fresh"
   },
   "session": {
     "poemsReviewed": "{count} poems reviewed",
@@ -165,6 +169,15 @@
     "streak": "Streak",
     "streakFreeze": "Streak freeze",
     "freezeCaption": "1 free freeze per week",
+    "resetSection": "Reset Learning",
+    "resetDesc": "Clear all system poem review progress, streaks, and scroll completions. Custom poems and flashcards are not affected.",
+    "resetButton": "Reset Learning Progress",
+    "resetConfirmTitle": "Reset progress?",
+    "resetConfirmDesc": "This will clear all review history, streaks, and scroll completions. This cannot be undone.",
+    "resetConfirm": "Reset",
+    "resetCancel": "Cancel",
+    "resetting": "Resetting...",
+    "resetSuccess": "Learning progress has been reset",
     "email": "Email",
     "password": "Password",
     "changePassword": "Change password",

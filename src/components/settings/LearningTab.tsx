@@ -75,6 +75,9 @@ export function LearningTab() {
   const [maxReviews, setMaxReviews] = useState(settings?.max_reviews_per_session ?? 15);
   const [streakFreeze, setStreakFreeze] = useState(settings?.streak_freeze_enabled ?? true);
   const [switching, setSwitching] = useState(false);
+  const [resetting, setResetting] = useState(false);
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
+  const [resetDone, setResetDone] = useState(false);
 
   const saveSettings = async (patch: Record<string, unknown>) => {
     if (!student) return;
@@ -279,6 +282,65 @@ export function LearningTab() {
             />
           </button>
         </div>
+      </section>
+
+      {/* Reset progress section */}
+      <section>
+        <h3 className="text-[13px] uppercase tracking-[0.08em] text-text-secondary mb-3">
+          {t("resetSection")}
+        </h3>
+        <p className="text-[14px] text-text-tertiary mb-3">
+          {t("resetDesc")}
+        </p>
+        {!showResetConfirm ? (
+          <button
+            onClick={() => setShowResetConfirm(true)}
+            disabled={resetting}
+            className="px-4 py-2 text-[14px] text-error border border-error rounded-[var(--radius-pill)] hover:bg-error hover:text-white transition-colors disabled:opacity-50"
+          >
+            {t("resetButton")}
+          </button>
+        ) : (
+          <div className="bg-bg-subtle rounded-[var(--radius-lg)] p-4 space-y-3">
+            <p className="text-[14px] text-text font-medium">{t("resetConfirmTitle")}</p>
+            <p className="text-[13px] text-text-tertiary">{t("resetConfirmDesc")}</p>
+            <div className="flex gap-3">
+              <button
+                onClick={async () => {
+                  if (!student) return;
+                  setResetting(true);
+                  try {
+                    const res = await fetch("/api/students/reset-progress", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({ studentId: student.id }),
+                    });
+                    if (res.ok) {
+                      setResetDone(true);
+                      setTimeout(() => window.location.reload(), 1500);
+                    }
+                  } finally {
+                    setResetting(false);
+                    setShowResetConfirm(false);
+                  }
+                }}
+                disabled={resetting}
+                className="px-4 py-2 text-[14px] bg-error text-white rounded-[var(--radius-pill)] hover:opacity-90 transition-opacity disabled:opacity-50"
+              >
+                {resetting ? t("resetting") : t("resetConfirm")}
+              </button>
+              <button
+                onClick={() => setShowResetConfirm(false)}
+                className="px-4 py-2 text-[14px] border border-border rounded-[var(--radius-pill)] text-text-secondary hover:text-text transition-colors"
+              >
+                {t("resetCancel")}
+              </button>
+            </div>
+          </div>
+        )}
+        {resetDone && (
+          <p className="text-[13px] text-success mt-3">{t("resetSuccess")}</p>
+        )}
       </section>
     </div>
   );

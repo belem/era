@@ -22,6 +22,15 @@ interface PoemWithEditions extends Poem {
 
 const LEVEL_ORDER: Record<string, number> = { "小学": 0, "初中": 1, "高中": 2 };
 
+function curriculumOrder(e: PoemEdition): number {
+  return (LEVEL_ORDER[e.level] ?? 9) * 10 + (e.grade ?? 0);
+}
+
+function minCurriculumOrder(editions: PoemEdition[]): number {
+  if (editions.length === 0) return 999;
+  return Math.min(...editions.map(curriculumOrder));
+}
+
 function MultiSelect({
   label,
   options,
@@ -76,23 +85,27 @@ export default function LibraryPage() {
     supabase
       .from("poems")
       .select("*, poem_editions(edition, level, grade)")
-      .order("title", { ascending: true })
       .then(({ data }) => {
         if (data) {
-          setPoems(
-            data.map((p: any) => ({
-              id: p.id,
-              title: p.title,
-              author: p.author,
-              dynasty: p.dynasty,
-              lines: p.content_lines,
-              editions: (p.poem_editions ?? []).map((e: any) => ({
-                edition: e.edition,
-                level: e.level,
-                grade: e.grade,
-              })),
-            }))
-          );
+          const mapped: PoemWithEditions[] = data.map((p: any) => ({
+            id: p.id,
+            title: p.title,
+            author: p.author,
+            dynasty: p.dynasty,
+            lines: p.content_lines,
+            editions: (p.poem_editions ?? []).map((e: any) => ({
+              edition: e.edition,
+              level: e.level,
+              grade: e.grade,
+            })),
+          }));
+          mapped.sort((a, b) => {
+            const aMin = minCurriculumOrder(a.editions);
+            const bMin = minCurriculumOrder(b.editions);
+            if (aMin !== bMin) return aMin - bMin;
+            return a.title.localeCompare(b.title, "zh");
+          });
+          setPoems(mapped);
         }
         setLoading(false);
       });

@@ -70,7 +70,11 @@
     "level": "学段",
     "grade": "年级",
     "edition": "教材版本",
-    "saved": "已保存"
+    "saved": "已保存",
+    "resetChoiceTitle": "学段/年级/版本已更改",
+    "resetChoiceDesc": "新诗词将自动添加到学习队列。你可以保留现有进度，或重新开始。",
+    "keepProgress": "保留现有进度",
+    "resetProgress": "重置并重新开始"
   },
   "session": {
     "poemsReviewed": "复习了 {count} 首诗",
@@ -165,6 +169,15 @@
     "streak": "连续打卡",
     "streakFreeze": "打卡保护",
     "freezeCaption": "每周可免费保护一次",
+    "resetSection": "重置学习",
+    "resetDesc": "清除所有系统诗词的复习进度、连续打卡和卷轴记录，重新开始。自定义诗词和集雅卡片不受影响。",
+    "resetButton": "重置学习进度",
+    "resetConfirmTitle": "确认重置？",
+    "resetConfirmDesc": "此操作将清除所有复习记录、连续打卡天数和卷轴完成记录，无法撤销。",
+    "resetConfirm": "确认重置",
+    "resetCancel": "取消",
+    "resetting": "重置中...",
+    "resetSuccess": "学习进度已重置",
     "email": "邮箱",
     "password": "密码",
     "changePassword": "修改密码",
