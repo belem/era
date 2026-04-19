@@ -23,6 +23,7 @@ export function useReviewQueue() {
       .select("*, poems(*), custom_poems(*)")
       .eq("student_id", student.id)
       .lte("next_review_at", new Date().toISOString())
+      .order("sort_order", { ascending: true })
       .order("next_review_at", { ascending: true })
       .then(({ data }) => {
         if (data) {

@@ -33,7 +33,19 @@
   "library": {
     "title": "Poetry Library",
     "searchPlaceholder": "Search by title, author, verse, or pinyin...",
-    "noResults": "No poems found"
+    "noResults": "No poems found",
+    "edition": "Edition",
+    "level": "Level",
+    "grade": "Grade",
+    "allEditions": "All Editions",
+    "allLevels": "All Levels",
+    "allGrades": "All Grades",
+    "grade1": "Grade 1",
+    "grade2": "Grade 2",
+    "grade3": "Grade 3",
+    "grade4": "Grade 4",
+    "grade5": "Grade 5",
+    "grade6": "Grade 6"
   },
   "gallery": {
     "title": "Scroll Gallery",

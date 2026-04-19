@@ -33,7 +33,19 @@
   "library": {
     "title": "诗库",
     "searchPlaceholder": "搜索诗名、作者、诗句或拼音...",
-    "noResults": "未找到诗词"
+    "noResults": "未找到诗词",
+    "edition": "版本",
+    "level": "学段",
+    "grade": "年级",
+    "allEditions": "全部版本",
+    "allLevels": "全部学段",
+    "allGrades": "全部年级",
+    "grade1": "一年级",
+    "grade2": "二年级",
+    "grade3": "三年级",
+    "grade4": "四年级",
+    "grade5": "五年级",
+    "grade6": "六年级"
   },
   "gallery": {
     "title": "卷轴馆",

@@ -13,6 +13,16 @@ import { LivingScroll } from "@/components/LivingScroll";
 import { SessionSummary } from "@/components/SessionSummary";
 import type { Poem } from "@/types/poem";
 
+const CN_NUM = ["", "一", "二", "三", "四", "五", "六", "七", "八", "九"];
+
+function formatGrade(level: string, grade: number | null): string {
+  const g = grade != null ? CN_NUM[grade] ?? String(grade) : null;
+  if (level === "初中" && g) return `初${g}`;
+  if (level === "高中" && g) return `高${g}`;
+  if (g) return `${level} · ${g}年级`;
+  return level;
+}
+
 interface SessionRating {
   poemId: string;
   rating: "forgot" | "hard" | "good" | "easy";
@@ -184,7 +194,7 @@ function ReviewContent() {
           <div className="flex flex-wrap justify-center gap-x-3 gap-y-0.5 mt-4 max-w-[480px] mx-auto">
             {editions.map((ed, i) => (
               <span key={i} className="text-[11px] text-text-tertiary">
-                {ed.edition}版 · {ed.level}{ed.grade ? ` · ${ed.grade}年级` : ""}
+                {ed.edition}版 · {formatGrade(ed.level, ed.grade)}
               </span>
             ))}
           </div>

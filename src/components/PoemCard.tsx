@@ -1,24 +1,51 @@
 import Link from "next/link";
 import type { Poem } from "@/types/poem";
 
-export function PoemCard({ poem }: { poem: Poem }) {
+interface PoemEdition {
+  edition: string;
+  level: string;
+  grade: number | null;
+}
+
+const CN_NUM = ["", "一", "二", "三", "四", "五", "六", "七", "八", "九"];
+
+function formatEdition(e: PoemEdition): string {
+  const g = e.grade != null ? CN_NUM[e.grade] ?? String(e.grade) : null;
+  if (e.level === "初中" && g) return `${e.edition}·初${g}`;
+  if (e.level === "高中" && g) return `${e.edition}·高${g}`;
+  if (g) return `${e.edition}·${e.level}·${g}年级`;
+  return `${e.edition}·${e.level}`;
+}
+
+export function PoemCard({ poem, editions }: { poem: Poem; editions?: PoemEdition[] }) {
   const firstLine = poem.lines[0]?.chars.map((c) => c.char).join("") ?? "";
 
   return (
     <Link
       href={`/review?id=${poem.id}`}
-      className="block px-4 py-4 -mx-4 rounded-[var(--radius-lg)] transition-colors hover:bg-bg-subtle"
+      className="flex items-start gap-3 px-4 py-4 -mx-4 rounded-[var(--radius-lg)] transition-colors hover:bg-bg-subtle"
     >
-      <div className="font-heading font-semibold text-[17px] tracking-tight mb-0.5">
-        {poem.title}
+      <div className="flex-1 min-w-0">
+        <div className="font-heading font-semibold text-[17px] tracking-tight mb-0.5">
+          {poem.title}
+        </div>
+        <div className="text-[14px] text-text-tertiary tracking-tight mb-1.5">
+          〔{poem.dynasty}〕{poem.author}
+        </div>
+        <div className="font-poetry text-[15px] text-text-secondary tracking-wide">
+          {firstLine}
+          {poem.lines[0]?.punctuation}
+        </div>
       </div>
-      <div className="text-[14px] text-text-tertiary tracking-tight mb-1.5">
-        〔{poem.dynasty}〕{poem.author}
-      </div>
-      <div className="font-poetry text-[15px] text-text-secondary tracking-wide">
-        {firstLine}
-        {poem.lines[0]?.punctuation}
-      </div>
+      {editions && editions.length > 0 && (
+        <div className="flex flex-col items-end gap-0.5 shrink-0 pt-0.5">
+          {editions.map((e, i) => (
+            <span key={i} className="text-[11px] text-text-tertiary leading-tight whitespace-nowrap">
+              {formatEdition(e)}
+            </span>
+          ))}
+        </div>
+      )}
     </Link>
   );
 }

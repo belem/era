@@ -26,9 +26,10 @@ export async function generatePlaylist(
 
   const { data } = await supabase
     .from("poem_reviews")
-    .select("poem_id, interval_days, fsrs_stability, poems(title, author, dynasty, content_lines)")
+    .select("poem_id, interval_days, fsrs_stability, sort_order, poems(title, author, dynasty, content_lines)")
     .eq("student_id", studentId)
     .lte("next_review_at", new Date().toISOString())
+    .order("sort_order", { ascending: true })
     .order("interval_days", { ascending: true });
 
   if (!data || data.length === 0) return [];
