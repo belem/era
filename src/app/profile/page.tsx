@@ -15,6 +15,162 @@ interface Badge {
   unlocked: boolean;
 }
 
+const LEVELS = ["小学", "初中", "高中"] as const;
+const EDITIONS = ["部编", "苏教", "北师大"] as const;
+
+function gradeOptions(level: string) {
+  if (level === "小学") return [1, 2, 3, 4, 5, 6];
+  if (level === "初中") return [1, 2, 3];
+  return [1, 2, 3];
+}
+
+function StudentCard() {
+  const t = useTranslations("profile");
+  const { student } = useStudent();
+  const [editing, setEditing] = useState(false);
+  const [name, setName] = useState("");
+  const [level, setLevel] = useState("");
+  const [grade, setGrade] = useState(1);
+  const [edition, setEdition] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    if (student) {
+      setName(student.name);
+      setLevel(student.level);
+      setGrade(student.grade);
+      setEdition(student.edition);
+    }
+  }, [student]);
+
+  const handleSave = async () => {
+    if (!student || !name.trim()) return;
+    setSaving(true);
+    const supabase = createClient();
+    await supabase
+      .from("students")
+      .update({ name: name.trim(), level, grade, edition })
+      .eq("id", student.id);
+    setSaving(false);
+    setSaved(true);
+    setEditing(false);
+    setTimeout(() => setSaved(false), 2000);
+    window.location.reload();
+  };
+
+  if (!student) return null;
+
+  if (editing) {
+    return (
+      <div className="bg-bg-subtle rounded-[var(--radius-lg)] p-6 mb-8 md:mb-0 space-y-4">
+        <div>
+          <label className="text-[12px] text-text-secondary block mb-1">{t("name")}</label>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="w-full border border-border rounded-[var(--radius-md)] bg-bg px-3 py-2.5 text-[15px] text-text focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+        </div>
+
+        <div className="grid grid-cols-3 gap-3">
+          <div>
+            <label className="text-[12px] text-text-secondary block mb-1">{t("level")}</label>
+            <select
+              value={level}
+              onChange={(e) => {
+                setLevel(e.target.value);
+                setGrade(1);
+              }}
+              className="w-full border border-border rounded-[var(--radius-md)] bg-bg px-3 py-2.5 text-[14px] text-text focus:outline-none focus:ring-2 focus:ring-primary"
+            >
+              {LEVELS.map((l) => (
+                <option key={l} value={l}>{l}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="text-[12px] text-text-secondary block mb-1">{t("grade")}</label>
+            <select
+              value={grade}
+              onChange={(e) => setGrade(parseInt(e.target.value, 10))}
+              className="w-full border border-border rounded-[var(--radius-md)] bg-bg px-3 py-2.5 text-[14px] text-text focus:outline-none focus:ring-2 focus:ring-primary"
+            >
+              {gradeOptions(level).map((g) => (
+                <option key={g} value={g}>{g}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="text-[12px] text-text-secondary block mb-1">{t("edition")}</label>
+            <select
+              value={edition}
+              onChange={(e) => setEdition(e.target.value)}
+              className="w-full border border-border rounded-[var(--radius-md)] bg-bg px-3 py-2.5 text-[14px] text-text focus:outline-none focus:ring-2 focus:ring-primary"
+            >
+              {EDITIONS.map((ed) => (
+                <option key={ed} value={ed}>{ed}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <div className="flex gap-3 pt-1">
+          <button
+            onClick={handleSave}
+            disabled={saving || !name.trim()}
+            className="px-5 py-2 bg-primary text-white rounded-[var(--radius-pill)] text-[14px] font-medium hover:bg-primary-hover transition-colors disabled:opacity-50"
+          >
+            {t("save")}
+          </button>
+          <button
+            onClick={() => {
+              setEditing(false);
+              setName(student.name);
+              setLevel(student.level);
+              setGrade(student.grade);
+              setEdition(student.edition);
+            }}
+            className="px-5 py-2 border border-border rounded-[var(--radius-pill)] text-[14px] text-text-secondary hover:text-text transition-colors"
+          >
+            {t("cancel")}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-bg-subtle rounded-[var(--radius-lg)] p-6 mb-8 md:mb-0">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-full bg-text text-bg flex items-center justify-center text-lg font-medium">
+            {student.name.charAt(0)}
+          </div>
+          <div>
+            <div className="font-heading font-semibold text-[17px] tracking-tight">
+              {student.name}
+            </div>
+            <div className="text-[14px] text-text-tertiary tracking-tight">
+              {student.level}{t("gradeInfo", { grade: student.grade })} · {t("editionInfo", { edition: student.edition })}
+            </div>
+          </div>
+        </div>
+        <button
+          onClick={() => setEditing(true)}
+          className="text-[14px] text-primary hover:underline"
+        >
+          {t("edit")}
+        </button>
+      </div>
+      {saved && (
+        <p className="text-[13px] text-success mt-3">{t("saved")}</p>
+      )}
+    </div>
+  );
+}
+
 export default function ProfilePage() {
   const t = useTranslations("profile");
   const tb = useTranslations("badges");
@@ -66,22 +222,7 @@ export default function ProfilePage() {
         </div>
 
         <div className="md:grid md:grid-cols-2 md:gap-8">
-          {/* Student info */}
-          <div className="bg-bg-subtle rounded-[var(--radius-lg)] p-6 mb-8 md:mb-0">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-full bg-text text-bg flex items-center justify-center text-lg font-medium">
-                {student?.name.charAt(0) ?? "?"}
-              </div>
-              <div>
-                <div className="font-heading font-semibold text-[17px] tracking-tight">
-                  {student?.name ?? "---"}
-                </div>
-                <div className="text-[14px] text-text-tertiary tracking-tight">
-                  {student?.level ?? ""}{t("gradeInfo", { grade: student?.grade ?? "--" })} · {t("editionInfo", { edition: student?.edition ?? "部编" })}
-                </div>
-              </div>
-            </div>
-          </div>
+          <StudentCard />
 
           {/* Badges */}
           <div>

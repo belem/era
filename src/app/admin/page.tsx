@@ -161,7 +161,7 @@ export default function AdminPage() {
             onClick={() => router.push("/")}
             className="text-[14px] text-text-secondary hover:text-primary transition-colors"
           >
-            &larr; Back
+            Back
           </button>
         </div>
         <div className="px-6 md:px-12 lg:px-20 xl:px-32 flex gap-6">

@@ -5,11 +5,13 @@ import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useReviewQueue } from "@/hooks/useReviewQueue";
 import { useStudent } from "@/hooks/useStudent";
+import { createClient } from "@/lib/supabase/client";
 import { AppHeader } from "@/components/AppHeader";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { CardReview } from "@/components/CardReview";
 import { LivingScroll } from "@/components/LivingScroll";
 import { SessionSummary } from "@/components/SessionSummary";
+import type { Poem } from "@/types/poem";
 
 interface SessionRating {
   poemId: string;
@@ -21,22 +23,52 @@ function ReviewContent() {
   const searchParams = useSearchParams();
   const poemId = searchParams.get("id");
   const { student } = useStudent();
-  const { poems, loading } = useReviewQueue();
+  const { poems: queuePoems, loading: queueLoading } = useReviewQueue();
 
+  const [poems, setPoems] = useState<Poem[]>([]);
+  const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [mode, setMode] = useState<"card" | "scroll">("card");
   const [sessionComplete, setSessionComplete] = useState(false);
   const [sessionRatings, setSessionRatings] = useState<SessionRating[]>([]);
 
-  // Set initial index when poems load and poemId is present
   useEffect(() => {
-    if (!loading && poems.length > 0 && poemId) {
-      const idx = poems.findIndex((p) => p.id === poemId);
-      if (idx >= 0) {
+    if (queueLoading) return;
+
+    if (poemId) {
+      const inQueue = queuePoems.find((p) => p.id === poemId);
+      if (inQueue) {
+        const idx = queuePoems.indexOf(inQueue);
+        setPoems(queuePoems);
         setCurrentIndex(idx);
+        setLoading(false);
+      } else {
+        const supabase = createClient();
+        supabase
+          .from("poems")
+          .select("id, title, author, dynasty, content_lines")
+          .eq("id", poemId)
+          .single()
+          .then(({ data }) => {
+            if (data) {
+              const poem: Poem = {
+                id: data.id,
+                title: data.title,
+                author: data.author,
+                dynasty: data.dynasty,
+                lines: data.content_lines as Poem["lines"],
+              };
+              setPoems([poem]);
+              setCurrentIndex(0);
+            }
+            setLoading(false);
+          });
       }
+    } else {
+      setPoems(queuePoems);
+      setLoading(false);
     }
-  }, [loading, poems, poemId]);
+  }, [queueLoading, queuePoems, poemId]);
 
   const poem = poems[currentIndex];
 

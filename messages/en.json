@@ -50,7 +50,15 @@
     "gradeInfo": "Grade {grade}",
     "editionInfo": "{edition} Edition",
     "unlocked": "unlocked",
-    "locked": "locked"
+    "locked": "locked",
+    "edit": "Edit",
+    "save": "Save",
+    "cancel": "Cancel",
+    "name": "Name",
+    "level": "Level",
+    "grade": "Grade",
+    "edition": "Edition",
+    "saved": "Saved"
   },
   "session": {
     "poemsReviewed": "{count} poems reviewed",
