@@ -54,7 +54,7 @@
     "edit": "Edit",
     "save": "Save",
     "cancel": "Cancel",
-    "name": "Name",
+    "name": "Username / Nickname",
     "level": "Level",
     "grade": "Grade",
     "edition": "Edition",
@@ -183,8 +183,8 @@
     }
   },
   "onboarding": {
-    "createStudent": "Create your first student profile",
-    "name": "Name",
+    "createStudent": "Create your first learning profile",
+    "name": "Username / Nickname",
     "level": "Level",
     "grade": "Grade",
     "edition": "Textbook Edition",

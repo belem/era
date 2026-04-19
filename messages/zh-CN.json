@@ -54,7 +54,7 @@
     "edit": "编辑",
     "save": "保存",
     "cancel": "取消",
-    "name": "昵称",
+    "name": "用户名/昵称",
     "level": "学段",
     "grade": "年级",
     "edition": "教材版本",
@@ -183,8 +183,8 @@
     }
   },
   "onboarding": {
-    "createStudent": "创建第一个学生档案",
-    "name": "姓名",
+    "createStudent": "创建第一个学习信息",
+    "name": "用户名/昵称",
     "level": "学段",
     "grade": "年级",
     "edition": "教材版本",
