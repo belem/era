@@ -147,6 +147,7 @@
     "switchTo": "切换到 {algo}",
     "migrating": "正在重新计算...",
     "session": "学习设置",
+    "showPinyin": "默认显示拼音",
     "newPoemsPerDay": "每日新诗数量",
     "maxReviewsPerSession": "每次最多复习数量",
     "streak": "连续打卡",

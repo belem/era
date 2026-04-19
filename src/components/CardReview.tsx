@@ -14,14 +14,15 @@ interface CardReviewProps {
 
 export function CardReview({ poem, onRate }: CardReviewProps) {
   const t = useTranslations("review");
-  const [showPinyin, setShowPinyin] = useState(true);
+  const [showPinyin, setShowPinyin] = useState(() =>
+    typeof document !== "undefined" ? !document.documentElement.classList.contains("pinyin-hidden") : true
+  );
   const [revealed, setRevealed] = useState(false);
 
   const togglePinyin = () => {
-    setShowPinyin((prev) => !prev);
-    if (typeof document !== "undefined") {
-      document.documentElement.classList.toggle("pinyin-hidden", showPinyin);
-    }
+    const next = !showPinyin;
+    setShowPinyin(next);
+    document.documentElement.classList.toggle("pinyin-hidden", !next);
   };
 
   return (

@@ -70,6 +70,7 @@ export function LearningTab() {
     (student?.algorithm as AlgorithmName) ?? "SM2"
   );
   const [expanded, setExpanded] = useState<AlgorithmName | null>(null);
+  const [showPinyin, setShowPinyin] = useState(settings?.show_pinyin ?? true);
   const [newPoems, setNewPoems] = useState(settings?.new_poems_per_day ?? 3);
   const [maxReviews, setMaxReviews] = useState(settings?.max_reviews_per_session ?? 15);
   const [streakFreeze, setStreakFreeze] = useState(settings?.streak_freeze_enabled ?? true);
@@ -205,6 +206,28 @@ export function LearningTab() {
         <h3 className="text-[13px] uppercase tracking-[0.08em] text-text-secondary mb-1">
           {t("session")}
         </h3>
+        <div className="flex items-center justify-between py-3">
+          <span className="text-[14px] text-text">{t("showPinyin")}</span>
+          <button
+            role="switch"
+            aria-checked={showPinyin}
+            onClick={() => {
+              const next = !showPinyin;
+              setShowPinyin(next);
+              saveSettings({ show_pinyin: next });
+              document.documentElement.classList.toggle("pinyin-hidden", !next);
+            }}
+            className={`relative w-[51px] h-[31px] rounded-full transition-colors ${
+              showPinyin ? "bg-primary" : "bg-bg-muted"
+            }`}
+          >
+            <div
+              className={`absolute top-[2px] w-[27px] h-[27px] rounded-full bg-white shadow transition-transform ${
+                showPinyin ? "translate-x-[22px]" : "translate-x-[2px]"
+              }`}
+            />
+          </button>
+        </div>
         <Stepper
           label={t("newPoemsPerDay")}
           value={newPoems}

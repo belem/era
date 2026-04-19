@@ -147,6 +147,7 @@
     "switchTo": "Switch to {algo}",
     "migrating": "Recalculating schedule...",
     "session": "Session",
+    "showPinyin": "Show pinyin by default",
     "newPoemsPerDay": "New poems per day",
     "maxReviewsPerSession": "Max reviews per session",
     "streak": "Streak",

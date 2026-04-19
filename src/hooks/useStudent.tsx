@@ -61,6 +61,12 @@ export function StudentProvider({ children }: { children: ReactNode }) {
 
   const student = students.find((s) => s.id === currentId) ?? null;
 
+  useEffect(() => {
+    if (!student) return;
+    const showPinyin = student.settings_json?.show_pinyin ?? true;
+    document.documentElement.classList.toggle("pinyin-hidden", !showPinyin);
+  }, [student]);
+
   const value = {
     student,
     students,
