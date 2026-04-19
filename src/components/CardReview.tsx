@@ -25,7 +25,7 @@ export function CardReview({ poem, onRate }: CardReviewProps) {
   };
 
   return (
-    <div className="max-w-[480px] mx-auto bg-bg-subtle rounded-[var(--radius-lg)] overflow-hidden px-6 pt-10 pb-8 text-center relative">
+    <div className="max-w-[480px] mx-auto bg-bg-subtle rounded-[var(--radius-lg)] overflow-hidden px-2 pt-10 pb-8 text-center relative">
       <button
         onClick={togglePinyin}
         className="absolute top-4 right-4 min-w-[44px] min-h-[44px] flex items-center justify-center text-text-tertiary hover:text-text-secondary transition-colors"
@@ -50,7 +50,7 @@ export function CardReview({ poem, onRate }: CardReviewProps) {
 
       <div className="mb-10" />
 
-      <div className="mb-12 leading-[2.4]">
+      <div className="mb-10 leading-[2.4]">
         <PoemBody poem={poem} />
       </div>
 
