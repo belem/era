@@ -19,6 +19,44 @@ export interface TTSEngine {
 }
 
 let _engine: TTSEngine | null = null;
+let _hfDomain: string | null = null;
+
+/**
+ * Detect whether huggingface.co is reachable (blocked in China).
+ * Falls back to hf-mirror.com if the main domain is unreachable.
+ */
+async function getHuggingFaceDomain(): Promise<string> {
+  if (_hfDomain) return _hfDomain;
+
+  const mainDomain = "huggingface.co";
+  const mirrorDomain = "hf-mirror.com";
+
+  async function checkDomain(domain: string): Promise<boolean> {
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 3000);
+      const res = await fetch(`https://${domain}/Xenova/mms-tts-zho/resolve/main/config.json`, {
+        method: "HEAD",
+        signal: controller.signal,
+        cache: "no-store",
+      });
+      clearTimeout(timeout);
+      return res.ok;
+    } catch {
+      return false;
+    }
+  }
+
+  if (await checkDomain(mainDomain)) {
+    _hfDomain = mainDomain;
+  } else if (await checkDomain(mirrorDomain)) {
+    _hfDomain = mirrorDomain;
+  } else {
+    _hfDomain = mainDomain;
+  }
+
+  return _hfDomain;
+}
 
 /**
  * Check if WebGPU is available in this browser.
@@ -53,10 +91,17 @@ function createTransformersEngine(): TTSEngine {
       if (!pipeline && !loading) {
         loading = true;
         try {
-          // Dynamic import to avoid bundling Transformers.js for all users
-          const { pipeline: createPipeline } = await import(
-            "@xenova/transformers" as string
-          );
+          const [{ pipeline: createPipeline, env }, domain] = await Promise.all([
+            import("@xenova/transformers" as string),
+            getHuggingFaceDomain(),
+          ]);
+
+          // Rewrite model host if huggingface.co is blocked
+          if (domain !== "huggingface.co") {
+            env.remoteHost = `https://${domain}`;
+            env.remotePathTemplate = "{model}/resolve/{revision}/";
+          }
+
           pipeline = await createPipeline("text-to-speech", "Xenova/mms-tts-zho", {
             device: "webgpu",
           });
@@ -64,7 +109,6 @@ function createTransformersEngine(): TTSEngine {
         } catch (err) {
           console.warn("Transformers.js TTS init failed, will fallback:", err);
           loading = false;
-          // Fallback to Web Speech for this call
           const fallback = createWebSpeechEngine();
           return fallback.speak(text);
         }
