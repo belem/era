@@ -70,22 +70,24 @@ export function LivingScroll({ poem, onComplete }: LivingScrollProps) {
         })}
       </div>
 
-      {completed && (
-        <div className="space-y-6 animate-[fadeIn_0.4s_ease]">
-          <ChopStamp />
-          <p className="text-[12px] text-text-tertiary">{t("scrollDone")}</p>
-          <RatingButtons onRate={handleRate} />
-        </div>
-      )}
+      <div className="px-8">
+        {completed && (
+          <div className="space-y-6 animate-[fadeIn_0.4s_ease]">
+            <ChopStamp />
+            <p className="text-[12px] text-text-tertiary">{t("scrollDone")}</p>
+            <RatingButtons onRate={handleRate} />
+          </div>
+        )}
 
-      {!completed && (
-        <button
-          onClick={revealNext}
-          className="w-full py-3 bg-primary text-white rounded-[var(--radius-md)] font-ui text-[17px] font-normal cursor-pointer transition-colors hover:bg-primary-hover"
-        >
-          {t("revealChar")}
-        </button>
-      )}
+        {!completed && (
+          <button
+            onClick={revealNext}
+            className="w-full py-3 bg-primary text-white rounded-[var(--radius-md)] font-ui text-[17px] font-normal cursor-pointer transition-colors hover:bg-primary-hover"
+          >
+            {t("revealChar")}
+          </button>
+        )}
+      </div>
     </div>
   );
 }

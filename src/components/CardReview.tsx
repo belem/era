@@ -54,16 +54,18 @@ export function CardReview({ poem, onRate }: CardReviewProps) {
         <PoemBody poem={poem} />
       </div>
 
-      {!revealed ? (
-        <button
-          onClick={() => setRevealed(true)}
-          className="w-full py-3 bg-primary text-white rounded-[var(--radius-md)] font-ui text-[17px] font-normal cursor-pointer transition-colors hover:bg-primary-hover"
-        >
-          {t("reveal")}
-        </button>
-      ) : (
-        <RatingButtons onRate={(r) => onRate?.(r)} />
-      )}
+      <div className="px-8">
+        {!revealed ? (
+          <button
+            onClick={() => setRevealed(true)}
+            className="w-full py-3 bg-primary text-white rounded-[var(--radius-md)] font-ui text-[17px] font-normal cursor-pointer transition-colors hover:bg-primary-hover"
+          >
+            {t("reveal")}
+          </button>
+        ) : (
+          <RatingButtons onRate={(r) => onRate?.(r)} />
+        )}
+      </div>
     </div>
   );
 }
