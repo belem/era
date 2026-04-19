@@ -42,7 +42,10 @@ export default function ActiveListenPage() {
   // Load playlist
   useEffect(() => {
     if (!student) return;
-    generatePlaylist(student.id, "active").then((items) => {
+    const settings = student.settings_json as { max_reviews_per_session?: number } | undefined;
+    generatePlaylist(student.id, "active", {
+      maxReviewsPerSession: settings?.max_reviews_per_session ?? 15,
+    }).then((items) => {
       setPlaylist(items);
       setLoading(false);
     });

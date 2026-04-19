@@ -27,7 +27,10 @@ export default function PassiveListenPage() {
   // Load playlist
   useEffect(() => {
     if (!student) return;
-    generatePlaylist(student.id, "passive").then((items) => {
+    const settings = student.settings_json as { max_reviews_per_session?: number } | undefined;
+    generatePlaylist(student.id, "passive", {
+      maxReviewsPerSession: settings?.max_reviews_per_session ?? 15,
+    }).then((items) => {
       setPlaylist(expandPlaylist(items));
       setLoading(false);
     });
