@@ -11,7 +11,7 @@
   "review": {
     "card": "卡片",
     "scroll": "卷轴",
-    "reveal": "显示评分",
+    "reveal": "自评",
     "revealChar": "揭示下一字",
     "complete": "复习完成",
     "todayCount": "今日复习 {count} 首诗",
@@ -165,6 +165,7 @@
     "migrating": "正在重新计算...",
     "session": "学习设置",
     "showPinyin": "默认显示拼音",
+    "showFirstLine": "首页显示诗词首句",
     "newPoemsPerDay": "每日新诗数量",
     "maxReviewsPerSession": "每次最多复习数量",
     "streak": "连续打卡",

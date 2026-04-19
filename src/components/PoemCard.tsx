@@ -17,8 +17,10 @@ function formatEdition(e: PoemEdition): string {
   return `${e.edition}·${e.level}`;
 }
 
-export function PoemCard({ poem, editions }: { poem: Poem; editions?: PoemEdition[] }) {
-  const firstLine = poem.lines[0]?.chars.map((c) => c.char).join("") ?? "";
+export function PoemCard({ poem, editions, hideFirstLine }: { poem: Poem; editions?: PoemEdition[]; hideFirstLine?: boolean }) {
+  const firstLine = !hideFirstLine
+    ? (poem.lines[0]?.chars.map((c) => c.char).join("") ?? "") + (poem.lines[0]?.punctuation ?? "")
+    : null;
 
   return (
     <Link
@@ -29,13 +31,14 @@ export function PoemCard({ poem, editions }: { poem: Poem; editions?: PoemEditio
         <div className="font-heading font-semibold text-[17px] tracking-tight mb-0.5">
           {poem.title}
         </div>
-        <div className="text-[14px] text-text-tertiary tracking-tight mb-1.5">
+        <div className="text-[14px] text-text-tertiary tracking-tight">
           〔{poem.dynasty}〕{poem.author}
         </div>
-        <div className="font-poetry text-[15px] text-text-secondary tracking-wide">
-          {firstLine}
-          {poem.lines[0]?.punctuation}
-        </div>
+        {firstLine && (
+          <div className="font-poetry text-[15px] text-text-secondary tracking-wide mt-1.5">
+            {firstLine}
+          </div>
+        )}
       </div>
       {editions && editions.length > 0 && (
         <div className="flex flex-col items-end gap-0.5 shrink-0 pt-0.5">

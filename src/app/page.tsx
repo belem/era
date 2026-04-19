@@ -83,6 +83,7 @@ export default function HomePage() {
   const { student } = useStudent();
   const { poems, loading } = useReviewQueue();
   const [streak, setStreak] = useState(0);
+  const showFirstLine = (student?.settings_json as any)?.show_first_line ?? false;
 
   useEffect(() => {
     if (!student) return;
@@ -125,7 +126,7 @@ export default function HomePage() {
         ) : (
           <div className="space-y-1">
             {poems.map((poem) => (
-              <PoemCard key={poem.id} poem={poem} />
+              <PoemCard key={poem.id} poem={poem} hideFirstLine={!showFirstLine} />
             ))}
           </div>
         )}

@@ -165,6 +165,7 @@
     "migrating": "Recalculating schedule...",
     "session": "Session",
     "showPinyin": "Show pinyin by default",
+    "showFirstLine": "Show first line on home",
     "newPoemsPerDay": "New poems per day",
     "maxReviewsPerSession": "Max reviews per session",
     "streak": "Streak",

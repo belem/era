@@ -61,6 +61,7 @@ export function LearningTab() {
 
   const settings = student?.settings_json as {
     show_pinyin?: boolean;
+    show_first_line?: boolean;
     new_poems_per_day?: number;
     max_reviews_per_session?: number;
     streak_freeze_enabled?: boolean;
@@ -71,6 +72,7 @@ export function LearningTab() {
   );
   const [expanded, setExpanded] = useState<AlgorithmName | null>(null);
   const [showPinyin, setShowPinyin] = useState(settings?.show_pinyin ?? true);
+  const [showFirstLine, setShowFirstLine] = useState(settings?.show_first_line ?? false);
   const [newPoems, setNewPoems] = useState(settings?.new_poems_per_day ?? 3);
   const [maxReviews, setMaxReviews] = useState(settings?.max_reviews_per_session ?? 15);
   const [streakFreeze, setStreakFreeze] = useState(settings?.streak_freeze_enabled ?? true);
@@ -227,6 +229,27 @@ export function LearningTab() {
             <div
               className={`absolute top-[2px] w-[27px] h-[27px] rounded-full bg-white shadow transition-transform ${
                 showPinyin ? "translate-x-[22px]" : "translate-x-[2px]"
+              }`}
+            />
+          </button>
+        </div>
+        <div className="flex items-center justify-between py-3">
+          <span className="text-[14px] text-text">{t("showFirstLine")}</span>
+          <button
+            role="switch"
+            aria-checked={showFirstLine}
+            onClick={() => {
+              const next = !showFirstLine;
+              setShowFirstLine(next);
+              saveSettings({ show_first_line: next });
+            }}
+            className={`relative w-[51px] h-[31px] rounded-full transition-colors ${
+              showFirstLine ? "bg-primary" : "bg-bg-muted"
+            }`}
+          >
+            <div
+              className={`absolute top-[2px] w-[27px] h-[27px] rounded-full bg-white shadow transition-transform ${
+                showFirstLine ? "translate-x-[22px]" : "translate-x-[2px]"
               }`}
             />
           </button>
