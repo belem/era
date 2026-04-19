@@ -1,18 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { createClient } from "@/lib/supabase/client";
 import type { Poem } from "@/types/poem";
 import { PoemBody } from "./PoemBody";
 import { RatingButtons } from "./RatingButtons";
 import { PlayButton } from "./PlayButton";
-
-interface PoemEdition {
-  edition: string;
-  level: string;
-  grade: number;
-}
 
 interface CardReviewProps {
   poem: Poem;
@@ -23,19 +16,6 @@ export function CardReview({ poem, onRate }: CardReviewProps) {
   const t = useTranslations("review");
   const [showPinyin, setShowPinyin] = useState(true);
   const [revealed, setRevealed] = useState(false);
-  const [editions, setEditions] = useState<PoemEdition[]>([]);
-
-  useEffect(() => {
-    if (!poem?.id) return;
-    const supabase = createClient();
-    supabase
-      .from("poem_editions")
-      .select("edition, level, grade")
-      .eq("poem_id", poem.id)
-      .then(({ data }) => {
-        if (data) setEditions(data);
-      });
-  }, [poem?.id]);
 
   const togglePinyin = () => {
     setShowPinyin((prev) => !prev);
@@ -45,7 +25,7 @@ export function CardReview({ poem, onRate }: CardReviewProps) {
   };
 
   return (
-    <div className="max-w-[390px] mx-auto bg-bg-subtle rounded-[var(--radius-lg)] overflow-hidden p-12 pb-8 text-center relative">
+    <div className="max-w-[480px] mx-auto bg-bg-subtle rounded-[var(--radius-lg)] overflow-hidden px-6 pt-10 pb-8 text-center relative">
       <button
         onClick={togglePinyin}
         className="absolute top-4 right-4 min-w-[44px] min-h-[44px] flex items-center justify-center text-text-tertiary hover:text-text-secondary transition-colors"
@@ -68,16 +48,7 @@ export function CardReview({ poem, onRate }: CardReviewProps) {
         <PlayButton poem={poem} />
       </div>
 
-      {editions.length > 0 && (
-        <div className="flex flex-wrap justify-center gap-x-3 gap-y-0.5 mb-10">
-          {editions.map((ed, i) => (
-            <span key={i} className="text-[11px] text-text-tertiary">
-              {ed.edition}版 · {ed.level}{ed.grade ? ` · ${ed.grade}年级` : ""}
-            </span>
-          ))}
-        </div>
-      )}
-      {editions.length === 0 && <div className="mb-10" />}
+      <div className="mb-10" />
 
       <div className="mb-12 leading-[2.4]">
         <PoemBody poem={poem} />

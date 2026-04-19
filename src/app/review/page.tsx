@@ -31,6 +31,7 @@ function ReviewContent() {
   const [mode, setMode] = useState<"card" | "scroll">("card");
   const [sessionComplete, setSessionComplete] = useState(false);
   const [sessionRatings, setSessionRatings] = useState<SessionRating[]>([]);
+  const [editions, setEditions] = useState<{ edition: string; level: string; grade: number }[]>([]);
 
   useEffect(() => {
     if (queueLoading) return;
@@ -71,6 +72,16 @@ function ReviewContent() {
   }, [queueLoading, queuePoems, poemId]);
 
   const poem = poems[currentIndex];
+
+  useEffect(() => {
+    if (!poem?.id) { setEditions([]); return; }
+    const supabase = createClient();
+    supabase
+      .from("poem_editions")
+      .select("edition, level, grade")
+      .eq("poem_id", poem.id)
+      .then(({ data }) => setEditions(data ?? []));
+  }, [poem?.id]);
 
   const handleRate = useCallback(async (rating: "forgot" | "hard" | "good" | "easy") => {
     if (student && poem) {
@@ -167,6 +178,16 @@ function ReviewContent() {
           <CardReview poem={poem} onRate={handleRate} />
         ) : (
           <LivingScroll poem={poem} onComplete={handleRate} />
+        )}
+
+        {editions.length > 0 && (
+          <div className="flex flex-wrap justify-center gap-x-3 gap-y-0.5 mt-4 max-w-[480px] mx-auto">
+            {editions.map((ed, i) => (
+              <span key={i} className="text-[11px] text-text-tertiary">
+                {ed.edition}版 · {ed.level}{ed.grade ? ` · ${ed.grade}年级` : ""}
+              </span>
+            ))}
+          </div>
         )}
       </main>
     </>

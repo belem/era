@@ -32,7 +32,7 @@ export function LivingScroll({ poem, onComplete }: LivingScrollProps) {
   };
 
   return (
-    <div className="max-w-[390px] mx-auto bg-bg-subtle rounded-[var(--radius-lg)] overflow-hidden p-10 text-center">
+    <div className="max-w-[480px] mx-auto bg-bg-subtle rounded-[var(--radius-lg)] overflow-hidden px-6 pt-10 pb-8 text-center">
       <h2 className="font-heading font-semibold text-[21px] tracking-tight mb-1">
         {poem.title}
       </h2>
