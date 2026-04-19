@@ -36,11 +36,11 @@ export function LivingScroll({ poem, onComplete }: LivingScrollProps) {
       <h2 className="font-heading font-semibold text-[21px] tracking-tight mb-1">
         {poem.title}
       </h2>
-      <p className="text-[14px] text-text-tertiary tracking-tight mb-10">
+      <p className="text-[14px] text-text-tertiary tracking-tight mb-8">
         〔{poem.dynasty}〕{poem.author}
       </p>
 
-      <div className="grid grid-cols-5 gap-1.5 max-w-[280px] mx-auto mb-10">
+      <div className="grid grid-cols-5 gap-1.5 max-w-[280px] mx-auto mb-8">
         {allChars.map((c, i) => {
           const isRevealed = i < revealedCount;
           const isActive = i === revealedCount;

@@ -48,9 +48,9 @@ export function CardReview({ poem, onRate }: CardReviewProps) {
         <PlayButton poem={poem} />
       </div>
 
-      <div className="mb-10" />
+      <div className="mb-8" />
 
-      <div className="mb-10 leading-[2.4]">
+      <div className="mb-8 leading-[2.4]">
         <PoemBody poem={poem} />
       </div>
 
