@@ -3,6 +3,13 @@
 import { useState, useRef, useEffect } from "react";
 import { useStudent } from "@/hooks/useStudent";
 
+function nameInitial(name: string): string {
+  if (!name) return "?";
+  const last = name.charAt(name.length - 1);
+  if (/[\u4e00-\u9fff]/.test(last)) return last;
+  return name.charAt(0).toUpperCase();
+}
+
 export function ProfileSwitcher() {
   const { student, students, switchStudent, loading } = useStudent();
   const [isOpen, setIsOpen] = useState(false);
@@ -39,7 +46,7 @@ export function ProfileSwitcher() {
         aria-label="Switch profile"
       >
         <div className="w-7 h-7 rounded-full bg-primary/10 text-primary flex items-center justify-center text-[12px] font-medium">
-          {student.name.charAt(0)}
+          {nameInitial(student.name)}
         </div>
       </button>
 
@@ -60,12 +67,12 @@ export function ProfileSwitcher() {
             >
               <div className="flex items-center gap-2.5">
                 <div className="w-6 h-6 rounded-full bg-primary/20 text-primary flex items-center justify-center text-[11px] font-medium">
-                  {s.name.charAt(0)}
+                  {nameInitial(s.name)}
                 </div>
                 <div>
                   <div className="leading-tight">{s.name}</div>
                   <div className="text-[11px] text-text-secondary">
-                    {s.level}{s.grade}年级 · {s.edition}版
+                    {s.edition}版 · {s.level}{s.grade ? ` · ${s.grade}年级` : ""}
                   </div>
                 </div>
               </div>

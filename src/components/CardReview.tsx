@@ -72,7 +72,7 @@ export function CardReview({ poem, onRate }: CardReviewProps) {
         <div className="flex flex-wrap justify-center gap-x-3 gap-y-0.5 mb-10">
           {editions.map((ed, i) => (
             <span key={i} className="text-[11px] text-text-tertiary">
-              {ed.edition}版 · {ed.level} · {ed.grade}年级
+              {ed.edition}版 · {ed.level}{ed.grade ? ` · ${ed.grade}年级` : ""}
             </span>
           ))}
         </div>

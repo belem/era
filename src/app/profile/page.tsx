@@ -18,6 +18,13 @@ interface Badge {
 const LEVELS = ["小学", "初中", "高中"] as const;
 const EDITIONS = ["部编", "苏教", "北师大"] as const;
 
+function nameInitial(name: string): string {
+  if (!name) return "?";
+  const last = name.charAt(name.length - 1);
+  if (/[\u4e00-\u9fff]/.test(last)) return last;
+  return name.charAt(0).toUpperCase();
+}
+
 function gradeOptions(level: string) {
   if (level === "小学") return [1, 2, 3, 4, 5, 6];
   if (level === "初中") return [1, 2, 3];
@@ -146,7 +153,7 @@ function StudentCard() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 rounded-full bg-text text-bg flex items-center justify-center text-lg font-medium">
-            {student.name.charAt(0)}
+            {nameInitial(student.name)}
           </div>
           <div>
             <div className="font-heading font-semibold text-[17px] tracking-tight">
