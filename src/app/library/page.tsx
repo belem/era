@@ -250,7 +250,7 @@ export default function LibraryPage() {
             {t("noResults")}
           </p>
         ) : (
-          <div className="space-y-1 md:grid md:grid-cols-2 md:gap-2 md:space-y-0 lg:grid-cols-3">
+          <div className="space-y-1 md:grid md:grid-cols-2 md:gap-2 md:space-y-0 lg:gap-4 lg:grid-cols-3 xl:gap-8 xl:grid-cols-4">
             {filtered.map((poem) => (
               <PoemCard key={poem.id} poem={poem} editions={poem.editions} />
             ))}
