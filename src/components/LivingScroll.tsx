@@ -70,7 +70,7 @@ export function LivingScroll({ poem, onComplete }: LivingScrollProps) {
         })}
       </div>
 
-      <div className="px-8">
+      <div className="px-12">
         {completed && (
           <div className="space-y-6 animate-[fadeIn_0.4s_ease]">
             <ChopStamp />

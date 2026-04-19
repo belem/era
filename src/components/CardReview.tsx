@@ -54,7 +54,7 @@ export function CardReview({ poem, onRate }: CardReviewProps) {
         <PoemBody poem={poem} />
       </div>
 
-      <div className="px-8">
+      <div className="px-12">
         {!revealed ? (
           <button
             onClick={() => setRevealed(true)}

@@ -199,8 +199,10 @@ Cinematic breathing room. Each section occupies generous vertical space. The whi
 
 ### Layout
 
-- **Max content width:** 980px, centered
-- **Page padding:** generous vertical (80px+), 24–32px horizontal
+- **No max-width constraint.** Content uses responsive padding instead of a fixed container.
+- **Page padding:** `px-6 py-10` mobile, `md:px-12 md:py-14`, `lg:px-20`, `xl:px-32`
+- **Focused pages** (review, settings): `lg:px-[20%] xl:px-[28%]`
+- **Review cards:** `max-w-[480px] mx-auto` for comfortable reading width
 - **Mobile-first:** responsive, single column by default
 - **Touch targets:** all interactive elements ≥ 44×44px
 
@@ -277,10 +279,11 @@ Sentence-ending marks sit outside the text block:
 
 ### Pinyin Visibility Toggle
 
-One CSS class on `<html>`, instant across all `<rt>` elements:
+One CSS class on `<html>`, instant across all `<rt>` elements. Must target `.poem-ruby rt` specifically to override the more specific poem-ruby styles:
 
 ```css
-.pinyin-hidden rt {
+.pinyin-hidden rt,
+.pinyin-hidden .poem-ruby rt {
   display: none;
 }
 ```
@@ -342,17 +345,29 @@ Four difficulty levels. Equal-width, spanning the container.
 - Shadow: rare, soft when used — `0 3px 30px rgba(0,0,0,0.08)`
 - Hover: no standard hover state on cards
 
-### Navigation (Glass Effect)
+### Navigation
+
+Desktop header uses a solid background with a subtle bottom border:
 
 ```css
-nav {
-  background: rgba(0, 0, 0, 0.8);
-  backdrop-filter: saturate(180%) blur(20px);
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
+.app-header {
+  background: var(--bg);
+  border-bottom: 1px solid var(--border-subtle);
 }
 ```
 
-The translucent, blurred navigation bar is the most recognizable depth element — floating UI above scrolling content.
+Mobile bottom tab bar uses the glass effect:
+
+```css
+.glass-nav {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-top: 1px solid var(--border-subtle);
+}
+```
+
+All nav text uses theme tokens (`text-text`, `text-text-secondary`, `text-primary`) for correct visibility in both light and dark modes.
 
 ### The Chop Stamp 印章
 
@@ -462,6 +477,9 @@ Respect `prefers-reduced-motion: reduce`:
 
 | File | Purpose |
 |---|---|
-| `doc/design-kuibu.md` | Full PRD with product requirements, data model, and implementation details |
-| `apple/DESIGN.md` | Apple design inspiration reference |
 | `DESIGN.md` | This file — the visual design system specification |
+| `CLAUDE.md` | Project instructions and skill routing |
+| `src/app/globals.css` | CSS custom properties, theme tokens, poetry rendering styles |
+| `src/components/CardReview.tsx` | Card-mode review component |
+| `src/components/LivingScroll.tsx` | Scroll-mode review component |
+| `src/components/ProfileSwitcher.tsx` | Avatar/profile dropdown with CJK-aware initials |
