@@ -1,11 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
+import { createClient } from "@/lib/supabase/client";
 import type { Poem } from "@/types/poem";
 import { PoemBody } from "./PoemBody";
 import { RatingButtons } from "./RatingButtons";
 import { PlayButton } from "./PlayButton";
+
+interface PoemEdition {
+  edition: string;
+  level: string;
+  grade: number;
+}
 
 interface CardReviewProps {
   poem: Poem;
@@ -16,6 +23,19 @@ export function CardReview({ poem, onRate }: CardReviewProps) {
   const t = useTranslations("review");
   const [showPinyin, setShowPinyin] = useState(true);
   const [revealed, setRevealed] = useState(false);
+  const [editions, setEditions] = useState<PoemEdition[]>([]);
+
+  useEffect(() => {
+    if (!poem?.id) return;
+    const supabase = createClient();
+    supabase
+      .from("poem_editions")
+      .select("edition, level, grade")
+      .eq("poem_id", poem.id)
+      .then(({ data }) => {
+        if (data) setEditions(data);
+      });
+  }, [poem?.id]);
 
   const togglePinyin = () => {
     setShowPinyin((prev) => !prev);
@@ -41,12 +61,23 @@ export function CardReview({ poem, onRate }: CardReviewProps) {
       <h2 className="font-heading font-semibold text-[21px] tracking-tight mb-1">
         {poem.title}
       </h2>
-      <div className="flex items-center justify-center gap-2 mb-10">
+      <div className="flex items-center justify-center gap-2 mb-2">
         <p className="text-[14px] text-text-tertiary tracking-tight">
           〔{poem.dynasty}〕{poem.author}
         </p>
         <PlayButton poem={poem} />
       </div>
+
+      {editions.length > 0 && (
+        <div className="flex flex-wrap justify-center gap-x-3 gap-y-0.5 mb-10">
+          {editions.map((ed, i) => (
+            <span key={i} className="text-[11px] text-text-tertiary">
+              {ed.edition}版 · {ed.level} · {ed.grade}年级
+            </span>
+          ))}
+        </div>
+      )}
+      {editions.length === 0 && <div className="mb-10" />}
 
       <div className="mb-12 leading-[2.4]">
         <PoemBody poem={poem} />

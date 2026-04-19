@@ -126,7 +126,8 @@ body {
 
 /* ─── Pinyin toggle ─── */
 
-.pinyin-hidden rt {
+.pinyin-hidden rt,
+.pinyin-hidden .poem-ruby rt {
   display: none;
 }
 
