@@ -48,6 +48,7 @@
     "settings": "设置",
     "analytics": "学习报告",
     "gradeInfo": "{grade}年级",
+    "editionInfo": "{edition}版",
     "unlocked": "已解锁",
     "locked": "未解锁"
   },

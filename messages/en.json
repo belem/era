@@ -48,6 +48,7 @@
     "settings": "Settings",
     "analytics": "Analytics",
     "gradeInfo": "Grade {grade}",
+    "editionInfo": "{edition} Edition",
     "unlocked": "unlocked",
     "locked": "locked"
   },
