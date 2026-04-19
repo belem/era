@@ -12,10 +12,10 @@ import type { Rating } from "@/lib/srs/types";
 
 const RATING_TIMEOUT_MS = 10_000; // Auto-rate as "good" after 10s
 const RATING_COLORS: Record<Rating, string> = {
-  forgot: "#ff3b30",
-  hard: "#ff9500",
-  good: "#0071e3",
-  easy: "#34c759",
+  forgot: "var(--error)",
+  hard: "var(--warning)",
+  good: "var(--primary)",
+  easy: "var(--success)",
 };
 
 export default function ActiveListenPage() {

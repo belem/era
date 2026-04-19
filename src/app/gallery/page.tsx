@@ -68,7 +68,7 @@ export default function GalleryPage() {
     <>
       <AppHeader />
       <ThemeToggle />
-      <main className="flex-1 px-6 py-10 max-w-[980px] mx-auto w-full">
+      <main className="flex-1 px-6 py-10 md:px-12 md:py-14 lg:px-20 xl:px-32">
         <h1 className="font-heading font-semibold text-[28px] leading-tight tracking-tight mb-8">
           {t("title")}
         </h1>

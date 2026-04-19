@@ -33,12 +33,11 @@ export function AppHeader() {
   }, []);
 
   return (
-    <header className="glass-nav sticky top-0 z-40 flex items-center justify-between px-5 h-12">
-      <Link href="/" className="font-heading font-semibold text-[17px] tracking-tight text-white [data-theme=light]_&:text-text">
+    <header className="app-header sticky top-0 z-40 flex items-center justify-between px-5 h-12 border-b border-border-subtle md:h-14 md:px-8">
+      <Link href="/" className="font-heading font-semibold text-[17px] tracking-tight text-text">
         跬步
       </Link>
 
-      {/* Desktop nav links - hidden on mobile */}
       <nav className="hidden md:flex items-center gap-6">
         {navLinks.map((link) => {
           const isActive =
@@ -51,8 +50,8 @@ export function AppHeader() {
               href={link.href}
               className={`text-[14px] font-medium transition-colors ${
                 isActive
-                  ? "text-white [data-theme=light]_&:text-primary"
-                  : "text-white/60 hover:text-white/90 [data-theme=light]_&:text-text-secondary [data-theme=light]_&:hover:text-text"
+                  ? "text-primary"
+                  : "text-text-secondary hover:text-text"
               }`}
             >
               {t(link.key)}
@@ -61,14 +60,14 @@ export function AppHeader() {
         })}
       </nav>
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2">
         {isAdmin && (
           <Link
             href="/admin"
             className={`hidden md:block text-[14px] font-medium transition-colors ${
               pathname.startsWith("/admin")
-                ? "text-white [data-theme=light]_&:text-primary"
-                : "text-white/60 hover:text-white/90 [data-theme=light]_&:text-text-secondary [data-theme=light]_&:hover:text-text"
+                ? "text-primary"
+                : "text-text-secondary hover:text-text"
             }`}
           >
             {ta("title")}

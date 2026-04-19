@@ -32,11 +32,13 @@ export async function POST(request: Request) {
   }
 
   try {
-    // Try pypinyin via Python subprocess
-    const { execSync } = await import("child_process");
-    const escaped = text.replace(/'/g, "\\'");
-    const cmd = `python3 -c "from pypinyin import pinyin, Style; import json; result = pinyin('${escaped}', style=Style.TONE); print(json.dumps(result))"`;
-    const output = execSync(cmd, { timeout: 5000, encoding: "utf-8" });
+    const { execFileSync } = await import("child_process");
+    const script = `import sys, json; from pypinyin import pinyin, Style; text = sys.stdin.read(); result = pinyin(text, style=Style.TONE); print(json.dumps(result))`;
+    const output = execFileSync("python3", ["-c", script], {
+      timeout: 5000,
+      encoding: "utf-8",
+      input: text,
+    });
     const result = JSON.parse(output.trim());
 
     // Convert [[p1], [p2], ...] to flat array

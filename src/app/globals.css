@@ -189,19 +189,21 @@ body {
   white-space: nowrap;
 }
 
-/* ─── Glass navigation ─── */
+/* ─── Navigation ─── */
 
-.glass-nav {
-  background: rgba(0, 0, 0, 0.8);
-  backdrop-filter: saturate(180%) blur(20px);
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
+.app-header {
+  background: var(--bg);
 }
 
-[data-theme="light"] .glass-nav,
-:root:not([data-theme="dark"]) .glass-nav {
-  background: rgba(255, 255, 255, 0.72);
+.glass-nav {
+  background: rgba(255, 255, 255, 0.88);
   backdrop-filter: saturate(180%) blur(20px);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-top: 1px solid var(--border-subtle);
+}
+
+[data-theme="dark"] .glass-nav {
+  background: rgba(28, 28, 30, 0.88);
 }
 
 /* ─── Animations ─── */

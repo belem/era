@@ -127,7 +127,7 @@ export default function FragmentReviewPage({ params }: { params: Promise<{ deckI
     <>
       <AppHeader />
       <ThemeToggle />
-      <main className="flex-1 px-6 py-10 max-w-[600px] mx-auto w-full">
+      <main className="flex-1 px-6 py-10 md:px-12 md:py-14 lg:px-[20%] xl:px-[28%]">
         <p className="text-[12px] text-text-tertiary tracking-tight mb-8">
           {currentIndex + 1} / {fragments.length}
         </p>

@@ -22,7 +22,7 @@ export default function SettingsPage() {
   return (
     <>
       <AppHeader />
-      <main className="flex-1 px-6 py-6 max-w-[600px] mx-auto w-full">
+      <main className="flex-1 px-6 py-6 md:px-12 md:py-10 lg:px-[20%] xl:px-[28%]">
         {/* Tab bar */}
         <div className="flex bg-bg-subtle rounded-[var(--radius-pill)] p-1 mb-6" role="tablist">
           {tabs.map((tab) => (

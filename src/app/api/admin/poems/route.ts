@@ -20,16 +20,17 @@ export async function GET(request: Request) {
     .range((page - 1) * limit, page * limit - 1);
 
   if (search) {
-    query = query.or(`title.ilike.%${search}%,author.ilike.%${search}%`);
+    const sanitized = search.replace(/[.,()]/g, "");
+    query = query.or(`title.ilike.%${sanitized}%,author.ilike.%${sanitized}%`);
   }
 
   if (edition || level || grade) {
-    const editionFilter = supabase!
+    let editionFilter = supabase!
       .from("poem_editions")
       .select("poem_id");
-    if (edition) editionFilter.eq("edition", edition);
-    if (level) editionFilter.eq("level", level);
-    if (grade) editionFilter.eq("grade", parseInt(grade, 10));
+    if (edition) editionFilter = editionFilter.eq("edition", edition);
+    if (level) editionFilter = editionFilter.eq("level", level);
+    if (grade) editionFilter = editionFilter.eq("grade", parseInt(grade, 10));
 
     const { data: matchingIds } = await editionFilter;
     if (matchingIds && matchingIds.length > 0) {

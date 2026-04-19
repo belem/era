@@ -5,6 +5,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import { StudentProvider } from "@/hooks/useStudent";
 import { ServiceWorkerRegistrar } from "@/components/ServiceWorkerRegistrar";
+import { Footer } from "@/components/Footer";
 import "./globals.css";
 
 const inter = Inter({
@@ -51,6 +52,7 @@ export default async function RootLayout({
           <ThemeProvider attribute="data-theme" defaultTheme="system" enableSystem>
             <StudentProvider>
               {children}
+              <Footer />
               <ServiceWorkerRegistrar />
             </StudentProvider>
           </ThemeProvider>

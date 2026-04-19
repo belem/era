@@ -102,7 +102,7 @@ function ReviewContent() {
     <>
       <AppHeader />
       <ThemeToggle />
-      <main className="flex-1 px-6 py-10 max-w-[600px] mx-auto w-full">
+      <main className="flex-1 px-6 py-10 md:px-12 md:py-14 lg:px-[20%] xl:px-[28%]">
         <div className="flex items-center justify-between mb-8">
           <p className="text-[12px] text-text-tertiary tracking-tight">
             {currentIndex + 1} / {poems.length}

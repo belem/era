@@ -15,10 +15,11 @@ export async function PATCH(
 
   const { fragmentId } = await params;
   const body = await request.json();
+  const { front, back, tags } = body;
 
   const { data, error } = await supabase
     .from("fragments")
-    .update(body)
+    .update({ front, back, tags })
     .eq("id", fragmentId)
     .select()
     .single();

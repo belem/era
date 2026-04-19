@@ -71,7 +71,7 @@ export default function DeckDetailPage({ params }: { params: Promise<{ deckId: s
     <>
       <AppHeader />
       <ThemeToggle />
-      <main className="flex-1 px-6 py-10 max-w-[980px] mx-auto w-full">
+      <main className="flex-1 px-6 py-10 md:px-12 md:py-14 lg:px-20 xl:px-32">
         <div className="flex items-center gap-3 mb-8">
           <Link href="/fragments" className="text-text-tertiary hover:text-text transition-colors">
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

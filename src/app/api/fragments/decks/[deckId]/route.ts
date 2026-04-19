@@ -15,10 +15,11 @@ export async function PATCH(
 
   const { deckId } = await params;
   const body = await request.json();
+  const { name, description, color } = body;
 
   const { data, error } = await supabase
     .from("fragment_decks")
-    .update(body)
+    .update({ name, description, color })
     .eq("id", deckId)
     .select()
     .single();

@@ -155,7 +155,7 @@ export default function AdminPage() {
   return (
     <div className="min-h-screen bg-bg">
       <header className="border-b border-border bg-bg-subtle">
-        <div className="max-w-[1200px] mx-auto px-6 py-4 flex items-center justify-between">
+        <div className="px-6 md:px-12 lg:px-20 xl:px-32 py-4 flex items-center justify-between">
           <h1 className="font-heading font-semibold text-[22px] text-text">{t("title")}</h1>
           <button
             onClick={() => router.push("/")}
@@ -164,7 +164,7 @@ export default function AdminPage() {
             &larr; Back
           </button>
         </div>
-        <div className="max-w-[1200px] mx-auto px-6 flex gap-6">
+        <div className="px-6 md:px-12 lg:px-20 xl:px-32 flex gap-6">
           {tabs.map((tb) => (
             <button
               key={tb.key}
@@ -181,7 +181,7 @@ export default function AdminPage() {
         </div>
       </header>
 
-      <main className="max-w-[1200px] mx-auto px-6 py-8">
+      <main className="px-6 md:px-12 lg:px-20 xl:px-32 py-8">
         {tab === "overview" && stats && <OverviewTab stats={stats} t={t} />}
         {tab === "poems" && (
           <PoemsTab

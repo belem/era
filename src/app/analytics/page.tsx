@@ -40,7 +40,7 @@ function Heatmap({ data }: { data: { date: string; count: number }[] }) {
             key={d.date}
             className="w-7 h-7 rounded-[4px] flex items-center justify-center text-[9px]"
             style={{
-              backgroundColor: d.count === 0 ? "var(--bg-muted)" : `rgba(0, 113, 227, ${intensity})`,
+              backgroundColor: d.count === 0 ? "var(--bg-muted)" : `color-mix(in srgb, var(--primary) ${Math.round(intensity * 100)}%, transparent)`,
               color: intensity > 0.5 ? "white" : "var(--text-tertiary)",
             }}
             title={`${d.date}: ${d.count} reviews`}
@@ -56,7 +56,7 @@ function Heatmap({ data }: { data: { date: string; count: number }[] }) {
 function RatingBars({ dist }: { dist: AnalyticsData["ratingDist"] }) {
   const t = useTranslations("rating");
   const total = dist.forgot + dist.hard + dist.good + dist.easy;
-  const colors = { forgot: "#ff3b30", hard: "#ff9500", good: "#0071e3", easy: "#34c759" };
+  const colors = { forgot: "var(--error)", hard: "var(--warning)", good: "var(--primary)", easy: "var(--success)" };
 
   return (
     <div className="space-y-2">
@@ -91,7 +91,7 @@ function MasteryList({ poems }: { poems: AnalyticsData["poemMastery"] }) {
         <div key={p.poemId} className="flex items-center gap-3 py-2 px-3 rounded-[var(--radius-md)] hover:bg-bg-muted transition-colors">
           <div
             className="w-2 h-2 rounded-full flex-shrink-0"
-            style={{ backgroundColor: p.mastered ? "#34c759" : p.intervalDays >= 7 ? "#ff9500" : "#ff3b30" }}
+            style={{ backgroundColor: p.mastered ? "var(--success)" : p.intervalDays >= 7 ? "var(--warning)" : "var(--error)" }}
           />
           <div className="flex-1 min-w-0">
             <span className="text-[14px] text-text">{p.title}</span>
@@ -122,7 +122,7 @@ export default function AnalyticsPage() {
     <>
       <AppHeader />
       <ThemeToggle />
-      <main className="flex-1 px-6 py-10 max-w-[980px] mx-auto w-full">
+      <main className="flex-1 px-6 py-10 md:px-12 md:py-14 lg:px-20 xl:px-32">
         <h1 className="font-heading font-semibold text-[28px] leading-tight tracking-tight mb-8">
           {t("title")}
         </h1>

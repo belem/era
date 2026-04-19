@@ -40,7 +40,7 @@ export default function ChangePasswordPage() {
   return (
     <>
       <AppHeader />
-      <main className="flex-1 px-6 py-10 max-w-[600px] mx-auto w-full">
+      <main className="flex-1 px-6 py-10 md:px-12 md:py-14 lg:px-[20%] xl:px-[28%]">
         <h1 className="font-heading font-semibold text-[21px] tracking-tight mb-6">
           {t("changePasswordTitle")}
         </h1>

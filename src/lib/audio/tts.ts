@@ -43,6 +43,7 @@ function createTransformersEngine(): TTSEngine {
   let pipeline: any = null;
   let loading = false;
   let currentAudio: HTMLAudioElement | null = null;
+  let sharedAudioCtx: AudioContext | null = null;
 
   const engine: TTSEngine = {
     backend: "transformers",
@@ -77,9 +78,11 @@ function createTransformersEngine(): TTSEngine {
         const audioData = result.audio;
         const sampleRate = result.sampling_rate;
 
-        // Convert raw audio to WAV blob
-        const audioCtx = new AudioContext({ sampleRate });
-        const buffer = audioCtx.createBuffer(1, audioData.length, sampleRate);
+        // Convert raw audio to WAV blob (reuse AudioContext to avoid browser limit)
+        if (!sharedAudioCtx || sharedAudioCtx.state === "closed") {
+          sharedAudioCtx = new AudioContext({ sampleRate });
+        }
+        const buffer = sharedAudioCtx.createBuffer(1, audioData.length, sampleRate);
         buffer.copyToChannel(new Float32Array(audioData), 0);
 
         const offlineCtx = new OfflineAudioContext(1, audioData.length, sampleRate);

@@ -2,7 +2,7 @@ import type { Poem } from "@/types/poem";
 
 export function PoemBody({ poem }: { poem: Poem }) {
   return (
-    <div className="poem-ruby font-poetry text-2xl tracking-widest leading-relaxed text-center">
+    <div className="poem-ruby font-poetry text-2xl tracking-[0.05em] leading-[2] text-center">
       {poem.lines.map((line, i) => (
         <span key={i}>
           {line.chars.map((c, j) => (

@@ -9,7 +9,7 @@ import { TabBar } from "@/components/TabBar";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import type { FragmentDeck } from "@/types/fragment";
 
-const DECK_COLORS = ["#0071e3", "#34c759", "#ff9500", "#ff3b30", "#af52de", "#5ac8fa"];
+const DECK_COLORS = ["var(--primary)", "var(--success)", "var(--warning)", "var(--error)", "var(--accent)", "var(--badge-1)"];
 
 export default function FragmentsPage() {
   const t = useTranslations("fragments");
@@ -61,7 +61,7 @@ export default function FragmentsPage() {
     <>
       <AppHeader />
       <ThemeToggle />
-      <main className="flex-1 px-6 py-10 max-w-[980px] mx-auto w-full">
+      <main className="flex-1 px-6 py-10 md:px-12 md:py-14 lg:px-20 xl:px-32">
         <div className="flex items-center justify-between mb-8">
           <h1 className="font-heading font-semibold text-[28px] leading-tight tracking-tight">
             {t("title")}
