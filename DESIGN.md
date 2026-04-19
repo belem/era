@@ -238,7 +238,7 @@ Every `<ruby>` element in poetry contexts is a fixed-width flex container. Long 
   display: inline-flex;
   flex-direction: column-reverse;
   align-items: center;
-  width: 1.8em;
+  width: 1.6em;
   vertical-align: top;
 }
 
