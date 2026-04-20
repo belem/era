@@ -347,6 +347,29 @@ ALTER TABLE fragment_review_events ENABLE ROW LEVEL SECURITY;
 ALTER TABLE custom_poems ENABLE ROW LEVEL SECURITY;
 ALTER TABLE listening_sessions ENABLE ROW LEVEL SECURITY;
 
+GRANT SELECT, INSERT, UPDATE ON profiles TO authenticated;
+GRANT SELECT ON users TO authenticated;
+GRANT SELECT, INSERT, UPDATE ON students TO authenticated;
+GRANT SELECT, INSERT ON student_guardians TO authenticated;
+GRANT SELECT ON poems TO authenticated;
+GRANT SELECT ON poem_editions TO authenticated;
+GRANT SELECT, INSERT, UPDATE ON poem_reviews TO authenticated;
+GRANT SELECT, INSERT ON review_events TO authenticated;
+GRANT SELECT, INSERT, UPDATE ON streaks TO authenticated;
+GRANT SELECT, INSERT, UPDATE ON scroll_completions TO authenticated;
+GRANT SELECT ON badges TO authenticated;
+GRANT SELECT, INSERT ON badge_unlocks TO authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON guardian_invitations TO authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON fragment_decks TO authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON fragments TO authenticated;
+GRANT SELECT, INSERT, UPDATE ON fragment_reviews TO authenticated;
+GRANT SELECT, INSERT ON fragment_review_events TO authenticated;
+GRANT SELECT, INSERT, UPDATE ON custom_poems TO authenticated;
+GRANT SELECT, INSERT ON listening_sessions TO authenticated;
+GRANT ALL ON poems TO service_role;
+GRANT ALL ON poem_editions TO service_role;
+GRANT ALL ON badges TO service_role;
+
 -- Profiles
 CREATE POLICY profiles_select ON profiles FOR SELECT USING (auth.uid() = id);
 CREATE POLICY profiles_update ON profiles FOR UPDATE USING (auth.uid() = id);
