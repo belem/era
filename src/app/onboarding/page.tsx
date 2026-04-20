@@ -43,6 +43,7 @@ export default function OnboardingPage() {
 
     try {
       const supabase = createClient();
+      await supabase.auth.refreshSession();
       const { data: { user }, error: userError } = await supabase.auth.getUser();
       if (userError || !user) throw new Error("Not authenticated");
 
