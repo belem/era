@@ -103,7 +103,10 @@ function LoginForm() {
         const { error } = await supabase.auth.signUp({
           email,
           password,
-          options: { data: { accepted_terms_at: new Date().toISOString() } },
+          options: {
+            data: { accepted_terms_at: new Date().toISOString() },
+            emailRedirectTo: `${window.location.origin}/auth/callback`,
+          },
         });
         if (error) throw error;
         setConfirmationSent(true);
