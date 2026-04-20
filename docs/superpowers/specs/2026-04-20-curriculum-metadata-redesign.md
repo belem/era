@@ -2,7 +2,7 @@
 
 ## Summary
 
-Redesign how poem edition/curriculum metadata works across Kuibu. Changes reflect actual Chinese textbook organization: 人教 (not 部编), 学制 (六三/五四/高中), unified 义务教育 level with grades 1-9, and per-poem page numbers.
+Redesign how poem edition/curriculum metadata works across Kuibu. Changes reflect actual Chinese textbook organization: 人教 (not 部编), 学制 (六三/五四/高中) with grades 1-9 or 1-3, semester (上册/下册), and per-poem page numbers. The `level` field (义务教育/高中) was removed as redundant — it's fully derivable from `school_system`.
 
 ## Data Model
 
@@ -14,38 +14,32 @@ CREATE TABLE poem_editions (
   poem_id UUID NOT NULL REFERENCES poems ON DELETE CASCADE,
   edition TEXT NOT NULL,
   school_system TEXT NOT NULL CHECK (school_system IN ('六三', '五四', '高中')),
-  level TEXT NOT NULL CHECK (level IN ('义务教育', '高中')),
   grade INTEGER CHECK (grade IS NULL OR grade BETWEEN 1 AND 9),
+  semester TEXT CHECK (semester IS NULL OR semester IN ('上册', '下册')),
   page INTEGER,
-  UNIQUE (poem_id, edition, school_system, grade)
+  UNIQUE (poem_id, edition, school_system, grade, semester)
 );
 
-CREATE INDEX idx_poem_editions_lookup ON poem_editions(edition, school_system, grade);
+CREATE INDEX idx_poem_editions_lookup ON poem_editions(edition, school_system, grade, semester);
 ```
 
 Fields:
 - `edition`: Publisher name (人教, 苏教, 沪教, etc.)
-- `school_system`: 六三, 五四, or 高中
-- `level`: 义务教育 or 高中 (derived from school_system but stored explicitly for query convenience)
-- `grade`: Nullable. 1-9 for 义务教育, 1-3 for 高中. NULL when grade placement is unknown (e.g. 苏教/沪教)
+- `school_system`: 六三, 五四, or 高中 (replaces the old `level` field — 六三/五四 = 义务教育, 高中 = 高中)
+- `grade`: Nullable. 1-9 for 六三/五四, 1-3 for 高中. NULL when grade placement is unknown (e.g. 苏教/沪教)
+- `semester`: 上册 or 下册 (nullable)
 - `page`: Nullable page number in textbook
 
 ### `students` table changes
 
-Add `school_system` column. Update constraints on `level`, `grade`, `edition`.
+Replace `level` with `school_system` as the sole curriculum identifier.
 
 ```sql
 -- New schema for students (relevant columns):
 school_system TEXT NOT NULL DEFAULT '六三' CHECK (school_system IN ('六三', '五四', '高中'))
-level TEXT NOT NULL DEFAULT '义务教育' CHECK (level IN ('义务教育', '高中'))
 grade INTEGER NOT NULL CHECK (grade BETWEEN 1 AND 9)
 edition TEXT NOT NULL DEFAULT '人教'
 ```
-
-### Derivation rule
-
-- `school_system IN ('六三', '五四')` implies `level = '义务教育'`
-- `school_system = '高中'` implies `level = '高中'`
 
 ### Grade mapping from old to new
 
@@ -78,29 +72,25 @@ Rewrite with new columns:
 ### `scripts/generate-seed-sql.py`
 
 Update `EDITION_MAP` constants:
-- `("部编", "小学", N)` → `("人教", "六三", "义务教育", N)`
-- `("部编", "初中", N)` → `("人教", "六三", "义务教育", N+6)`
-- `("部编", "高中", N)` → `("人教", "高中", "高中", N)`
-- `("苏教", "小学", None)` → `("苏教", "六三", "义务教育", None)`
-- `("苏教", "初中", None)` → `("苏教", "六三", "义务教育", None)`
+- `("部编", "小学", N)` → `("人教", "六三", N, "上册"/"下册")`
+- `("部编", "初中", N)` → `("人教", "六三", N+6, "上册"/"下册")`
+- `("部编", "高中", N)` → `("人教", "高中", N, "上册"/"下册")`
+- `("苏教", "小学", None)` → `("苏教", "六三", None, None)`
+- `("苏教", "初中", None)` → `("苏教", "六三", None, None)`
 
 ## UI Changes
 
 ### Student onboarding (`src/app/onboarding/page.tsx`)
 
-- Replace level picker (小学/初中/高中) with **学制 picker** (六·三学制, 五·四学制)
-  - 高中 is a separate path, triggered when grade > what 义务教育 covers
-  - Or: three-option picker: 六·三学制, 五·四学制, 高中
-- Grade picker: 1-9 for 义务教育, 1-3 for 高中
+- Three-option **学制 picker**: 六·三学制, 五·四学制, 高中
+- Grade picker: 1-9 for 六三/五四, 1-3 for 高中
 - Edition default: 人教
 - KNOWN_EDITIONS: update, remove 部编, ensure 人教 is first
 
 ### Student profile (`src/app/profile/page.tsx`)
 
-- Replace LEVELS constant with school_system options
-- Replace `gradeOptions(level)` with `gradeOptions(schoolSystem)`:
-  - 六三 or 五四 → grades 1-9
-  - 高中 → grades 1-3
+- School system options: 六三, 五四, 高中
+- `maxGradeForSchoolSystem(schoolSystem)`: 六三/五四 → 9, 高中 → 3
 - EDITIONS: replace 部编 with 人教
 - Curriculum change detection: include school_system
 
@@ -109,16 +99,16 @@ Update `EDITION_MAP` constants:
 - Edition filter: show only editions with data in the DB
 - School system filter: only show if more than one school_system has data
 - Grade filter: show available grades based on data
-- Update LEVEL_ORDER and curriculumOrder sorting logic
+- Update curriculumOrder sorting logic (uses school_system directly)
 - Hide any filter section with no data
 
 ### PoemCard display (`src/components/PoemCard.tsx`)
 
 Update `formatEdition()`:
 ```
-人教·六三·三年级           (义务教育 grade 1-6)
-人教·六三·七年级·第97页    (义务教育 grade 7-9, with page)
-人教·高中·高一             (高中)
+人教·六三·三年级           (grade 1-6)
+人教·六三·七年级·上册·第97页  (grade 7-9, with semester and page)
+人教·高中·高一·下册        (高中 with semester)
 苏教·六三                  (no grade info)
 ```
 
@@ -137,26 +127,26 @@ Already uses `formatGrade` from lib. Will work after utility update.
 
 ### Admin page (`src/app/admin/page.tsx`)
 
-- Add school_system dropdown (六三/五四/高中) to edition editor
-- Add page number input (optional)
-- Update LEVELS and KNOWN_EDITIONS constants
+- School_system dropdown (六三/五四/高中) in edition editor
+- Semester dropdown (上册/下册) in edition editor
+- Page number input (optional)
 - Update filter dropdowns
 
 ### useStudent hook (`src/hooks/useStudent.tsx`)
 
-Add `school_system` to Student interface.
+Replace `level` with `school_system` in Student interface.
 
 ## API Changes
 
 ### `src/app/api/admin/poems/route.ts`
 
-- Add `school_system` to query filter params
-- Add `page` to insert/update payloads
+- `school_system` query filter param (replaces old `level`)
+- `page` and `semester` in insert/update payloads
 
 ### `src/app/api/admin/poems/[poemId]/route.ts`
 
-- Include school_system and page in upsert/conflict resolution
-- Update unique key from `(poem_id, edition, level, grade)` to `(poem_id, edition, school_system, grade)`
+- Include school_system, semester, and page in upsert/conflict resolution
+- Unique key: `(poem_id, edition, school_system, grade, semester)`
 
 ## UI Principle
 

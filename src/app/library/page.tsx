@@ -15,10 +15,9 @@ interface PoemWithEditions extends Poem {
   editions: PoemEdition[];
 }
 
-const LEVEL_ORDER: Record<string, number> = { "义务教育": 0, "高中": 1 };
-
 function curriculumOrder(e: PoemEdition): number {
-  return (LEVEL_ORDER[e.level] ?? 9) * 100 + (e.grade ?? 0);
+  const base = (e.school_system === "高中" ? 100 : 0) + (e.grade ?? 0);
+  return base * 10 + (e.semester === "下册" ? 1 : 0);
 }
 
 function minCurriculumOrder(editions: PoemEdition[]): number {
@@ -79,7 +78,7 @@ export default function LibraryPage() {
     const supabase = createClient();
     supabase
       .from("poems")
-      .select("*, poem_editions(edition, school_system, level, grade, page)")
+      .select("*, poem_editions(edition, school_system, grade, semester, page)")
       .then(({ data }) => {
         if (data) {
           const mapped: PoemWithEditions[] = data.map((p: any) => ({
@@ -91,8 +90,8 @@ export default function LibraryPage() {
             editions: (p.poem_editions ?? []).map((e: any) => ({
               edition: e.edition,
               school_system: e.school_system,
-              level: e.level,
               grade: e.grade,
+              semester: e.semester,
               page: e.page,
             })),
           }));
@@ -108,23 +107,37 @@ export default function LibraryPage() {
       });
   }, []);
 
-  const { allEditions, allSchoolSystems, allGrades } = useMemo(() => {
+  const { allEditions, allSchoolSystems } = useMemo(() => {
     const edSet = new Set<string>();
     const ssSet = new Set<string>();
-    const grSet = new Set<number>();
     for (const p of poems) {
       for (const e of p.editions) {
         edSet.add(e.edition);
         ssSet.add(e.school_system);
-        if (e.grade != null) grSet.add(e.grade);
       }
     }
     return {
       allEditions: [...edSet].sort(),
       allSchoolSystems: [...ssSet].sort(),
-      allGrades: [...grSet].sort((a, b) => a - b).map(String),
     };
   }, [poems]);
+
+  const allGrades = useMemo(() => {
+    const onlyGaozhong = selectedSchoolSystems.size > 0
+      && selectedSchoolSystems.has("高中")
+      && !selectedSchoolSystems.has("六三")
+      && !selectedSchoolSystems.has("五四");
+    const max = onlyGaozhong ? 3 : 9;
+    return Array.from({ length: max }, (_, i) => String(i + 1));
+  }, [selectedSchoolSystems]);
+
+  useEffect(() => {
+    const gradeSet = new Set(allGrades);
+    setSelectedGrades((prev) => {
+      const next = new Set([...prev].filter((g) => gradeSet.has(g)));
+      return next.size === prev.size ? prev : next;
+    });
+  }, [allGrades]);
 
   const handleQueryChange = useCallback((val: string) => {
     setQuery(val);

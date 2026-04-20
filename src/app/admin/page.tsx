@@ -17,8 +17,8 @@ interface Stats {
 interface PoemEdition {
   edition: string;
   school_system: string;
-  level: string;
   grade: number;
+  semester?: string | null;
   page?: number | null;
 }
 
@@ -52,7 +52,7 @@ export default function AdminPage() {
   const [poemPage, setPoemPage] = useState(1);
   const [poemSearch, setPoemSearch] = useState("");
   const [poemEdition, setPoemEdition] = useState("");
-  const [poemLevel, setPoemLevel] = useState("");
+  const [poemSchoolSystem, setPoemSchoolSystem] = useState("");
   const [poemGrade, setPoemGrade] = useState("");
   const [editingPoem, setEditingPoem] = useState<PoemRow | null>(null);
 
@@ -79,7 +79,7 @@ export default function AdminPage() {
     const params = new URLSearchParams({ page: String(poemPage), limit: "50" });
     if (poemSearch) params.set("q", poemSearch);
     if (poemEdition) params.set("edition", poemEdition);
-    if (poemLevel) params.set("level", poemLevel);
+    if (poemSchoolSystem) params.set("school_system", poemSchoolSystem);
     if (poemGrade) params.set("grade", poemGrade);
     const res = await fetch(`/api/admin/poems?${params}`);
     if (res.ok) {
@@ -87,7 +87,7 @@ export default function AdminPage() {
       setPoems(data.poems);
       setPoemTotal(data.total);
     }
-  }, [poemPage, poemSearch, poemEdition, poemLevel, poemGrade]);
+  }, [poemPage, poemSearch, poemEdition, poemSchoolSystem, poemGrade]);
 
   const fetchUsers = useCallback(async () => {
     const res = await fetch("/api/admin/users");
@@ -193,12 +193,12 @@ export default function AdminPage() {
             page={poemPage}
             search={poemSearch}
             edition={poemEdition}
-            level={poemLevel}
+            schoolSystem={poemSchoolSystem}
             grade={poemGrade}
             editing={editingPoem}
             onSearchChange={setPoemSearch}
             onEditionChange={setPoemEdition}
-            onLevelChange={setPoemLevel}
+            onSchoolSystemChange={setPoemSchoolSystem}
             onGradeChange={setPoemGrade}
             onPageChange={setPoemPage}
             onEdit={setEditingPoem}
@@ -239,8 +239,8 @@ const KNOWN_EDITIONS = ["人教", "苏教", "沪教", "北师", "语文", "长�
 const SCHOOL_SYSTEMS = ["六三", "五四", "高中"];
 
 function PoemsTab({
-  t, poems, total, page, search, edition, level, grade, editing,
-  onSearchChange, onEditionChange, onLevelChange, onGradeChange, onPageChange, onEdit, onDelete, onSave, onCancelEdit,
+  t, poems, total, page, search, edition, schoolSystem, grade, editing,
+  onSearchChange, onEditionChange, onSchoolSystemChange, onGradeChange, onPageChange, onEdit, onDelete, onSave, onCancelEdit,
 }: {
   t: any;
   poems: PoemRow[];
@@ -248,12 +248,12 @@ function PoemsTab({
   page: number;
   search: string;
   edition: string;
-  level: string;
+  schoolSystem: string;
   grade: string;
   editing: PoemRow | null;
   onSearchChange: (v: string) => void;
   onEditionChange: (v: string) => void;
-  onLevelChange: (v: string) => void;
+  onSchoolSystemChange: (v: string) => void;
   onGradeChange: (v: string) => void;
   onPageChange: (v: number) => void;
   onEdit: (p: PoemRow | null) => void;
@@ -289,8 +289,8 @@ function PoemsTab({
           ))}
         </select>
         <select
-          value={level}
-          onChange={(e) => { onLevelChange(e.target.value); onPageChange(1); }}
+          value={schoolSystem}
+          onChange={(e) => { onSchoolSystemChange(e.target.value); onPageChange(1); }}
           className="border border-border rounded-[var(--radius-md)] bg-bg px-3 py-2 text-[14px] text-text focus:outline-none focus:ring-2 focus:ring-primary"
         >
           <option value="">全部学制</option>
@@ -342,7 +342,7 @@ function PoemsTab({
                   <td className="px-4 py-3 text-text-secondary hidden md:table-cell">{poem.dynasty}</td>
                   <td className="px-4 py-3 text-text-secondary text-[12px]">
                     {poem.poem_editions?.length > 0
-                      ? poem.poem_editions.map((e) => `${e.edition}·${e.school_system}·${e.grade}年级${e.page ? `·p${e.page}` : ""}`).join(", ")
+                      ? poem.poem_editions.map((e) => `${e.edition}·${e.school_system}·${e.grade}年级${e.semester ? `·${e.semester}` : ""}${e.page ? `·p${e.page}` : ""}`).join(", ")
                       : "-"}
                   </td>
                   <td className="px-4 py-3 text-right">
@@ -419,7 +419,7 @@ function PoemEditor({
   });
 
   const addEdition = () => {
-    setEditions([...editions, { edition: "人教", school_system: "六三", level: "义务教育", grade: 1 }]);
+    setEditions([...editions, { edition: "人教", school_system: "六三", grade: 1, semester: "上册" }]);
   };
 
   const removeEdition = (i: number) => {
@@ -430,7 +430,7 @@ function PoemEditor({
     const next = [...editions];
     if (field === "school_system") {
       const sys = value as string;
-      next[i] = { ...next[i], school_system: sys, level: sys === "高中" ? "高中" : "义务教育" };
+      next[i] = { ...next[i], school_system: sys };
       if (next[i].grade > (sys === "高中" ? 3 : 9)) next[i].grade = 1;
     } else {
       next[i] = { ...next[i], [field]: value };
@@ -504,7 +504,7 @@ function PoemEditor({
 
       <div>
         <div className="flex items-center justify-between mb-2">
-          <label className="text-[12px] text-text-tertiary">版本/学制/年级/页码</label>
+          <label className="text-[12px] text-text-tertiary">版本/学制/年级/册次/页码</label>
           <button
             type="button"
             onClick={addEdition}
@@ -545,6 +545,15 @@ function PoemEditor({
                 {Array.from({ length: ed.school_system === "高中" ? 3 : 9 }, (_, g) => g + 1).map((g) => (
                   <option key={g} value={g}>{g}年级</option>
                 ))}
+              </select>
+              <select
+                value={ed.semester ?? ""}
+                onChange={(e) => updateEdition(i, "semester", e.target.value || null)}
+                className="border border-border rounded-[var(--radius-md)] bg-bg px-2 py-1.5 text-[13px] text-text focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+                <option value="">册次</option>
+                <option value="上册">上册</option>
+                <option value="下册">下册</option>
               </select>
               <input
                 type="number"

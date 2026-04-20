@@ -61,7 +61,7 @@ export async function POST(request: Request) {
       case "grade_mastered": {
         const { data: student } = await supabase
           .from("students")
-          .select("grade, level, edition, school_system")
+          .select("grade, edition, school_system")
           .eq("id", studentId)
           .single();
         if (student) {

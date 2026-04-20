@@ -92,7 +92,6 @@ CREATE TABLE students (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name TEXT NOT NULL,
   school_system TEXT NOT NULL DEFAULT '六三' CHECK (school_system IN ('六三', '五四', '高中')),
-  level TEXT NOT NULL DEFAULT '义务教育' CHECK (level IN ('义务教育', '高中')),
   grade INTEGER NOT NULL CHECK (grade BETWEEN 1 AND 9),
   edition TEXT NOT NULL DEFAULT '人教',
   algorithm srs_algorithm DEFAULT 'SM2',
@@ -131,13 +130,13 @@ CREATE TABLE poem_editions (
   poem_id UUID NOT NULL REFERENCES poems ON DELETE CASCADE,
   edition TEXT NOT NULL,
   school_system TEXT NOT NULL CHECK (school_system IN ('六三', '五四', '高中')),
-  level TEXT NOT NULL CHECK (level IN ('义务教育', '高中')),
   grade INTEGER CHECK (grade IS NULL OR grade BETWEEN 1 AND 9),
+  semester TEXT CHECK (semester IS NULL OR semester IN ('上册', '下册')),
   page INTEGER,
-  UNIQUE (poem_id, edition, school_system, grade)
+  UNIQUE (poem_id, edition, school_system, grade, semester)
 );
 
-CREATE INDEX idx_poem_editions_lookup ON poem_editions(edition, school_system, grade);
+CREATE INDEX idx_poem_editions_lookup ON poem_editions(edition, school_system, grade, semester);
 
 -- Custom poems (诗心 — paid tier)
 CREATE TABLE custom_poems (
@@ -672,15 +671,15 @@ $func$;
 -- AUTO-ASSIGN POEMS (004_auto_assign_poems.sql)
 -- ==========================================================================
 
-CREATE OR REPLACE FUNCTION curriculum_sort_order(p_level TEXT, p_grade INTEGER)
+CREATE OR REPLACE FUNCTION curriculum_sort_order(p_school_system TEXT, p_grade INTEGER, p_semester TEXT DEFAULT NULL)
 RETURNS INTEGER
 LANGUAGE sql IMMUTABLE
 AS $$
-  SELECT CASE p_level
-    WHEN '义务教育' THEN 0
+  SELECT (CASE p_school_system
     WHEN '高中' THEN 100
-    ELSE 200
-  END + COALESCE(p_grade, 0);
+    ELSE 0
+  END + COALESCE(p_grade, 0)) * 10
+  + CASE p_semester WHEN '上册' THEN 0 WHEN '下册' THEN 1 ELSE 0 END;
 $$;
 
 CREATE OR REPLACE FUNCTION assign_poems_for_student(p_student_id UUID)
@@ -695,12 +694,12 @@ BEGIN
     p_student_id,
     pe.poem_id,
     'SYSTEM',
-    curriculum_sort_order(pe.level, pe.grade)
+    curriculum_sort_order(pe.school_system, pe.grade, pe.semester)
   FROM poem_editions pe
   JOIN students s ON s.id = p_student_id
   WHERE pe.edition = s.edition
     AND pe.school_system = s.school_system
-  ORDER BY pe.poem_id, curriculum_sort_order(pe.level, pe.grade)
+  ORDER BY pe.poem_id, curriculum_sort_order(pe.school_system, pe.grade, pe.semester)
   ON CONFLICT (student_id, poem_id) DO NOTHING;
 END;
 $$;
@@ -735,7 +734,7 @@ SET search_path = public
 AS $$
 BEGIN
   INSERT INTO poem_reviews (student_id, poem_id, source, sort_order)
-  SELECT s.id, NEW.poem_id, 'SYSTEM', curriculum_sort_order(NEW.level, NEW.grade)
+  SELECT s.id, NEW.poem_id, 'SYSTEM', curriculum_sort_order(NEW.school_system, NEW.grade, NEW.semester)
   FROM students s
   WHERE s.edition = NEW.edition
     AND s.school_system = NEW.school_system

@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/client";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { levelFromSchoolSystem, maxGradeForSchoolSystem } from "@/lib/format";
+import { maxGradeForSchoolSystem } from "@/lib/format";
 
 type Algorithm = "SM2" | "LEITNER" | "FSRS";
 type SchoolSystem = "六三" | "五四" | "高中";
@@ -54,7 +54,6 @@ export default function OnboardingPage() {
         .insert({
           name: name.trim(),
           school_system: schoolSystem,
-          level: levelFromSchoolSystem(schoolSystem),
           grade,
           edition,
           algorithm,

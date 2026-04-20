@@ -42,7 +42,13 @@
       "Bash(curl *)",
       "Bash(python -c ' *)",
       "Bash(python *)",
-      "Skill(investigate)"
+      "Skill(investigate)",
+      "Bash(sed -i \"6,341s/', \\\\\\([0-9]\\\\+\\\\\\)\\),/', \\\\1, NULL\\),/\" scripts/seed-batches/seed-poems-18-editions.sql)",
+      "Bash(sed -n '5,8p' scripts/seed-batches/seed-poems-18-editions.sql)",
+      "Bash(grep -n '\\\\\\\\\\\\\\\\1' scripts/seed-batches/seed-poems-18-editions.sql)",
+      "Bash(grep *)",
+      "Bash(git show *)",
+      "Read(//tmp/**)"
     ]
   }
 }

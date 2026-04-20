@@ -10,7 +10,7 @@ export async function GET(request: Request) {
   const limit = parseInt(searchParams.get("limit") ?? "50", 10);
   const search = searchParams.get("q") ?? "";
   const edition = searchParams.get("edition");
-  const level = searchParams.get("level");
+  const schoolSystem = searchParams.get("school_system");
   const grade = searchParams.get("grade");
 
   let query = supabase!
@@ -24,12 +24,12 @@ export async function GET(request: Request) {
     query = query.or(`title.ilike.%${sanitized}%,author.ilike.%${sanitized}%`);
   }
 
-  if (edition || level || grade) {
+  if (edition || schoolSystem || grade) {
     let editionFilter = supabase!
       .from("poem_editions")
       .select("poem_id");
     if (edition) editionFilter = editionFilter.eq("edition", edition);
-    if (level) editionFilter = editionFilter.eq("school_system", level);
+    if (schoolSystem) editionFilter = editionFilter.eq("school_system", schoolSystem);
     if (grade) editionFilter = editionFilter.eq("grade", parseInt(grade, 10));
 
     const { data: matchingIds } = await editionFilter;
@@ -66,12 +66,12 @@ export async function POST(request: Request) {
   if (insertError) return NextResponse.json({ error: insertError.message }, { status: 500 });
 
   if (editions && Array.isArray(editions) && editions.length > 0) {
-    const rows = editions.map((e: { edition: string; school_system: string; level: string; grade: number; page?: number | null }) => ({
+    const rows = editions.map((e: { edition: string; school_system: string; grade: number; semester?: string | null; page?: number | null }) => ({
       poem_id: data.id,
       edition: e.edition,
       school_system: e.school_system,
-      level: e.level,
       grade: e.grade,
+      semester: e.semester ?? null,
       page: e.page ?? null,
     }));
     const { error: edError } = await supabase!

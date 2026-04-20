@@ -30,31 +30,31 @@ ALL_PUNCTS = set(
 )
 SKIP_CHARS = ALL_PUNCTS | set("\"'()[]{}<>~`@#$%^&*_+=|\\")
 
-# Collection ID -> (edition, school_system, level, grade_or_None)
-# 人教 (formerly 部编): 册 -> semester, ceil(N/2) = grade
+# Collection ID -> (edition, school_system, grade_or_None, semester_or_None)
+# 人教 (formerly 部编): even IDs = 上册, odd IDs = 下册
 EDITION_MAP = {
-    # 人教 义务教育 六三学制 (12 semesters = grades 1-6)
-    114: ("人教", "六三", "义务教育", 1), 115: ("人教", "六三", "义务教育", 1),
-    116: ("人教", "六三", "义务教育", 2), 117: ("人教", "六三", "义务教育", 2),
-    118: ("人教", "六三", "义务教育", 3), 119: ("人教", "六三", "义务教育", 3),
-    120: ("人教", "六三", "义务教育", 4), 121: ("人教", "六三", "义务教育", 4),
-    122: ("人教", "六三", "义务教育", 5), 123: ("人教", "六三", "义务教育", 5),
-    124: ("人教", "六三", "义务教育", 6), 125: ("人教", "六三", "义务教育", 6),
-    # 人教 义务教育 六三学制 (old 初中 grades 1-3 -> grades 7-9)
-    126: ("人教", "六三", "义务教育", 7), 127: ("人教", "六三", "义务教育", 7),
-    128: ("人教", "六三", "义务教育", 8), 129: ("人教", "六三", "义务教育", 8),
-    131: ("人教", "六三", "义务教育", 9), 132: ("人教", "六三", "义务教育", 9),
+    # 人教 六三学制 (12 semesters = grades 1-6)
+    114: ("人教", "六三", 1, "上册"), 115: ("人教", "六三", 1, "下册"),
+    116: ("人教", "六三", 2, "上册"), 117: ("人教", "六三", 2, "下册"),
+    118: ("人教", "六三", 3, "上册"), 119: ("人教", "六三", 3, "下册"),
+    120: ("人教", "六三", 4, "上册"), 121: ("人教", "六三", 4, "下册"),
+    122: ("人教", "六三", 5, "上册"), 123: ("人教", "六三", 5, "下册"),
+    124: ("人教", "六三", 6, "上册"), 125: ("人教", "六三", 6, "下册"),
+    # 人教 六三学制 (old 初中 grades 1-3 -> grades 7-9)
+    126: ("人教", "六三", 7, "上册"), 127: ("人教", "六三", 7, "下册"),
+    128: ("人教", "六三", 8, "上册"), 129: ("人教", "六三", 8, "下册"),
+    131: ("人教", "六三", 9, "上册"), 132: ("人教", "六三", 9, "下册"),
     # 人教 高中 (grades 1-3)
-    133: ("人教", "高中", "高中", 1), 134: ("人教", "高中", "高中", 1),
-    135: ("人教", "高中", "高中", 2), 136: ("人教", "高中", "高中", 2),
-    137: ("人教", "高中", "高中", 3), 138: ("人教", "高中", "高中", 3),
-    # 苏教 (no grade info)
-    421: ("苏教", "六三", "义务教育", None),
-    427: ("苏教", "六三", "义务教育", None),
-    440: ("苏教", "高中", "高中", None),
-    # 沪教 (no grade info)
-    423: ("沪教", "六三", "义务教育", None),
-    430: ("沪教", "六三", "义务教育", None),
+    133: ("人教", "高中", 1, "上册"), 134: ("人教", "高中", 1, "下册"),
+    135: ("人教", "高中", 2, "上册"), 136: ("人教", "高中", 2, "下册"),
+    137: ("人教", "高中", 3, "上册"), 138: ("人教", "高中", 3, "下册"),
+    # 苏教 (no grade/semester info)
+    421: ("苏教", "六三", None, None),
+    427: ("苏教", "六三", None, None),
+    440: ("苏教", "高中", None, None),
+    # 沪教 (no grade/semester info)
+    423: ("沪教", "六三", None, None),
+    430: ("沪教", "六三", None, None),
 }
 
 # Known polyphones: char -> context-dependent readings
@@ -180,14 +180,14 @@ def main():
     # Collect unique poems and their edition mappings
     # poem key = (title, author, dynasty) to deduplicate
     poems_map = {}  # key -> {title, author, dynasty, content, kind_cn, content_lines, tags}
-    edition_entries = []  # (poem_key, edition, school_system, level, grade_or_None)
+    edition_entries = []  # (poem_key, edition, school_system, grade_or_None, semester_or_None)
 
     for cw in collection_works:
         cid = cw["collection_id"]
         if cid not in EDITION_MAP:
             continue
 
-        edition, school_system, level, grade = EDITION_MAP[cid]
+        edition, school_system, grade, semester = EDITION_MAP[cid]
         work_id = cw["work_id"]
         title = cw["work_title"]
         author = cw["work_author"]
@@ -218,13 +218,13 @@ def main():
                 "tags": tags,
             }
 
-        edition_entries.append((key, edition, school_system, level, grade))
+        edition_entries.append((key, edition, school_system, grade, semester))
 
     # Deduplicate edition entries
     edition_set = set()
     unique_editions = []
-    for key, edition, school_system, level, grade in edition_entries:
-        entry = (key, edition, school_system, level, grade)
+    for key, edition, school_system, grade, semester in edition_entries:
+        entry = (key, edition, school_system, grade, semester)
         if entry not in edition_set:
             edition_set.add(entry)
             unique_editions.append(entry)
@@ -261,35 +261,36 @@ def main():
     sql.append("")
 
     # Group edition entries: with grade vs without grade
-    with_grade = [(k, ed, ss, lv, g) for k, ed, ss, lv, g in unique_editions if g is not None]
-    without_grade = [(k, ed, ss, lv, g) for k, ed, ss, lv, g in unique_editions if g is None]
+    with_grade = [(k, ed, ss, g, sem) for k, ed, ss, g, sem in unique_editions if g is not None]
+    without_grade = [(k, ed, ss, g, sem) for k, ed, ss, g, sem in unique_editions if g is None]
 
     if with_grade:
         sql.append("-- Link poems to editions with grade info (人教)")
-        sql.append("INSERT INTO poem_editions (poem_id, edition, school_system, level, grade)")
-        sql.append("SELECT p.id, g.edition, g.school_system, g.level, g.grade")
+        sql.append("INSERT INTO poem_editions (poem_id, edition, school_system, grade, semester)")
+        sql.append("SELECT p.id, g.edition, g.school_system, g.grade, g.semester")
         sql.append("FROM (VALUES")
         vals = []
-        for key, edition, school_system, level, grade in with_grade:
+        for key, edition, school_system, grade, semester in with_grade:
             title = escape_sql(key[0])
-            vals.append(f"  ('{title}', '{edition}', '{school_system}', '{level}', {grade})")
+            sem_sql = f"'{semester}'" if semester else "NULL"
+            vals.append(f"  ('{title}', '{edition}', '{school_system}', {grade}, {sem_sql})")
         sql.append(",\n".join(vals))
-        sql.append(") AS g(title, edition, school_system, level, grade)")
+        sql.append(") AS g(title, edition, school_system, grade, semester)")
         sql.append("JOIN poems p ON p.title = g.title")
         sql.append("ON CONFLICT DO NOTHING;")
         sql.append("")
 
     if without_grade:
         sql.append("-- Link poems to editions without grade info (苏教/沪教)")
-        sql.append("INSERT INTO poem_editions (poem_id, edition, school_system, level, grade)")
-        sql.append("SELECT p.id, g.edition, g.school_system, g.level, NULL")
+        sql.append("INSERT INTO poem_editions (poem_id, edition, school_system, grade, semester)")
+        sql.append("SELECT p.id, g.edition, g.school_system, NULL, NULL")
         sql.append("FROM (VALUES")
         vals = []
-        for key, edition, school_system, level, _ in without_grade:
+        for key, edition, school_system, _, _sem in without_grade:
             title = escape_sql(key[0])
-            vals.append(f"  ('{title}', '{edition}', '{school_system}', '{level}')")
+            vals.append(f"  ('{title}', '{edition}', '{school_system}')")
         sql.append(",\n".join(vals))
-        sql.append(") AS g(title, edition, school_system, level)")
+        sql.append(") AS g(title, edition, school_system)")
         sql.append("JOIN poems p ON p.title = g.title")
         sql.append("ON CONFLICT DO NOTHING;")
 
@@ -344,29 +345,30 @@ def main():
     edition_sql = []
     if with_grade:
         edition_sql.append("-- Link poems to editions with grade info (人教)")
-        edition_sql.append("INSERT INTO poem_editions (poem_id, edition, school_system, level, grade)")
-        edition_sql.append("SELECT p.id, g.edition, g.school_system, g.level, g.grade")
+        edition_sql.append("INSERT INTO poem_editions (poem_id, edition, school_system, grade, semester)")
+        edition_sql.append("SELECT p.id, g.edition, g.school_system, g.grade, g.semester")
         edition_sql.append("FROM (VALUES")
         vals = []
-        for key, edition, school_system, level, grade in with_grade:
+        for key, edition, school_system, grade, semester in with_grade:
             title = escape_sql(key[0])
-            vals.append(f"  ('{title}', '{edition}', '{school_system}', '{level}', {grade})")
+            sem_sql = f"'{semester}'" if semester else "NULL"
+            vals.append(f"  ('{title}', '{edition}', '{school_system}', {grade}, {sem_sql})")
         edition_sql.append(",\n".join(vals))
-        edition_sql.append(") AS g(title, edition, school_system, level, grade)")
+        edition_sql.append(") AS g(title, edition, school_system, grade, semester)")
         edition_sql.append("JOIN poems p ON p.title = g.title")
         edition_sql.append("ON CONFLICT DO NOTHING;")
         edition_sql.append("")
     if without_grade:
         edition_sql.append("-- Link poems to editions without grade info (苏教/沪教)")
-        edition_sql.append("INSERT INTO poem_editions (poem_id, edition, school_system, level, grade)")
-        edition_sql.append("SELECT p.id, g.edition, g.school_system, g.level, NULL")
+        edition_sql.append("INSERT INTO poem_editions (poem_id, edition, school_system, grade, semester)")
+        edition_sql.append("SELECT p.id, g.edition, g.school_system, NULL, NULL")
         edition_sql.append("FROM (VALUES")
         vals = []
-        for key, edition, school_system, level, _ in without_grade:
+        for key, edition, school_system, _, _sem in without_grade:
             title = escape_sql(key[0])
-            vals.append(f"  ('{title}', '{edition}', '{school_system}', '{level}')")
+            vals.append(f"  ('{title}', '{edition}', '{school_system}')")
         edition_sql.append(",\n".join(vals))
-        edition_sql.append(") AS g(title, edition, school_system, level)")
+        edition_sql.append(") AS g(title, edition, school_system)")
         edition_sql.append("JOIN poems p ON p.title = g.title")
         edition_sql.append("ON CONFLICT DO NOTHING;")
     edition_file = batch_dir / f"seed-poems-{batch_num:02d}-editions.sql"

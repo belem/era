@@ -29,7 +29,6 @@ CREATE TABLE students (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name TEXT NOT NULL,
   school_system TEXT NOT NULL DEFAULT '六三' CHECK (school_system IN ('六三', '五四', '高中')),
-  level TEXT NOT NULL DEFAULT '义务教育' CHECK (level IN ('义务教育', '高中')),
   grade INTEGER NOT NULL CHECK (grade BETWEEN 1 AND 9),
   edition TEXT NOT NULL DEFAULT '人教',
   algorithm srs_algorithm DEFAULT 'SM2',
@@ -68,13 +67,13 @@ CREATE TABLE poem_editions (
   poem_id UUID NOT NULL REFERENCES poems ON DELETE CASCADE,
   edition TEXT NOT NULL,
   school_system TEXT NOT NULL CHECK (school_system IN ('六三', '五四', '高中')),
-  level TEXT NOT NULL CHECK (level IN ('义务教育', '高中')),
   grade INTEGER CHECK (grade IS NULL OR grade BETWEEN 1 AND 9),
+  semester TEXT CHECK (semester IS NULL OR semester IN ('上册', '下册')),
   page INTEGER,
-  UNIQUE (poem_id, edition, school_system, grade)
+  UNIQUE (poem_id, edition, school_system, grade, semester)
 );
 
-CREATE INDEX idx_poem_editions_lookup ON poem_editions(edition, school_system, grade);
+CREATE INDEX idx_poem_editions_lookup ON poem_editions(edition, school_system, grade, semester);
 
 -- Custom poems (诗心 — paid tier), defined before poem_reviews for FK reference
 CREATE TABLE custom_poems (

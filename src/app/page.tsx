@@ -19,7 +19,7 @@ interface SeasonalPoem {
   firstLine: string;
 }
 
-function SeasonalTeaser() {
+function SeasonalTeaser({ showFirstLine }: { showFirstLine: boolean }) {
   const t = useTranslations("home");
   const [poem, setPoem] = useState<SeasonalPoem | null>(null);
   const solarTerm = getCurrentSolarTerm();
@@ -71,9 +71,11 @@ function SeasonalTeaser() {
           <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
         </svg>
       </div>
-      <p className="font-poetry text-[17px] text-text-secondary mt-1 truncate lg:whitespace-normal">
-        {poem.firstLine}
-      </p>
+      {showFirstLine && (
+        <p className="font-poetry text-[17px] text-text-secondary mt-1 truncate lg:whitespace-normal">
+          {poem.firstLine}
+        </p>
+      )}
     </Link>
   );
 }
@@ -83,7 +85,7 @@ export default function HomePage() {
   const { student } = useStudent();
   const { poems, loading } = useReviewQueue();
   const [streak, setStreak] = useState(0);
-  const showFirstLine = (student?.settings_json as any)?.show_first_line ?? false;
+  const showFirstLine = student?.settings_json?.show_first_line ?? false;
 
   useEffect(() => {
     if (!student) return;
@@ -111,7 +113,7 @@ export default function HomePage() {
           <span>{t("streak", { days: streak })}</span>
         </p>
 
-        <SeasonalTeaser />
+        <SeasonalTeaser showFirstLine={showFirstLine} />
 
         {loading ? (
           <div className="space-y-1">

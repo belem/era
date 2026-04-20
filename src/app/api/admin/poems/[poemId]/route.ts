@@ -28,12 +28,12 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ po
     // Delete all existing and re-insert (simpler than upsert with new unique key)
     await supabase!.from("poem_editions").delete().eq("poem_id", poemId);
     if (body.editions.length > 0) {
-      const rows = body.editions.map((e: { edition: string; school_system: string; level: string; grade: number; page?: number | null }) => ({
+      const rows = body.editions.map((e: { edition: string; school_system: string; grade: number; semester?: string | null; page?: number | null }) => ({
         poem_id: poemId,
         edition: e.edition,
         school_system: e.school_system,
-        level: e.level,
         grade: e.grade,
+        semester: e.semester ?? null,
         page: e.page ?? null,
       }));
       const { error: edError } = await supabase!

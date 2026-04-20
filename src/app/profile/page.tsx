@@ -8,7 +8,7 @@ import { useStudent } from "@/hooks/useStudent";
 import { AppHeader } from "@/components/AppHeader";
 import { TabBar } from "@/components/TabBar";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { nameInitial, levelFromSchoolSystem, maxGradeForSchoolSystem } from "@/lib/format";
+import { nameInitial, maxGradeForSchoolSystem } from "@/lib/format";
 
 interface Badge {
   id: string;
@@ -50,7 +50,7 @@ function StudentCard() {
     const supabase = createClient();
     await supabase
       .from("students")
-      .update({ name: name.trim(), school_system: schoolSystem, level: levelFromSchoolSystem(schoolSystem), grade, edition })
+      .update({ name: name.trim(), school_system: schoolSystem, grade, edition })
       .eq("id", student.id);
 
     if (resetProgress) {

@@ -57,15 +57,9 @@ function Stepper({
 
 export function LearningTab() {
   const t = useTranslations("settings");
-  const { student } = useStudent();
+  const { student, refresh } = useStudent();
 
-  const settings = student?.settings_json as {
-    show_pinyin?: boolean;
-    show_first_line?: boolean;
-    new_poems_per_day?: number;
-    max_reviews_per_session?: number;
-    streak_freeze_enabled?: boolean;
-  } | undefined;
+  const settings = student?.settings_json;
 
   const [activeAlgo, setActiveAlgo] = useState<AlgorithmName>(
     (student?.algorithm as AlgorithmName) ?? "SM2"
@@ -89,6 +83,7 @@ export function LearningTab() {
       .from("students")
       .update({ settings_json: merged })
       .eq("id", student.id);
+    refresh();
   };
 
   const handleAlgorithmSwitch = async (algo: AlgorithmName) => {

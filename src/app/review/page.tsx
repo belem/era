@@ -79,7 +79,7 @@ function ReviewContent() {
     const supabase = createClient();
     supabase
       .from("poem_editions")
-      .select("edition, school_system, level, grade, page")
+      .select("edition, school_system, grade, semester, page")
       .eq("poem_id", poem.id)
       .then(({ data }) => setEditions(data ?? []));
   }, [poem?.id]);

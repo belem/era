@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
@@ -8,22 +8,22 @@ interface Student {
   id: string;
   name: string;
   school_system: string;
-  level: string;
   grade: number;
   edition: string;
   algorithm: string;
-  settings_json: { show_pinyin: boolean };
+  settings_json: { show_pinyin?: boolean; show_first_line?: boolean; new_poems_per_day?: number; max_reviews_per_session?: number; streak_freeze_enabled?: boolean };
 }
 
 interface StudentContextValue {
   student: Student | null;
   students: Student[];
   switchStudent: (id: string) => void;
+  refresh: () => void;
   loading: boolean;
 }
 
 const StudentContext = createContext<StudentContextValue>({
-  student: null, students: [], switchStudent: () => {}, loading: true,
+  student: null, students: [], switchStudent: () => {}, refresh: () => {}, loading: true,
 });
 
 const PUBLIC_PATHS = ["/login", "/forgot-password", "/reset-password", "/auth", "/invite/accept", "/onboarding"];
@@ -32,6 +32,7 @@ export function StudentProvider({ children }: { children: ReactNode }) {
   const [students, setStudents] = useState<Student[]>([]);
   const [currentId, setCurrentId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [fetchKey, setFetchKey] = useState(0);
   const router = useRouter();
   const pathname = usePathname();
 
@@ -58,7 +59,9 @@ export function StudentProvider({ children }: { children: ReactNode }) {
       }
       setLoading(false);
     });
-  }, [currentId]);
+  }, [currentId, fetchKey]);
+
+  const refresh = useCallback(() => setFetchKey((k) => k + 1), []);
 
   const student = students.find((s) => s.id === currentId) ?? null;
 
@@ -72,6 +75,7 @@ export function StudentProvider({ children }: { children: ReactNode }) {
     student,
     students,
     switchStudent: setCurrentId,
+    refresh,
     loading,
   };
 

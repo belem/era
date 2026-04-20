@@ -66,7 +66,7 @@ export function ProfileSwitcher() {
                 <div>
                   <div className="leading-tight">{s.name}</div>
                   <div className="text-[11px] text-text-secondary">
-                    {s.edition}版 · {s.level}{s.grade ? ` · ${s.grade}年级` : ""}
+                    {s.edition}版 · {s.school_system === "高中" ? "高中" : `${s.school_system}学制`}{s.grade ? ` · ${s.grade}年级` : ""}
                   </div>
                 </div>
               </div>
