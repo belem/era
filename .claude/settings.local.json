@@ -41,7 +41,8 @@
       "WebFetch(domain:www.renjiaoshe.com)",
       "Bash(curl *)",
       "Bash(python -c ' *)",
-      "Bash(python *)"
+      "Bash(python *)",
+      "Skill(investigate)"
     ]
   }
 }

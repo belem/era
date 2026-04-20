@@ -83,7 +83,8 @@ export default function OnboardingPage() {
 
       router.push("/");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to complete onboarding");
+      const message = err instanceof Error ? err.message : typeof err === "object" && err !== null && "message" in err ? String((err as { message: unknown }).message) : "Failed to complete onboarding";
+      setError(message);
     } finally {
       setLoading(false);
     }

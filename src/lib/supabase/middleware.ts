@@ -28,6 +28,18 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
+  if (user && !isPublic && !request.nextUrl.pathname.startsWith("/onboarding")) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("onboarding_completed")
+      .eq("id", user.id)
+      .single();
+
+    if (profile && !profile.onboarding_completed) {
+      return NextResponse.redirect(new URL("/onboarding", request.url));
+    }
+  }
+
   // MFA enforcement: if user has enrolled TOTP factors, check AAL level
   if (user && !request.nextUrl.pathname.startsWith("/auth/mfa")) {
     const { data: aal } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
