@@ -2,13 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useStudent } from "@/hooks/useStudent";
-
-function nameInitial(name: string): string {
-  if (!name) return "?";
-  const last = name.charAt(name.length - 1);
-  if (/[\u4e00-\u9fff]/.test(last)) return last;
-  return name.charAt(0).toUpperCase();
-}
+import { nameInitial } from "@/lib/format";
 
 export function ProfileSwitcher() {
   const { student, students, switchStudent, loading } = useStudent();

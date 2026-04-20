@@ -1,21 +1,6 @@
 import Link from "next/link";
 import type { Poem } from "@/types/poem";
-
-interface PoemEdition {
-  edition: string;
-  level: string;
-  grade: number | null;
-}
-
-const CN_NUM = ["", "一", "二", "三", "四", "五", "六", "七", "八", "九"];
-
-function formatEdition(e: PoemEdition): string {
-  const g = e.grade != null ? CN_NUM[e.grade] ?? String(e.grade) : null;
-  if (e.level === "初中" && g) return `${e.edition}·初${g}`;
-  if (e.level === "高中" && g) return `${e.edition}·高${g}`;
-  if (g) return `${e.edition}·${e.level}·${g}年级`;
-  return `${e.edition}·${e.level}`;
-}
+import { formatEdition, type PoemEdition } from "@/lib/format";
 
 export function PoemCard({ poem, editions, hideFirstLine }: { poem: Poem; editions?: PoemEdition[]; hideFirstLine?: boolean }) {
   const firstLine = !hideFirstLine

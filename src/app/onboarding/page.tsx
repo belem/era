@@ -4,12 +4,12 @@ import { createClient } from "@/lib/supabase/client";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { levelFromSchoolSystem, maxGradeForSchoolSystem } from "@/lib/format";
 
 type Algorithm = "SM2" | "LEITNER" | "FSRS";
-type Level = "小学" | "初中" | "高中";
+type SchoolSystem = "六三" | "五四" | "高中";
 
-const KNOWN_EDITIONS = ["部编", "苏教", "沪教", "人教", "北师", "语文", "长春", "鄂教", "鲁教", "河大", "五四", "北京", "粤教", "鲁人", "华师"];
-const MAX_GRADES: Record<Level, number> = { "小学": 6, "初中": 3, "高中": 3 };
+const KNOWN_EDITIONS = ["人教", "苏教", "沪教", "北师", "语文", "长春", "鄂教", "鲁教", "河大", "北京", "粤教", "鲁人", "华师"];
 
 export default function OnboardingPage() {
   const t = useTranslations("onboarding");
@@ -20,15 +20,15 @@ export default function OnboardingPage() {
   const [error, setError] = useState("");
 
   const [name, setName] = useState("");
-  const [level, setLevel] = useState<Level>("小学");
+  const [schoolSystem, setSchoolSystem] = useState<SchoolSystem>("六三");
   const [grade, setGrade] = useState<number>(1);
-  const [edition, setEdition] = useState("部编");
+  const [edition, setEdition] = useState("人教");
 
   const [algorithm, setAlgorithm] = useState<Algorithm>("SM2");
 
-  const handleLevelChange = (newLevel: Level) => {
-    setLevel(newLevel);
-    if (grade > MAX_GRADES[newLevel]) setGrade(1);
+  const handleSchoolSystemChange = (sys: SchoolSystem) => {
+    setSchoolSystem(sys);
+    if (grade > maxGradeForSchoolSystem(sys)) setGrade(1);
   };
 
   const handleNext = () => {
@@ -50,7 +50,8 @@ export default function OnboardingPage() {
         .from("students")
         .insert({
           name: name.trim(),
-          level,
+          school_system: schoolSystem,
+          level: levelFromSchoolSystem(schoolSystem),
           grade,
           edition,
           algorithm,
@@ -127,21 +128,21 @@ export default function OnboardingPage() {
 
                 <div>
                   <label className="block text-text-secondary text-sm mb-2">
-                    {t("level")}
+                    {t("schoolSystem")}
                   </label>
                   <div className="grid grid-cols-3 gap-2">
-                    {(["小学", "初中", "高中"] as Level[]).map((lv) => (
+                    {(["六三", "五四", "高中"] as SchoolSystem[]).map((sys) => (
                       <button
-                        key={lv}
+                        key={sys}
                         type="button"
-                        onClick={() => handleLevelChange(lv)}
+                        onClick={() => handleSchoolSystemChange(sys)}
                         className={`py-2.5 rounded-[var(--radius-md)] text-[14px] font-medium transition-colors ${
-                          level === lv
+                          schoolSystem === sys
                             ? "bg-primary text-white"
                             : "border border-border bg-bg text-text hover:border-primary"
                         }`}
                       >
-                        {lv}
+                        {sys === "高中" ? "高中" : `${sys}学制`}
                       </button>
                     ))}
                   </div>
@@ -151,8 +152,8 @@ export default function OnboardingPage() {
                   <label className="block text-text-secondary text-sm mb-2">
                     {t("grade")}
                   </label>
-                  <div className="grid grid-cols-6 gap-2">
-                    {Array.from({ length: MAX_GRADES[level] }, (_, i) => i + 1).map((g) => (
+                  <div className="grid grid-cols-5 gap-2">
+                    {Array.from({ length: maxGradeForSchoolSystem(schoolSystem) }, (_, i) => i + 1).map((g) => (
                       <button
                         key={g}
                         type="button"

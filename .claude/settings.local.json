@@ -39,7 +39,9 @@
       "Bash(sort -t'\"' -k4n -u)",
       "Bash(python3 *)",
       "WebFetch(domain:www.renjiaoshe.com)",
-      "Bash(curl *)"
+      "Bash(curl *)",
+      "Bash(python -c ' *)",
+      "Bash(python *)"
     ]
   }
 }

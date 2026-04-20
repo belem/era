@@ -9,21 +9,16 @@ import { TabBar } from "@/components/TabBar";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { PoemCard } from "@/components/PoemCard";
 import type { Poem } from "@/types/poem";
-
-interface PoemEdition {
-  edition: string;
-  level: string;
-  grade: number | null;
-}
+import type { PoemEdition } from "@/lib/format";
 
 interface PoemWithEditions extends Poem {
   editions: PoemEdition[];
 }
 
-const LEVEL_ORDER: Record<string, number> = { "小学": 0, "初中": 1, "高中": 2 };
+const LEVEL_ORDER: Record<string, number> = { "义务教育": 0, "高中": 1 };
 
 function curriculumOrder(e: PoemEdition): number {
-  return (LEVEL_ORDER[e.level] ?? 9) * 10 + (e.grade ?? 0);
+  return (LEVEL_ORDER[e.level] ?? 9) * 100 + (e.grade ?? 0);
 }
 
 function minCurriculumOrder(editions: PoemEdition[]): number {
@@ -77,14 +72,14 @@ export default function LibraryPage() {
   const [debouncedQuery, setDebouncedQuery] = useState("");
 
   const [selectedEditions, setSelectedEditions] = useState<Set<string>>(new Set());
-  const [selectedLevels, setSelectedLevels] = useState<Set<string>>(new Set());
+  const [selectedSchoolSystems, setSelectedSchoolSystems] = useState<Set<string>>(new Set());
   const [selectedGrades, setSelectedGrades] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     const supabase = createClient();
     supabase
       .from("poems")
-      .select("*, poem_editions(edition, level, grade)")
+      .select("*, poem_editions(edition, school_system, level, grade, page)")
       .then(({ data }) => {
         if (data) {
           const mapped: PoemWithEditions[] = data.map((p: any) => ({
@@ -95,8 +90,10 @@ export default function LibraryPage() {
             lines: p.content_lines,
             editions: (p.poem_editions ?? []).map((e: any) => ({
               edition: e.edition,
+              school_system: e.school_system,
               level: e.level,
               grade: e.grade,
+              page: e.page,
             })),
           }));
           mapped.sort((a, b) => {
@@ -111,20 +108,20 @@ export default function LibraryPage() {
       });
   }, []);
 
-  const { allEditions, allLevels, allGrades } = useMemo(() => {
+  const { allEditions, allSchoolSystems, allGrades } = useMemo(() => {
     const edSet = new Set<string>();
-    const lvSet = new Set<string>();
+    const ssSet = new Set<string>();
     const grSet = new Set<number>();
     for (const p of poems) {
       for (const e of p.editions) {
         edSet.add(e.edition);
-        lvSet.add(e.level);
+        ssSet.add(e.school_system);
         if (e.grade != null) grSet.add(e.grade);
       }
     }
     return {
       allEditions: [...edSet].sort(),
-      allLevels: [...lvSet].sort((a, b) => (LEVEL_ORDER[a] ?? 9) - (LEVEL_ORDER[b] ?? 9)),
+      allSchoolSystems: [...ssSet].sort(),
       allGrades: [...grSet].sort((a, b) => a - b).map(String),
     };
   }, [poems]);
@@ -144,7 +141,7 @@ export default function LibraryPage() {
     });
   }, []);
 
-  const hasFilters = selectedEditions.size > 0 || selectedLevels.size > 0 || selectedGrades.size > 0;
+  const hasFilters = selectedEditions.size > 0 || selectedSchoolSystems.size > 0 || selectedGrades.size > 0;
 
   const filtered = useMemo(() => {
     let result = poems;
@@ -160,7 +157,7 @@ export default function LibraryPage() {
         if (p.editions.length === 0) return false;
         return p.editions.some((e) => {
           if (selectedEditions.size > 0 && !selectedEditions.has(e.edition)) return false;
-          if (selectedLevels.size > 0 && !selectedLevels.has(e.level)) return false;
+          if (selectedSchoolSystems.size > 0 && !selectedSchoolSystems.has(e.school_system)) return false;
           if (selectedGrades.size > 0 && (e.grade == null || !selectedGrades.has(String(e.grade)))) return false;
           return true;
         });
@@ -168,7 +165,7 @@ export default function LibraryPage() {
     }
 
     return result;
-  }, [debouncedQuery, ready, search, poems, hasFilters, selectedEditions, selectedLevels, selectedGrades]);
+  }, [debouncedQuery, ready, search, poems, hasFilters, selectedEditions, selectedSchoolSystems, selectedGrades]);
 
   return (
     <>
@@ -209,7 +206,7 @@ export default function LibraryPage() {
           )}
         </div>
 
-        {!loading && (allEditions.length > 0 || allLevels.length > 0 || allGrades.length > 0) && (
+        {!loading && (allEditions.length > 0 || allSchoolSystems.length > 0 || allGrades.length > 0) && (
           <div className="flex flex-col gap-2 mb-6">
             {allEditions.length > 1 && (
               <MultiSelect
@@ -219,12 +216,13 @@ export default function LibraryPage() {
                 onToggle={(v) => toggle(selectedEditions, setSelectedEditions, v)}
               />
             )}
-            {allLevels.length > 1 && (
+            {allSchoolSystems.length > 1 && (
               <MultiSelect
-                label={t("level")}
-                options={allLevels}
-                selected={selectedLevels}
-                onToggle={(v) => toggle(selectedLevels, setSelectedLevels, v)}
+                label={t("schoolSystem")}
+                options={allSchoolSystems}
+                selected={selectedSchoolSystems}
+                onToggle={(v) => toggle(selectedSchoolSystems, setSelectedSchoolSystems, v)}
+                renderOption={(v) => v === "高中" ? "高中" : `${v}学制`}
               />
             )}
             {allGrades.length > 1 && (

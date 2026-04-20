@@ -116,10 +116,10 @@ Available for badges, heatmaps, and charts. These never appear as UI chrome — 
 
 Three voices. Each has a cultural reason for being, adapted with Apple's typographic discipline.
 
-### Voice 1 — Poetry: LXGW WenKai (霞鹜文楷)
+### Voice 1 — Poetry: LXGW WenKai TC (霞鹜文楷)
 
 ```css
---font-poetry: 'LXGW WenKai', 'KaiTi', 'STKaiti', serif;
+--font-poetry: 'LXGW WenKai TC', 'KaiTi', 'STKaiti', serif;
 ```
 
 Kai (楷) is the style Chinese children learn to write by hand. Every stroke follows the structure a teacher demonstrates on a blackboard. A child seeing 床前明月光 in LXGW WenKai is also reinforcing how those characters should be handwritten.
@@ -158,7 +158,7 @@ Intentionally invisible typography. System sans loads instantly. Inter handles p
 
 | Font | Size | Strategy |
 |---|---|---|
-| LXGW WenKai Regular | ~4–6 MB | `font-display: swap`, preload in `<head>`. Fallback: `KaiTi`, `STKaiti`. |
+| LXGW WenKai TC Regular | ~4–6 MB | `font-display: swap`, preload in `<head>`. Fallback: `KaiTi`, `STKaiti`. |
 | Noto Serif SC | ~2 MB | `font-display: swap`, `<link rel="preload">`. Fallback: `Songti SC`, `SimSun`. |
 | Inter | ~100 KB | Variable font, lightweight. |
 

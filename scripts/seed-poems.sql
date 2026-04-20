@@ -1,5 +1,5 @@
 -- Seed script for poems + poem_editions tables
--- Generated from 部编版/苏教版/沪教版 textbook collections
+-- Generated from 人教/苏教/沪教 textbook collections
 -- Total: 487 unique poems, 791 edition placements
 -- Covers: 小学 (grades 1-6), 初中 (grades 1-3), 高中 (grades 1-3)
 
@@ -495,7 +495,7 @@ VALUES
   ('同儿辈赋未开海棠二首', '元好问', '金', '[{"chars": [{"char": "翠", "pinyin": "cuì"}, {"char": "叶", "pinyin": "yè"}, {"char": "轻", "pinyin": "qīng"}, {"char": "笼", "pinyin": "lóng"}, {"char": "豆", "pinyin": "dòu"}, {"char": "颗", "pinyin": "kē"}, {"char": "均", "pinyin": "jūn"}], "punctuation": "，"}, {"chars": [{"char": "胭", "pinyin": "yān"}, {"char": "脂", "pinyin": "zhī"}, {"char": "浓", "pinyin": "nóng"}, {"char": "抹", "pinyin": "mǒ"}, {"char": "蜡", "pinyin": "là"}, {"char": "痕", "pinyin": "hén"}, {"char": "新", "pinyin": "xīn"}], "punctuation": "。"}, {"chars": [{"char": "殷", "pinyin": "yīn"}, {"char": "勤", "pinyin": "qín"}, {"char": "留", "pinyin": "liú"}, {"char": "着", "pinyin": "zhe"}, {"char": "花", "pinyin": "huā"}, {"char": "梢", "pinyin": "shāo"}, {"char": "露", "pinyin": "lù"}], "punctuation": "，"}, {"chars": [{"char": "滴", "pinyin": "dī"}, {"char": "下", "pinyin": "xià"}, {"char": "生", "pinyin": "shēng"}, {"char": "红", "pinyin": "hóng"}, {"char": "可", "pinyin": "kě"}, {"char": "惜", "pinyin": "xī"}, {"char": "春", "pinyin": "chūn"}], "punctuation": "。"}, {"chars": [{"char": "枝", "pinyin": "zhī"}, {"char": "间", "pinyin": "jiān", "polyphone": true}, {"char": "新", "pinyin": "xīn"}, {"char": "绿", "pinyin": "lǜ"}, {"char": "一", "pinyin": "yī"}, {"char": "重", "pinyin": "chóng", "polyphone": true}, {"char": "重", "pinyin": "chóng", "polyphone": true}], "punctuation": "，"}, {"chars": [{"char": "小", "pinyin": "xiǎo"}, {"char": "蕾", "pinyin": "lěi"}, {"char": "深", "pinyin": "shēn"}, {"char": "藏", "pinyin": "cáng", "polyphone": true}, {"char": "数", "pinyin": "shù"}, {"char": "点", "pinyin": "diǎn"}, {"char": "红", "pinyin": "hóng"}], "punctuation": "。"}, {"chars": [{"char": "爱", "pinyin": "ài"}, {"char": "惜", "pinyin": "xī"}, {"char": "芳", "pinyin": "fāng"}, {"char": "心", "pinyin": "xīn"}, {"char": "莫", "pinyin": "mò"}, {"char": "轻", "pinyin": "qīng"}, {"char": "吐", "pinyin": "tǔ"}], "punctuation": "，"}, {"chars": [{"char": "且", "pinyin": "qiě"}, {"char": "教", "pinyin": "jiào", "polyphone": true}, {"char": "桃", "pinyin": "táo"}, {"char": "李", "pinyin": "lǐ"}, {"char": "闹", "pinyin": "nào"}, {"char": "春", "pinyin": "chūn"}, {"char": "风", "pinyin": "fēng"}], "punctuation": "。"}]'::jsonb, ARRAY['金', '七言律诗', '山水'])
 ;
 
--- Link poems to editions with grade info (部编版)
+-- Link poems to editions with grade info (人教)
 INSERT INTO poem_editions (poem_id, edition, level, grade)
 SELECT p.id, g.edition, g.level, g.grade
 FROM (VALUES
@@ -839,7 +839,7 @@ FROM (VALUES
 JOIN poems p ON p.title = g.title
 ON CONFLICT DO NOTHING;
 
--- Link poems to editions without grade info (苏教版/沪教版)
+-- Link poems to editions without grade info (苏教/沪教)
 INSERT INTO poem_editions (poem_id, edition, level, grade)
 SELECT p.id, g.edition, g.level, NULL
 FROM (VALUES

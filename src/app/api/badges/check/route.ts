@@ -61,7 +61,7 @@ export async function POST(request: Request) {
       case "grade_mastered": {
         const { data: student } = await supabase
           .from("students")
-          .select("grade, level, edition")
+          .select("grade, level, edition, school_system")
           .eq("id", studentId)
           .single();
         if (student) {
@@ -70,7 +70,7 @@ export async function POST(request: Request) {
               .from("poem_editions")
               .select("poem_id", { count: "exact", head: true })
               .eq("edition", student.edition)
-              .eq("level", student.level)
+              .eq("school_system", student.school_system)
               .eq("grade", student.grade),
             supabase
               .from("poem_reviews")

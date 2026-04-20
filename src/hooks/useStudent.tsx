@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 interface Student {
   id: string;
   name: string;
+  school_system: string;
   level: string;
   grade: number;
   edition: string;

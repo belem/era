@@ -29,7 +29,7 @@ export async function GET(request: Request) {
       .from("poem_editions")
       .select("poem_id");
     if (edition) editionFilter = editionFilter.eq("edition", edition);
-    if (level) editionFilter = editionFilter.eq("level", level);
+    if (level) editionFilter = editionFilter.eq("school_system", level);
     if (grade) editionFilter = editionFilter.eq("grade", parseInt(grade, 10));
 
     const { data: matchingIds } = await editionFilter;
@@ -66,11 +66,13 @@ export async function POST(request: Request) {
   if (insertError) return NextResponse.json({ error: insertError.message }, { status: 500 });
 
   if (editions && Array.isArray(editions) && editions.length > 0) {
-    const rows = editions.map((e: { edition: string; level: string; grade: number }) => ({
+    const rows = editions.map((e: { edition: string; school_system: string; level: string; grade: number; page?: number | null }) => ({
       poem_id: data.id,
       edition: e.edition,
+      school_system: e.school_system,
       level: e.level,
       grade: e.grade,
+      page: e.page ?? null,
     }));
     const { error: edError } = await supabase!
       .from("poem_editions")

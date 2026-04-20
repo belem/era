@@ -25,31 +25,21 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ po
   }
 
   if (body.editions !== undefined && Array.isArray(body.editions)) {
+    // Delete all existing and re-insert (simpler than upsert with new unique key)
+    await supabase!.from("poem_editions").delete().eq("poem_id", poemId);
     if (body.editions.length > 0) {
-      const rows = body.editions.map((e: { edition: string; level: string; grade: number }) => ({
+      const rows = body.editions.map((e: { edition: string; school_system: string; level: string; grade: number; page?: number | null }) => ({
         poem_id: poemId,
         edition: e.edition,
+        school_system: e.school_system,
         level: e.level,
         grade: e.grade,
+        page: e.page ?? null,
       }));
       const { error: edError } = await supabase!
         .from("poem_editions")
-        .upsert(rows, { onConflict: "poem_id,edition,level,grade" });
+        .insert(rows);
       if (edError) return NextResponse.json({ error: edError.message }, { status: 500 });
-    }
-    // Remove editions not in the new set
-    const keepPairs = body.editions.map((e: { edition: string; level: string; grade: number }) =>
-      `${e.edition}|${e.level}|${e.grade}`
-    );
-    const { data: existing } = await supabase!
-      .from("poem_editions")
-      .select("id, edition, level, grade")
-      .eq("poem_id", poemId);
-    const toDelete = (existing ?? [])
-      .filter((e: any) => !keepPairs.includes(`${e.edition}|${e.level}|${e.grade}`))
-      .map((e: any) => e.id);
-    if (toDelete.length > 0) {
-      await supabase!.from("poem_editions").delete().in("id", toDelete);
     }
   }
 

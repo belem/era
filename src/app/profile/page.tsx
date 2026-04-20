@@ -8,6 +8,7 @@ import { useStudent } from "@/hooks/useStudent";
 import { AppHeader } from "@/components/AppHeader";
 import { TabBar } from "@/components/TabBar";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { nameInitial, levelFromSchoolSystem, maxGradeForSchoolSystem } from "@/lib/format";
 
 interface Badge {
   id: string;
@@ -15,28 +16,15 @@ interface Badge {
   unlocked: boolean;
 }
 
-const LEVELS = ["小学", "初中", "高中"] as const;
-const EDITIONS = ["部编", "苏教", "北师大"] as const;
-
-function nameInitial(name: string): string {
-  if (!name) return "?";
-  const last = name.charAt(name.length - 1);
-  if (/[\u4e00-\u9fff]/.test(last)) return last;
-  return name.charAt(0).toUpperCase();
-}
-
-function gradeOptions(level: string) {
-  if (level === "小学") return [1, 2, 3, 4, 5, 6];
-  if (level === "初中") return [1, 2, 3];
-  return [1, 2, 3];
-}
+const SCHOOL_SYSTEMS = ["六三", "五四", "高中"] as const;
+const EDITIONS = ["人教", "苏教", "沪教", "北师", "语文", "长春", "鄂教", "鲁教"] as const;
 
 function StudentCard() {
   const t = useTranslations("profile");
   const { student } = useStudent();
   const [editing, setEditing] = useState(false);
   const [name, setName] = useState("");
-  const [level, setLevel] = useState("");
+  const [schoolSystem, setSchoolSystem] = useState("");
   const [grade, setGrade] = useState(1);
   const [edition, setEdition] = useState("");
   const [saving, setSaving] = useState(false);
@@ -46,14 +34,14 @@ function StudentCard() {
   useEffect(() => {
     if (student) {
       setName(student.name);
-      setLevel(student.level);
+      setSchoolSystem(student.school_system);
       setGrade(student.grade);
       setEdition(student.edition);
     }
   }, [student]);
 
   const curriculumChanged = student
-    ? level !== student.level || grade !== student.grade || edition !== student.edition
+    ? schoolSystem !== student.school_system || grade !== student.grade || edition !== student.edition
     : false;
 
   const doSave = async (resetProgress: boolean) => {
@@ -62,7 +50,7 @@ function StudentCard() {
     const supabase = createClient();
     await supabase
       .from("students")
-      .update({ name: name.trim(), level, grade, edition })
+      .update({ name: name.trim(), school_system: schoolSystem, level: levelFromSchoolSystem(schoolSystem), grade, edition })
       .eq("id", student.id);
 
     if (resetProgress) {
@@ -107,17 +95,17 @@ function StudentCard() {
 
         <div className="grid grid-cols-3 gap-3">
           <div>
-            <label className="text-[12px] text-text-secondary block mb-1">{t("level")}</label>
+            <label className="text-[12px] text-text-secondary block mb-1">{t("schoolSystem")}</label>
             <select
-              value={level}
+              value={schoolSystem}
               onChange={(e) => {
-                setLevel(e.target.value);
-                setGrade(1);
+                setSchoolSystem(e.target.value);
+                if (grade > maxGradeForSchoolSystem(e.target.value)) setGrade(1);
               }}
               className="w-full border border-border rounded-[var(--radius-md)] bg-bg px-3 py-2.5 text-[14px] text-text focus:outline-none focus:ring-2 focus:ring-primary"
             >
-              {LEVELS.map((l) => (
-                <option key={l} value={l}>{l}</option>
+              {SCHOOL_SYSTEMS.map((sys) => (
+                <option key={sys} value={sys}>{sys === "高中" ? "高中" : `${sys}学制`}</option>
               ))}
             </select>
           </div>
@@ -128,7 +116,7 @@ function StudentCard() {
               onChange={(e) => setGrade(parseInt(e.target.value, 10))}
               className="w-full border border-border rounded-[var(--radius-md)] bg-bg px-3 py-2.5 text-[14px] text-text focus:outline-none focus:ring-2 focus:ring-primary"
             >
-              {gradeOptions(level).map((g) => (
+              {Array.from({ length: maxGradeForSchoolSystem(schoolSystem) }, (_, i) => i + 1).map((g) => (
                 <option key={g} value={g}>{g}</option>
               ))}
             </select>
@@ -141,7 +129,7 @@ function StudentCard() {
               className="w-full border border-border rounded-[var(--radius-md)] bg-bg px-3 py-2.5 text-[14px] text-text focus:outline-none focus:ring-2 focus:ring-primary"
             >
               {EDITIONS.map((ed) => (
-                <option key={ed} value={ed}>{ed}</option>
+                <option key={ed} value={ed}>{ed}版</option>
               ))}
             </select>
           </div>
@@ -161,7 +149,7 @@ function StudentCard() {
                 setEditing(false);
                 setShowResetChoice(false);
                 setName(student.name);
-                setLevel(student.level);
+                setSchoolSystem(student.school_system);
                 setGrade(student.grade);
                 setEdition(student.edition);
               }}
@@ -214,7 +202,7 @@ function StudentCard() {
               {student.name}
             </div>
             <div className="text-[14px] text-text-tertiary tracking-tight">
-              {student.level}{t("gradeInfo", { grade: student.grade })} · {t("editionInfo", { edition: student.edition })}
+              {student.school_system === "高中" ? "高中" : `${student.school_system}学制`} · {t("gradeInfo", { grade: student.grade })} · {student.edition}版
             </div>
           </div>
         </div>

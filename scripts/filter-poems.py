@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Curated list of 50 classical Chinese poems from PEP (人教版) textbooks, grades 1-6.
+Curated list of 50 classical Chinese poems from PEP (人教) textbooks, grades 1-6.
 Each poem includes title, author, dynasty, grade level, and complete text as paragraphs.
 """
 

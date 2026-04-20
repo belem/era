@@ -12,16 +12,7 @@ import { CardReview } from "@/components/CardReview";
 import { LivingScroll } from "@/components/LivingScroll";
 import { SessionSummary } from "@/components/SessionSummary";
 import type { Poem } from "@/types/poem";
-
-const CN_NUM = ["", "一", "二", "三", "四", "五", "六", "七", "八", "九"];
-
-function formatGrade(level: string, grade: number | null): string {
-  const g = grade != null ? CN_NUM[grade] ?? String(grade) : null;
-  if (level === "初中" && g) return `初${g}`;
-  if (level === "高中" && g) return `高${g}`;
-  if (g) return `${level} · ${g}年级`;
-  return level;
-}
+import { formatEdition, type PoemEdition } from "@/lib/format";
 
 interface SessionRating {
   poemId: string;
@@ -41,7 +32,7 @@ function ReviewContent() {
   const [mode, setMode] = useState<"card" | "scroll">("card");
   const [sessionComplete, setSessionComplete] = useState(false);
   const [sessionRatings, setSessionRatings] = useState<SessionRating[]>([]);
-  const [editions, setEditions] = useState<{ edition: string; level: string; grade: number }[]>([]);
+  const [editions, setEditions] = useState<PoemEdition[]>([]);
 
   useEffect(() => {
     if (queueLoading) return;
@@ -88,7 +79,7 @@ function ReviewContent() {
     const supabase = createClient();
     supabase
       .from("poem_editions")
-      .select("edition, level, grade")
+      .select("edition, school_system, level, grade, page")
       .eq("poem_id", poem.id)
       .then(({ data }) => setEditions(data ?? []));
   }, [poem?.id]);
@@ -194,7 +185,7 @@ function ReviewContent() {
           <div className="flex flex-wrap justify-center gap-x-3 gap-y-0.5 mt-4 max-w-[480px] mx-auto">
             {editions.map((ed, i) => (
               <span key={i} className="text-[11px] text-text-tertiary">
-                {ed.edition}版 · {formatGrade(ed.level, ed.grade)}
+                {formatEdition(ed)}
               </span>
             ))}
           </div>

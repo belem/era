@@ -16,8 +16,10 @@ interface Stats {
 
 interface PoemEdition {
   edition: string;
+  school_system: string;
   level: string;
   grade: number;
+  page?: number | null;
 }
 
 interface PoemRow {
@@ -233,8 +235,8 @@ function OverviewTab({ stats, t }: { stats: Stats; t: any }) {
   );
 }
 
-const KNOWN_EDITIONS = ["部编", "苏教", "沪教", "人教", "北师", "语文", "长春", "鄂教", "鲁教", "河大", "五四", "北京", "粤教", "鲁人", "华师"];
-const LEVELS = ["小学", "初中", "高中"];
+const KNOWN_EDITIONS = ["人教", "苏教", "沪教", "北师", "语文", "长春", "鄂教", "鲁教", "河大", "北京", "粤教", "鲁人", "华师"];
+const SCHOOL_SYSTEMS = ["六三", "五四", "高中"];
 
 function PoemsTab({
   t, poems, total, page, search, edition, level, grade, editing,
@@ -291,9 +293,9 @@ function PoemsTab({
           onChange={(e) => { onLevelChange(e.target.value); onPageChange(1); }}
           className="border border-border rounded-[var(--radius-md)] bg-bg px-3 py-2 text-[14px] text-text focus:outline-none focus:ring-2 focus:ring-primary"
         >
-          <option value="">全部学段</option>
-          {LEVELS.map((lv) => (
-            <option key={lv} value={lv}>{lv}</option>
+          <option value="">全部学制</option>
+          {SCHOOL_SYSTEMS.map((sys) => (
+            <option key={sys} value={sys}>{sys === "高中" ? "高中" : `${sys}学制`}</option>
           ))}
         </select>
         <select
@@ -302,7 +304,7 @@ function PoemsTab({
           className="border border-border rounded-[var(--radius-md)] bg-bg px-3 py-2 text-[14px] text-text focus:outline-none focus:ring-2 focus:ring-primary"
         >
           <option value="">{t("allGrades")}</option>
-          {[1, 2, 3, 4, 5, 6].map((g) => (
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((g) => (
             <option key={g} value={g}>{t("gradeN", { n: g })}</option>
           ))}
         </select>
@@ -340,7 +342,7 @@ function PoemsTab({
                   <td className="px-4 py-3 text-text-secondary hidden md:table-cell">{poem.dynasty}</td>
                   <td className="px-4 py-3 text-text-secondary text-[12px]">
                     {poem.poem_editions?.length > 0
-                      ? poem.poem_editions.map((e) => `${e.level}${e.grade}年级·${e.edition}版`).join(", ")
+                      ? poem.poem_editions.map((e) => `${e.edition}·${e.school_system}·${e.grade}年级${e.page ? `·p${e.page}` : ""}`).join(", ")
                       : "-"}
                   </td>
                   <td className="px-4 py-3 text-right">
@@ -417,16 +419,22 @@ function PoemEditor({
   });
 
   const addEdition = () => {
-    setEditions([...editions, { edition: "部编", level: "小学", grade: 1 }]);
+    setEditions([...editions, { edition: "人教", school_system: "六三", level: "义务教育", grade: 1 }]);
   };
 
   const removeEdition = (i: number) => {
     setEditions(editions.filter((_, idx) => idx !== i));
   };
 
-  const updateEdition = (i: number, field: keyof PoemEdition, value: string | number) => {
+  const updateEdition = (i: number, field: keyof PoemEdition, value: string | number | null) => {
     const next = [...editions];
-    next[i] = { ...next[i], [field]: value };
+    if (field === "school_system") {
+      const sys = value as string;
+      next[i] = { ...next[i], school_system: sys, level: sys === "高中" ? "高中" : "义务教育" };
+      if (next[i].grade > (sys === "高中" ? 3 : 9)) next[i].grade = 1;
+    } else {
+      next[i] = { ...next[i], [field]: value };
+    }
     setEditions(next);
   };
 
@@ -496,7 +504,7 @@ function PoemEditor({
 
       <div>
         <div className="flex items-center justify-between mb-2">
-          <label className="text-[12px] text-text-tertiary">版本/学段/年级</label>
+          <label className="text-[12px] text-text-tertiary">版本/学制/年级/页码</label>
           <button
             type="button"
             onClick={addEdition}
@@ -510,7 +518,7 @@ function PoemEditor({
         )}
         <div className="space-y-2">
           {editions.map((ed, i) => (
-            <div key={i} className="flex items-center gap-2">
+            <div key={i} className="flex items-center gap-2 flex-wrap">
               <select
                 value={ed.edition}
                 onChange={(e) => updateEdition(i, "edition", e.target.value)}
@@ -521,12 +529,12 @@ function PoemEditor({
                 ))}
               </select>
               <select
-                value={ed.level}
-                onChange={(e) => updateEdition(i, "level", e.target.value)}
+                value={ed.school_system}
+                onChange={(e) => updateEdition(i, "school_system", e.target.value)}
                 className="border border-border rounded-[var(--radius-md)] bg-bg px-2 py-1.5 text-[13px] text-text focus:outline-none focus:ring-2 focus:ring-primary"
               >
-                {LEVELS.map((lv) => (
-                  <option key={lv} value={lv}>{lv}</option>
+                {SCHOOL_SYSTEMS.map((sys) => (
+                  <option key={sys} value={sys}>{sys === "高中" ? "高中" : `${sys}学制`}</option>
                 ))}
               </select>
               <select
@@ -534,10 +542,17 @@ function PoemEditor({
                 onChange={(e) => updateEdition(i, "grade", parseInt(e.target.value, 10))}
                 className="border border-border rounded-[var(--radius-md)] bg-bg px-2 py-1.5 text-[13px] text-text focus:outline-none focus:ring-2 focus:ring-primary"
               >
-                {[1, 2, 3, 4, 5, 6].map((g) => (
+                {Array.from({ length: ed.school_system === "高中" ? 3 : 9 }, (_, g) => g + 1).map((g) => (
                   <option key={g} value={g}>{g}年级</option>
                 ))}
               </select>
+              <input
+                type="number"
+                placeholder="页码"
+                value={ed.page ?? ""}
+                onChange={(e) => updateEdition(i, "page", e.target.value ? parseInt(e.target.value, 10) : null)}
+                className="w-16 border border-border rounded-[var(--radius-md)] bg-bg px-2 py-1.5 text-[13px] text-text focus:outline-none focus:ring-2 focus:ring-primary"
+              />
               <button
                 type="button"
                 onClick={() => removeEdition(i)}
