@@ -43,7 +43,9 @@ export default function OnboardingPage() {
 
     try {
       const supabase = createClient();
-      await supabase.auth.refreshSession();
+      const { data: { session }, error: refreshError } = await supabase.auth.refreshSession();
+      if (refreshError || !session) throw new Error("Session expired. Please log in again.");
+
       const { data: { user }, error: userError } = await supabase.auth.getUser();
       if (userError || !user) throw new Error("Not authenticated");
 
@@ -75,14 +77,17 @@ export default function OnboardingPage() {
 
       if (guardianError) throw guardianError;
 
-      const { error: profileError } = await supabase
+      const { data: updated, error: profileError } = await supabase
         .from("profiles")
         .update({ onboarding_completed: true })
-        .eq("id", user.id);
+        .eq("id", user.id)
+        .select("onboarding_completed")
+        .single();
 
       if (profileError) throw profileError;
+      if (!updated?.onboarding_completed) throw new Error("Profile update failed");
 
-      router.push("/");
+      window.location.href = "/";
     } catch (err) {
       const message = err instanceof Error ? err.message : typeof err === "object" && err !== null && "message" in err ? String((err as { message: unknown }).message) : "Failed to complete onboarding";
       setError(message);

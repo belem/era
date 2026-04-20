@@ -380,7 +380,7 @@ CREATE POLICY users_select ON users FOR SELECT USING (auth.uid() = id);
 
 -- Students
 CREATE POLICY students_select ON students FOR SELECT
-  USING (EXISTS (SELECT 1 FROM student_guardians sg WHERE sg.student_id = id AND sg.guardian_id = auth.uid()));
+  USING (created_by = auth.uid() OR EXISTS (SELECT 1 FROM student_guardians sg WHERE sg.student_id = id AND sg.guardian_id = auth.uid()));
 CREATE POLICY students_insert ON students FOR INSERT
   WITH CHECK (created_by = auth.uid());
 CREATE POLICY students_update ON students FOR UPDATE
