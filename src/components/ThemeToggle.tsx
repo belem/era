@@ -34,7 +34,7 @@ export function ThemeToggle({ inline = false }: ThemeToggleProps) {
     return (
       <button
         className={`min-w-[44px] min-h-[44px] rounded-full flex items-center justify-center opacity-0 ${
-          inline ? "" : "fixed top-1 right-14 z-50 md:hidden"
+          inline ? "" : "fixed top-1/2 -translate-y-1/2 right-14 z-50 md:hidden"
         }`}
         aria-label="Toggle theme"
       />
@@ -47,7 +47,7 @@ export function ThemeToggle({ inline = false }: ThemeToggleProps) {
       className={`min-w-[44px] min-h-[44px] rounded-full flex items-center justify-center transition-colors ${
         inline
           ? "text-text-secondary hover:text-text"
-          : "fixed top-1 right-14 z-50 text-text-secondary hover:text-text md:hidden"
+          : "fixed right-14 top-1/2 -translate-y-1/2 z-50 text-text-secondary hover:text-text md:hidden"
       }`}
       aria-label={`Switch to ${resolvedTheme === "dark" ? "light" : "dark"} mode`}
     >

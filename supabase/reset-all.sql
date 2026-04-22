@@ -1,7 +1,7 @@
 -- ==========================================================================
 -- FULL RESET: Drop everything and recreate all tables, functions, triggers.
 -- Run this in Supabase SQL Editor to start fresh.
--- After this, run seed-poems batches (01-17) then seed-poems-18-editions.sql.
+-- After this, run seed-poems batches (01-17), then 18-editions, then 19.
 -- ==========================================================================
 
 -- ========== DROP EVERYTHING ==========
