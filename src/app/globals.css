@@ -101,7 +101,7 @@
   --color-badge-3: var(--badge-3);
   --color-badge-4: var(--badge-4);
 
-  --font-poetry: 'LXGW WenKai TC', 'KaiTi', 'STKaiti', serif;
+  --font-poetry: 'KingHwa_OldSong', 'Noto Serif SC', 'SimSun', serif;
   --font-heading: 'Noto Serif SC', 'SimSun', serif;
   --font-ui: 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', system-ui, sans-serif;
   --font-pinyin: var(--font-inter), sans-serif;

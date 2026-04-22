@@ -116,18 +116,17 @@ Available for badges, heatmaps, and charts. These never appear as UI chrome — 
 
 Three voices. Each has a cultural reason for being, adapted with Apple's typographic discipline.
 
-### Voice 1 — Poetry: LXGW WenKai TC (霞鹜文楷)
+### Voice 1 — Poetry: 京華老宋体 (KingHwa_OldSong)
 
 ```css
---font-poetry: 'LXGW WenKai TC', 'KaiTi', 'STKaiti', serif;
+--font-poetry: 'KingHwa_OldSong', 'Noto Serif SC', 'SimSun', serif;
 ```
 
-Kai (楷) is the style Chinese children learn to write by hand. Every stroke follows the structure a teacher demonstrates on a blackboard. A child seeing 床前明月光 in LXGW WenKai is also reinforcing how those characters should be handwritten.
+An elegant Song-style typeface inspired by classical woodblock print lettering. Its structured strokes give poetry a refined, archival quality.
 
-- **Weights:** Regular (400) for poem body, Light (300) for prose passages
+- **Weight:** Regular (400)
 - **Letter-spacing:** `0.05em` for poetry lines — each character gets room to breathe
-- **Coverage:** ~8,000 CJK characters, open source (SIL license)
-- **Source:** Google Fonts
+- **Source:** `https://chinese-fonts-cdn.deno.dev/packages/jhlst/dist/京華老宋体v2_002/result.css`
 
 ### Voice 2 — Headings: Noto Serif SC (思源宋体)
 
@@ -158,7 +157,7 @@ Intentionally invisible typography. System sans loads instantly. Inter handles p
 
 | Font | Size | Strategy |
 |---|---|---|
-| LXGW WenKai TC Regular | ~4–6 MB | `font-display: swap`, preload in `<head>`. Fallback: `KaiTi`, `STKaiti`. |
+| KingHwa_OldSong | CDN via chinese-fonts-cdn.deno.dev | Loaded via `<link>` in `<head>`. Fallback: `Noto Serif SC`, `SimSun`. |
 | Noto Serif SC | ~2 MB | `font-display: swap`, `<link rel="preload">`. Fallback: `Songti SC`, `SimSun`. |
 | Inter | ~100 KB | Variable font, lightweight. |
 
@@ -169,8 +168,8 @@ Intentionally invisible typography. System sans loads instantly. Inter handles p
 | Display hero | Noto Serif SC | 600 | 40px | 1.10 | -0.01em |
 | Page title | Noto Serif SC | 600 | 28px | 1.14 | -0.005em |
 | Section header | System sans | 500 | 13px uppercase | 1.33 | 0.08em |
-| Poetry body (card) | LXGW WenKai | 400 | 24–28px | 2.0 | 0.05em |
-| Poetry body (scroll) | LXGW WenKai | 400 | 26–32px | 2.0 | 0.05em |
+| Poetry body (card) | KingHwa_OldSong | 400 | 24–28px | 2.0 | 0.05em |
+| Poetry body (scroll) | KingHwa_OldSong | 400 | 26–32px | 2.0 | 0.05em |
 | Poem title | Noto Serif SC | 600 | 17–21px | 1.19 | -0.005em |
 | Metadata | System sans | 400 | 14px | 1.43 | -0.006em |
 | UI label | System sans | 400 | 17px | 1.47 | -0.01em |

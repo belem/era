@@ -134,27 +134,13 @@ export default function HomePage() {
         )}
 
         {!loading && poems.length > 0 && (
-          <div className="mt-8 space-y-3">
+          <div className="mt-8">
             <Link
               href="/review"
               className="block w-full py-3 bg-primary text-white rounded-[var(--radius-pill)] text-center font-ui text-[17px] font-normal transition-colors hover:bg-primary-hover"
             >
               {t("startReview")}
             </Link>
-            <div className="flex gap-3">
-              <Link
-                href="/listen"
-                className="flex-1 py-2.5 border border-border rounded-[var(--radius-pill)] text-center text-[14px] text-text-secondary hover:border-primary hover:text-primary transition-colors"
-              >
-                {t("listenMode")}
-              </Link>
-              <Link
-                href="/custom-poems"
-                className="flex-1 py-2.5 border border-border rounded-[var(--radius-pill)] text-center text-[14px] text-text-secondary hover:border-primary hover:text-primary transition-colors"
-              >
-                {t("customPoems")}
-              </Link>
-            </div>
           </div>
         )}
       </main>

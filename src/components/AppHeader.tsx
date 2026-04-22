@@ -10,10 +10,11 @@ import { ThemeToggle } from "./ThemeToggle";
 
 const navLinks = [
   { href: "/", key: "home" },
+  { href: "/listen", key: "listen" },
   { href: "/library", key: "library" },
+  { href: "/custom-poems", key: "customPoems" },
   { href: "/fragments", key: "fragments" },
   { href: "/gallery", key: "gallery" },
-  { href: "/profile", key: "profile" },
 ] as const;
 
 export function AppHeader() {

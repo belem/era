@@ -5,7 +5,7 @@
     "startReview": "Start Review",
     "empty": "No poems to review today",
     "listenMode": "Listen",
-    "customPoems": "Custom Poems",
+    "customPoems": "My Poems",
     "seasonal": "Seasonal"
   },
   "review": {
@@ -26,7 +26,9 @@
   },
   "nav": {
     "home": "Home",
+    "listen": "Listen",
     "library": "Library",
+    "customPoems": "My Poems",
     "fragments": "Cards",
     "gallery": "Gallery",
     "profile": "Profile"
@@ -52,9 +54,9 @@
     "grade9": "Grade 9"
   },
   "gallery": {
-    "title": "Scroll Gallery",
+    "title": "Poetry Gallery",
     "empty": "Complete reviews to see scrolls here",
-    "emptyTitle": "Your gallery awaits",
+    "emptyTitle": "Your Poetry Gallery awaits",
     "emptyDesc": "Complete a Living Scroll to display your first masterpiece here",
     "startScroll": "Start a scroll"
   },
@@ -323,7 +325,7 @@
     "loading": "Loading..."
   },
   "customPoems": {
-    "title": "Custom Poems",
+    "title": "My Poems",
     "newPoem": "New Poem",
     "cancel": "Cancel",
     "titlePlaceholder": "Poem title (start typing to search)",

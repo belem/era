@@ -9,11 +9,12 @@ export async function POST(request: Request) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const { studentId, poemId, customPoemId, rating } = await request.json() as {
+  const { studentId, poemId, customPoemId, rating, reviewMode } = await request.json() as {
     studentId: string;
     poemId?: string;
     customPoemId?: string;
     rating: Rating;
+    reviewMode?: string;
   };
 
   if (!poemId && !customPoemId) {
@@ -96,7 +97,19 @@ export async function POST(request: Request) {
     .from("poem_reviews")
     .upsert(reviewData, { onConflict: conflictKey });
 
-  const [eventResult, reviewResult] = await Promise.all([eventInsert, reviewUpsert]);
+  const scrollInsert = reviewMode === "scroll" && poemId
+    ? supabase.from("scroll_completions").insert({
+        student_id: studentId,
+        poem_id: poemId,
+        review_mode: "scroll",
+      })
+    : null;
+
+  const allOps = scrollInsert
+    ? [eventInsert, reviewUpsert, scrollInsert]
+    : [eventInsert, reviewUpsert];
+
+  const [eventResult, reviewResult] = await Promise.all(allOps);
 
   if (eventResult.error) {
     return NextResponse.json({ error: eventResult.error.message }, { status: 500 });

@@ -5,7 +5,7 @@
     "startReview": "开始复习",
     "empty": "今日无诗可复习",
     "listenMode": "听诵",
-    "customPoems": "诗心",
+    "customPoems": "拾诗",
     "seasonal": "季节限定"
   },
   "review": {
@@ -26,9 +26,11 @@
   },
   "nav": {
     "home": "晨光",
+    "listen": "听诵",
     "library": "诗库",
+    "customPoems": "拾诗",
     "fragments": "集雅",
-    "gallery": "卷轴馆",
+    "gallery": "诗廊",
     "profile": "我的"
   },
   "library": {
@@ -52,9 +54,9 @@
     "grade9": "九年级"
   },
   "gallery": {
-    "title": "卷轴馆",
+    "title": "诗廊",
     "empty": "完成复习后，卷轴将在此展示",
-    "emptyTitle": "你的卷轴馆等待着",
+    "emptyTitle": "你的诗廊等待着",
     "emptyDesc": "完成一次卷轴复习，你的首幅墨宝将在此展出",
     "startScroll": "开始卷轴"
   },
@@ -323,7 +325,7 @@
     "loading": "加载中..."
   },
   "customPoems": {
-    "title": "诗心",
+    "title": "拾诗",
     "newPoem": "添加诗词",
     "cancel": "取消",
     "titlePlaceholder": "诗名（输入可搜索）",
