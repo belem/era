@@ -28,7 +28,7 @@ function ReviewContent() {
   const [poems, setPoems] = useState<Poem[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [mode, setMode] = useState<"card" | "scroll">("card");
+  const [mode, setMode] = useState<"card" | "scroll">("scroll");
   const [sessionComplete, setSessionComplete] = useState(false);
   const [sessionRatings, setSessionRatings] = useState<SessionRating[]>([]);
   const [editions, setEditions] = useState<PoemEdition[]>([]);
@@ -143,7 +143,13 @@ function ReviewContent() {
     <>
       <AppHeader />
       <main className="flex-1 px-6 py-8 md:px-12 md:py-14 lg:px-[20%] xl:px-[28%]">
-        <div className="flex items-center justify-between mb-8">
+        {mode === "card" ? (
+          <CardReview poem={poem} onRate={handleRate} />
+        ) : (
+          <LivingScroll poem={poem} onComplete={handleRate} />
+        )}
+
+        <div className="flex items-center justify-between mt-6">
           <p className="text-[12px] text-text-tertiary tracking-tight">
             {currentIndex + 1} / {poems.length}
           </p>
@@ -171,14 +177,8 @@ function ReviewContent() {
           </div>
         </div>
 
-        {mode === "card" ? (
-          <CardReview poem={poem} onRate={handleRate} />
-        ) : (
-          <LivingScroll poem={poem} onComplete={handleRate} />
-        )}
-
         {editions.length > 0 && (
-          <div className="flex flex-wrap justify-center gap-x-3 gap-y-0.5 mt-4 max-w-[480px] mx-auto">
+          <div className="flex flex-wrap justify-center gap-x-3 gap-y-0.5 mt-3 max-w-[480px] mx-auto">
             {editions.map((ed, i) => (
               <span key={i} className="text-[11px] text-text-tertiary">
                 {formatEdition(ed)}
