@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 
 interface RatingButtonsProps {
@@ -8,6 +9,13 @@ interface RatingButtonsProps {
 
 export function RatingButtons({ onRate }: RatingButtonsProps) {
   const t = useTranslations("rating");
+  const [clicked, setClicked] = useState(false);
+
+  const handleClick = (rating: "forgot" | "hard" | "good" | "easy") => {
+    if (clicked) return;
+    setClicked(true);
+    onRate(rating);
+  };
 
   const ratings = [
     { key: "forgot" as const, label: t("forgot"), className: "" },
@@ -24,8 +32,9 @@ export function RatingButtons({ onRate }: RatingButtonsProps) {
       {ratings.map((r) => (
         <button
           key={r.key}
-          onClick={() => onRate(r.key)}
-          className={`flex-1 py-3 px-2 rounded-[var(--radius-md)] font-ui text-[14px] font-normal border transition-all cursor-pointer ${
+          onClick={() => handleClick(r.key)}
+          disabled={clicked}
+          className={`flex-1 py-3 px-2 rounded-[var(--radius-md)] font-ui text-[14px] font-normal border transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${
             r.className ||
             "border-border bg-transparent text-text-secondary hover:bg-bg-muted"
           }`}

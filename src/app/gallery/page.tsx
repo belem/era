@@ -35,14 +35,20 @@ export default function GalleryPage() {
     const supabase = createClient();
     supabase
       .from("scroll_completions")
-      .select("id, completed_at, poems(title, author, dynasty, content_lines)")
+      .select("id, completed_at, poem_id, poems(title, author, dynasty, content_lines)")
       .eq("student_id", student.id)
       .order("completed_at", { ascending: false })
       .then(({ data }) => {
         if (data) {
+          const seen = new Set<string>();
           setScrolls(
             data
               .filter((d: any) => d.poems)
+              .filter((d: any) => {
+                if (seen.has(d.poem_id)) return false;
+                seen.add(d.poem_id);
+                return true;
+              })
               .map((d: any) => {
                 const lines = d.poems.content_lines ?? [];
                 const firstLine = lines[0]?.chars?.map((c: any) => c.char).join("") ?? "";
@@ -109,7 +115,7 @@ export default function GalleryPage() {
               >
                 {/* ChopStamp */}
                 <div className="absolute top-2 right-2">
-                  <ChopStamp name={student?.name.charAt(0) ?? "学"} size={48} />
+                  <ChopStamp name={student?.name.slice(-1) ?? "学"} size={48} />
                 </div>
 
                 <h3 className="font-heading font-semibold text-[17px] text-text tracking-tight mb-0.5 pr-14">

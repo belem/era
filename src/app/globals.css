@@ -137,7 +137,7 @@ body {
   display: inline-flex;
   flex-direction: column-reverse;
   align-items: center;
-  width: 1.6em;
+  width: 1.5em;
   vertical-align: top;
 }
 
@@ -212,6 +212,25 @@ body {
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes poemIn {
+  from { opacity: 0; transform: translateX(14px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes poemOut {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(-14px); }
+}
+
+.animate-poem-in {
+  animation: poemIn 0.22s ease-out both;
+}
+
+.animate-poem-out {
+  animation: poemOut 0.18s ease-in both;
+  pointer-events: none;
 }
 
 @keyframes stampIn {

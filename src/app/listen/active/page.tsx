@@ -7,7 +7,6 @@ import { useStudent } from "@/hooks/useStudent";
 import { useTTS } from "@/hooks/useTTS";
 import { generatePlaylist, type PlaylistItem } from "@/lib/audio/playlist";
 import { AppHeader } from "@/components/AppHeader";
-import { ThemeToggle } from "@/components/ThemeToggle";
 import type { Rating } from "@/lib/srs/types";
 
 const RATING_TIMEOUT_MS = 10_000; // Auto-rate as "good" after 10s
@@ -229,7 +228,6 @@ export default function ActiveListenPage() {
   return (
     <>
       <AppHeader />
-      <ThemeToggle />
       <main className="flex-1 flex items-center justify-center px-6 py-20">
         <div className="max-w-[360px] mx-auto text-center space-y-8 w-full">
           <h1 className="font-heading font-semibold text-[28px] leading-tight tracking-tight">

@@ -11,28 +11,44 @@ interface LivingScrollProps {
   onComplete?: (rating: "forgot" | "hard" | "good" | "easy") => void;
 }
 
+const PUNCTUATION = /[，。！？、；：,\.!?;:]/;
+
 export function LivingScroll({ poem, onComplete }: LivingScrollProps) {
   const t = useTranslations("review");
   const allChars = poem.lines.flatMap((line) => line.chars);
   const [revealedCount, setRevealedCount] = useState(0);
   const [completed, setCompleted] = useState(false);
 
+  const advance = useCallback((nextCount: number) => {
+    setRevealedCount(nextCount);
+    if (nextCount >= allChars.length) {
+      setCompleted(true);
+      navigator.vibrate?.(50);
+    }
+  }, [allChars.length]);
+
   const revealNext = useCallback(() => {
     if (revealedCount < allChars.length) {
-      setRevealedCount((prev) => prev + 1);
-      if (revealedCount + 1 === allChars.length) {
-        setCompleted(true);
-        navigator.vibrate?.(50);
-      }
+      advance(revealedCount + 1);
     }
-  }, [revealedCount, allChars.length]);
+  }, [revealedCount, allChars.length, advance]);
+
+  const revealPhrase = useCallback(() => {
+    if (revealedCount >= allChars.length) return;
+    // Reveal chars until we hit (and include) the next punctuation mark
+    let next = revealedCount + 1;
+    while (next < allChars.length && !PUNCTUATION.test(allChars[next - 1].char)) {
+      next++;
+    }
+    advance(next);
+  }, [revealedCount, allChars, advance]);
 
   const handleRate = (rating: "forgot" | "hard" | "good" | "easy") => {
     onComplete?.(rating);
   };
 
   return (
-    <div className="max-w-[480px] mx-auto bg-bg-subtle rounded-[var(--radius-lg)] overflow-hidden px-2 pt-8 pb-8 text-center">
+    <div className="max-w-[480px] mx-auto overflow-hidden px-2 pt-8 pb-8 text-center">
       <h2 className="font-heading font-semibold text-[21px] tracking-tight mb-1">
         {poem.title}
       </h2>
@@ -80,12 +96,20 @@ export function LivingScroll({ poem, onComplete }: LivingScrollProps) {
         )}
 
         {!completed && (
-          <button
-            onClick={revealNext}
-            className="w-full py-3 bg-primary text-white rounded-[var(--radius-md)] font-ui text-[17px] font-normal cursor-pointer transition-colors hover:bg-primary-hover"
-          >
-            {t("revealChar")}
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={revealNext}
+              className="flex-1 py-3 bg-primary text-white rounded-[var(--radius-md)] font-ui text-[17px] font-normal cursor-pointer transition-colors hover:bg-primary-hover"
+            >
+              {t("revealChar")}
+            </button>
+            <button
+              onClick={revealPhrase}
+              className="flex-1 py-3 bg-bg-subtle text-text-secondary border border-border rounded-[var(--radius-md)] font-ui text-[17px] font-normal cursor-pointer transition-colors hover:bg-bg-muted"
+            >
+              {t("revealPhrase")}
+            </button>
+          </div>
         )}
       </div>
     </div>
