@@ -224,6 +224,27 @@ body {
   to   { opacity: 0; transform: translateX(-14px); }
 }
 
+@keyframes inkRingDraw {
+  0%   { stroke-dashoffset: 427; opacity: 0; }
+  20%  { opacity: 1; }
+  100% { stroke-dashoffset: 0; opacity: 0.7; }
+}
+
+@keyframes plumFadeIn {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.ink-ring {
+  stroke-dasharray: 427;
+  animation: inkRingDraw 0.5s ease-out forwards;
+}
+
+.plum-group {
+  opacity: 0;
+  animation: plumFadeIn 0.35s 0.12s ease-out forwards;
+}
+
 .animate-poem-in {
   animation: poemIn 0.22s ease-out both;
 }

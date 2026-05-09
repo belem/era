@@ -34,7 +34,7 @@ export function CardReview({ poem, onRate }: CardReviewProps) {
         <span>〔{poem.dynasty}〕{poem.author}</span>
         <button
           onClick={togglePinyin}
-          className="min-w-[32px] min-h-[32px] flex items-center justify-center text-text-tertiary hover:text-text-secondary transition-colors"
+          className="min-w-[32px] min-h-[32px] flex items-center ml-2 justify-center text-text-tertiary hover:text-text-secondary transition-colors"
           aria-label={showPinyin ? "Hide pinyin" : "Show pinyin"}
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -46,9 +46,9 @@ export function CardReview({ poem, onRate }: CardReviewProps) {
         <PlayButton poem={poem} />
       </div>
 
-      <div className="mb-8" />
+      <div className="mb-4" />
 
-      <div className="mb-8 leading-[2.4]">
+      <div className="mb-4 leading-[2.4]">
         <PoemBody poem={poem} />
       </div>
 

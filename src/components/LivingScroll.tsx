@@ -13,9 +13,18 @@ interface LivingScrollProps {
 
 const PUNCTUATION = /[，。！？、；：,\.!?;:]/;
 
+type FlatChar = { char: string; pinyin: string; isPunct?: boolean };
+
 export function LivingScroll({ poem, onComplete }: LivingScrollProps) {
   const t = useTranslations("review");
-  const allChars = poem.lines.flatMap((line) => line.chars);
+
+  // Flatten chars + punctuation into one sequence so revealPhrase can stop at punctuation
+  const allChars = poem.lines.flatMap((line): FlatChar[] => [
+    ...line.chars,
+    ...(line.punctuation
+      ? line.punctuation.split("").map((ch) => ({ char: ch, pinyin: "", isPunct: true }))
+      : []),
+  ]);
   const [revealedCount, setRevealedCount] = useState(0);
   const [completed, setCompleted] = useState(false);
 
@@ -35,7 +44,7 @@ export function LivingScroll({ poem, onComplete }: LivingScrollProps) {
 
   const revealPhrase = useCallback(() => {
     if (revealedCount >= allChars.length) return;
-    // Reveal chars until we hit (and include) the next punctuation mark
+    // Reveal chars until we've included the next punctuation char
     let next = revealedCount + 1;
     while (next < allChars.length && !PUNCTUATION.test(allChars[next - 1].char)) {
       next++;
@@ -60,6 +69,18 @@ export function LivingScroll({ poem, onComplete }: LivingScrollProps) {
         {allChars.map((c, i) => {
           const isRevealed = i < revealedCount;
           const isActive = i === revealedCount;
+          if (c.isPunct) {
+            return (
+              <div
+                key={i}
+                className={`aspect-square flex items-center justify-center font-poetry text-[20px] rounded-[var(--radius-sm)] transition-all duration-500 ${
+                  isRevealed ? "text-text-tertiary" : "text-transparent"
+                }`}
+              >
+                {isRevealed ? c.char : "　"}
+              </div>
+            );
+          }
           return (
             <button
               key={i}
@@ -99,13 +120,13 @@ export function LivingScroll({ poem, onComplete }: LivingScrollProps) {
           <div className="flex gap-2">
             <button
               onClick={revealNext}
-              className="flex-1 py-3 bg-primary text-white rounded-[var(--radius-md)] font-ui text-[17px] font-normal cursor-pointer transition-colors hover:bg-primary-hover"
+              className="flex-1 py-2 bg-primary text-white rounded-[var(--radius-md)] font-ui text-[17px] font-normal cursor-pointer transition-colors hover:bg-primary-hover"
             >
               {t("revealChar")}
             </button>
             <button
               onClick={revealPhrase}
-              className="flex-1 py-3 bg-bg-subtle text-text-secondary border border-border rounded-[var(--radius-md)] font-ui text-[17px] font-normal cursor-pointer transition-colors hover:bg-bg-muted"
+              className="flex-1 py-2 bg-bg-subtle text-text-secondary border border-border rounded-[var(--radius-md)] font-ui text-[17px] font-normal cursor-pointer transition-colors hover:bg-bg-muted"
             >
               {t("revealPhrase")}
             </button>

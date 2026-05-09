@@ -94,19 +94,19 @@ function StudentCard() {
 
         <div className="grid grid-cols-3 gap-3">
           <div>
+            <label className="text-[12px] text-text-secondary block mb-1">{t("edition")}</label>
+            <select
+              value={edition}
+              onChange={(e) => setEdition(e.target.value)}
+              className="w-full border border-border rounded-[var(--radius-md)] bg-bg px-3 py-2.5 text-[14px] text-text focus:outline-none focus:ring-2 focus:ring-primary"
+            >
+              {EDITIONS.map((ed) => (
+                <option key={ed} value={ed}>{ed}版</option>
+              ))}
+            </select>
+          </div>
+          <div>
             <label className="text-[12px] text-text-secondary block mb-1">{t("schoolSystem")}</label>
-            <div>
-              <label className="text-[12px] text-text-secondary block mb-1">{t("edition")}</label>
-              <select
-                value={edition}
-                onChange={(e) => setEdition(e.target.value)}
-                className="w-full border border-border rounded-[var(--radius-md)] bg-bg px-3 py-2.5 text-[14px] text-text focus:outline-none focus:ring-2 focus:ring-primary"
-              >
-                {EDITIONS.map((ed) => (
-                  <option key={ed} value={ed}>{ed}版</option>
-                ))}
-              </select>
-            </div>
             <select
               value={schoolSystem}
               onChange={(e) => {
@@ -132,6 +132,7 @@ function StudentCard() {
               ))}
             </select>
           </div>
+
         </div>
 
         {!showResetChoice ? (
@@ -207,7 +208,7 @@ function StudentCard() {
         </div>
         <button
           onClick={() => setEditing(true)}
-          className="min-w-[54px] min-h-[44px] flex items-center justify-center gap-1.5 px-3 rounded-[var(--radius-pill)] border border-border text-[14px] text-primary hover:bg-primary hover:text-white transition-colors"
+          className="min-w-[44px] min-h-[44px] flex items-center justify-center gap-1.5 px-3 rounded-[var(--radius-pill)] border border-border text-[14px] text-primary hover:bg-primary hover:text-white transition-colors"
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />

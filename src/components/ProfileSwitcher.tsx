@@ -48,17 +48,17 @@ export function ProfileSwitcher() {
       {isOpen && (
         <div className="absolute right-0 top-[calc(100%+8px)] min-w-[160px] bg-bg-subtle rounded-[var(--radius-lg)] shadow-lg overflow-hidden border border-border-subtle">
           {students.map((s) => (
-            <button
+            <div
               key={s.id}
-              onClick={() => {
-                switchStudent(s.id);
-                setIsOpen(false);
-              }}
-              className={`w-full px-4 py-2.5 text-left text-[14px] transition-colors ${
+              className={`w-full px-4 py-2.5 text-left text-[14px] transition-colors cursor-pointer ${
                 s.id === student.id
                   ? "text-primary font-medium"
                   : "text-text hover:bg-bg-muted"
               }`}
+              onClick={() => {
+                switchStudent(s.id);
+                setIsOpen(false);
+              }}
             >
               <div className="flex items-center gap-2.5">
                 <Link
@@ -74,11 +74,11 @@ export function ProfileSwitcher() {
                     {s.edition} · {s.school_system === "高中" ? "高中" : s.school_system}
                   </div>
                   <div className="text-[11px] text-text-secondary">
-                    {s.grade ? ` · ${"一二三四五六七八九".at(Number(s.grade) - 1) ?? s.grade}年级` : ""}
+                    {s.grade ? `${"一二三四五六七八九".at(Number(s.grade) - 1) ?? s.grade}年级` : ""}
                   </div>
                 </div>
               </div>
-            </button>
+            </div>
           ))}
         </div>
       )}

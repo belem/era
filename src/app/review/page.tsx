@@ -146,6 +146,34 @@ function ReviewContent() {
   return (
     <>
       <AppHeader />
+
+      {/* Chinese ink transition overlay */}
+      {exiting && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
+          <div className="absolute inset-0 bg-bg/60" />
+          <svg width="200" height="200" viewBox="0 0 200 200" className="relative">
+            {/* Ensō — calligraphy ink ring */}
+            <circle
+              cx="100" cy="100" r="68"
+              fill="none"
+              stroke="var(--primary)"
+              strokeWidth="5"
+              strokeLinecap="round"
+              className="ink-ring"
+            />
+            {/* 梅花 plum blossom — 5 petals + golden center */}
+            <g className="plum-group">
+              <ellipse cx="100" cy="82" rx="9" ry="13" fill="var(--primary)" opacity="0.85" />
+              <ellipse cx="100" cy="82" rx="9" ry="13" fill="var(--primary)" opacity="0.85" transform="rotate(72 100 100)" />
+              <ellipse cx="100" cy="82" rx="9" ry="13" fill="var(--primary)" opacity="0.85" transform="rotate(144 100 100)" />
+              <ellipse cx="100" cy="82" rx="9" ry="13" fill="var(--primary)" opacity="0.85" transform="rotate(216 100 100)" />
+              <ellipse cx="100" cy="82" rx="9" ry="13" fill="var(--primary)" opacity="0.85" transform="rotate(288 100 100)" />
+              <circle cx="100" cy="100" r="7" fill="#f59e0b" opacity="0.95" />
+            </g>
+          </svg>
+        </div>
+      )}
+
       <main className="flex-1 px-6 py-6 md:px-12 md:py-14 lg:px-[20%] xl:px-[28%]">
         <div key={currentIndex} className={exiting ? "animate-poem-out" : "animate-poem-in"}>
           {mode === "card" ? (
