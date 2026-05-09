@@ -2,13 +2,11 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
 import { useStudent } from "@/hooks/useStudent";
 import { nameInitial } from "@/lib/format";
 
 export function ProfileSwitcher() {
   const { student, students, switchStudent, loading } = useStudent();
-  const t = useTranslations("nav");
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -58,36 +56,30 @@ export function ProfileSwitcher() {
               }}
               className={`w-full px-4 py-2.5 text-left text-[14px] transition-colors ${
                 s.id === student.id
-                  ? "bg-primary/10 text-primary font-medium"
+                  ? "text-primary font-medium"
                   : "text-text hover:bg-bg-muted"
               }`}
             >
               <div className="flex items-center gap-2.5">
-                <div className="w-6 h-6 rounded-full bg-primary/20 text-primary flex items-center justify-center text-[11px] font-medium">
+                <Link
+                  href="/profile"
+                  onClick={(e) => { e.stopPropagation(); setIsOpen(false); }}
+                  className="w-6 h-6 rounded-full bg-primary/20 text-primary flex items-center justify-center text-[11px] font-medium hover:opacity-70 transition-opacity shrink-0"
+                >
                   {nameInitial(s.name)}
-                </div>
+                </Link>
                 <div>
                   <div className="leading-tight">{s.name}</div>
                   <div className="text-[11px] text-text-secondary">
-                    {s.edition}版 · {s.school_system === "高中" ? "高中" : `${s.school_system}学制`}{s.grade ? ` · ${s.grade}年级` : ""}
+                    {s.edition} · {s.school_system === "高中" ? "高中" : s.school_system}
+                  </div>
+                  <div className="text-[11px] text-text-secondary">
+                    {s.grade ? ` · ${"一二三四五六七八九".at(Number(s.grade) - 1) ?? s.grade}年级` : ""}
                   </div>
                 </div>
               </div>
             </button>
           ))}
-          <div className="border-t border-border-subtle">
-            <Link
-              href="/profile"
-              onClick={() => setIsOpen(false)}
-              className="flex items-center gap-2 px-4 py-2.5 text-[14px] text-text-secondary hover:bg-bg-muted hover:text-text transition-colors"
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                <circle cx="12" cy="7" r="4" />
-              </svg>
-              {t("profile")}
-            </Link>
-          </div>
         </div>
       )}
     </div>

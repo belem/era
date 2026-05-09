@@ -84,29 +84,26 @@ function ReviewContent() {
       .then(({ data }) => setEditions(data ?? []));
   }, [poem?.id]);
 
-  const handleRate = useCallback((rating: "forgot" | "hard" | "good" | "easy") => {
+  const handleRate = useCallback(async (rating: "forgot" | "hard" | "good" | "easy") => {
     if (exiting) return;
+    setExiting(true);
     if (student && poem) {
       setSessionRatings((prev) => [...prev, { poemId: poem.id, rating }]);
       const scheduleBody: Record<string, string> = { studentId: student.id, rating, reviewMode: mode };
       if (poem.isCustom) scheduleBody.customPoemId = poem.id;
       else scheduleBody.poemId = poem.id;
-      // Fire-and-forget — don't block UI on network
-      fetch("/api/schedule", {
+      await fetch("/api/schedule", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(scheduleBody),
-      }).catch(() => {});
+      });
     }
-    setExiting(true);
-    setTimeout(() => {
-      setExiting(false);
-      if (currentIndex < poems.length - 1) {
-        setCurrentIndex((prev) => prev + 1);
-      } else {
-        setSessionComplete(true);
-      }
-    }, 180);
+    setExiting(false);
+    if (currentIndex < poems.length - 1) {
+      setCurrentIndex((prev) => prev + 1);
+    } else {
+      setSessionComplete(true);
+    }
   }, [student, poem, currentIndex, poems.length, exiting]);
 
   if (loading) {
