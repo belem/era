@@ -14,7 +14,7 @@ export async function POST(request: Request) {
 
   // Fetch all badge definitions and existing unlocks
   const [{ data: badges }, { data: unlocked }] = await Promise.all([
-    supabase.from("badges").select("*"),
+    supabase.from("badges").select("id, name, icon, criteria_type, criteria_value"),
     supabase
       .from("badge_unlocks")
       .select("badge_id")

@@ -18,7 +18,7 @@ export async function GET(request: Request) {
 
   let query = supabase
     .from("fragments")
-    .select("*")
+    .select("id, deck_id, student_id, front, back, tags, created_at")
     .eq("student_id", studentId)
     .order("created_at", { ascending: false });
 

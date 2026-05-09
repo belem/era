@@ -56,8 +56,17 @@ export function LivingScroll({ poem, onComplete }: LivingScrollProps) {
     onComplete?.(rating);
   };
 
+  // Show 2 poem lines per grid row (couplet style)
+  const lineWidth = Math.max(
+    ...poem.lines.map((l) => l.chars.length + (l.punctuation?.length ?? 0)),
+    1
+  );
+  const cols = lineWidth * 2;
+  // Scale font down for wider grids to fit the container
+  const charFontSize = cols <= 8 ? 24 : cols <= 12 ? 18 : 14;
+
   return (
-    <div className="max-w-[480px] mx-auto overflow-hidden px-2 pt-8 pb-8 text-center">
+    <div className="max-w-[480px] mx-auto overflow-hidden px-2 pt-2 pb-4 text-center">
       <h2 className="font-heading font-semibold text-[21px] tracking-tight mb-1">
         {poem.title}
       </h2>
@@ -65,7 +74,10 @@ export function LivingScroll({ poem, onComplete }: LivingScrollProps) {
         〔{poem.dynasty}〕{poem.author}
       </p>
 
-      <div className="grid grid-cols-5 gap-1.5 max-w-[280px] mx-auto mb-6">
+      <div
+        className="grid gap-1 mx-auto mb-6"
+        style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`, maxWidth: `${cols * 40}px` }}
+      >
         {allChars.map((c, i) => {
           const isRevealed = i < revealedCount;
           const isActive = i === revealedCount;
@@ -73,7 +85,8 @@ export function LivingScroll({ poem, onComplete }: LivingScrollProps) {
             return (
               <div
                 key={i}
-                className={`aspect-square flex items-center justify-center font-poetry text-[20px] rounded-[var(--radius-sm)] transition-all duration-500 ${
+                style={{ fontSize: `${charFontSize}px` }}
+                className={`aspect-square flex items-center justify-center font-poetry rounded-[var(--radius-sm)] transition-all duration-500 ${
                   isRevealed ? "text-text-tertiary" : "text-transparent"
                 }`}
               >
@@ -86,7 +99,8 @@ export function LivingScroll({ poem, onComplete }: LivingScrollProps) {
               key={i}
               onClick={revealNext}
               disabled={i !== revealedCount}
-              className={`aspect-square flex items-center justify-center font-poetry text-[26px] rounded-[var(--radius-sm)] transition-all duration-500 ${
+              style={{ fontSize: `${charFontSize}px` }}
+              className={`aspect-square flex items-center justify-center font-poetry rounded-[var(--radius-sm)] transition-all duration-500 ${
                 isRevealed
                   ? "bg-bg text-text"
                   : isActive

@@ -15,7 +15,7 @@ export async function POST(request: Request) {
   // Find invitation
   const { data: invitation, error: invError } = await supabase
     .from("guardian_invitations")
-    .select("*")
+    .select("accepted_at, expires_at, student_id, invited_by")
     .eq("token", token)
     .single();
 

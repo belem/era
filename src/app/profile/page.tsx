@@ -235,7 +235,7 @@ export default function ProfilePage() {
     const supabase = createClient();
 
     Promise.all([
-      supabase.from("badges").select("*"),
+      supabase.from("badges").select("id, icon"),
       supabase.from("badge_unlocks").select("badge_id").eq("student_id", student.id),
     ]).then(([{ data: allBadges }, { data: unlocks }]) => {
       const unlockedIds = new Set(unlocks?.map((u) => u.badge_id) ?? []);

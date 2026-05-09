@@ -31,7 +31,7 @@ export async function POST(request: Request) {
 
   const { data: existing } = await supabase
     .from("fragment_reviews")
-    .select("*")
+    .select("repetitions, ease_factor, interval_days, leitner_box, fsrs_stability, fsrs_difficulty, fsrs_reps, last_reviewed_at")
     .eq("student_id", studentId)
     .eq("fragment_id", fragmentId)
     .single();

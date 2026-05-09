@@ -16,7 +16,7 @@ export async function GET(request: Request) {
 
   const { data, error } = await supabase
     .from("custom_poems")
-    .select("*")
+    .select("id, title, author, dynasty, content_lines, created_at")
     .eq("student_id", studentId)
     .order("created_at", { ascending: false });
 

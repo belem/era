@@ -26,7 +26,7 @@ export function CardReview({ poem, onRate }: CardReviewProps) {
   };
 
   return (
-    <div className="max-w-[480px] mx-auto overflow-hidden px-2 pt-8 pb-8 text-center">
+    <div className="max-w-[480px] mx-auto overflow-hidden px-2 pt-2 pb-4 text-center">
       <h2 className="font-heading font-semibold text-[21px] tracking-tight mb-1">
         {poem.title}
       </h2>
