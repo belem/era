@@ -72,11 +72,11 @@ export default function GalleryPage() {
         </h1>
 
         {loading ? (
-          <div className="flex gap-3 overflow-hidden md:grid md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-2 lg:grid-cols-3">
             {[1, 2, 3].map((i) => (
               <div
                 key={i}
-                className="min-w-[280px] h-[160px] bg-bg-subtle rounded-[var(--radius-lg)] animate-pulse flex-shrink-0"
+                className="h-[160px] bg-bg-subtle rounded-[var(--radius-lg)] animate-pulse"
               />
             ))}
           </div>
@@ -99,11 +99,11 @@ export default function GalleryPage() {
           </div>
         ) : (
           /* Gallery cards */
-          <div className="flex gap-3 overflow-x-auto snap-x snap-mandatory pb-4 -mx-6 px-6 md:mx-0 md:px-0 md:grid md:grid-cols-2 md:overflow-visible md:snap-none lg:grid-cols-3">
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-2 lg:grid-cols-3">
             {scrolls.map((scroll) => (
               <div
                 key={scroll.id}
-                className="min-w-[280px] snap-start bg-bg-subtle rounded-[var(--radius-lg)] p-4 relative flex-shrink-0"
+                className="bg-bg-subtle rounded-[var(--radius-lg)] p-4 relative"
                 role="listitem"
                 aria-label={scroll.poem.title}
               >
