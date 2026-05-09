@@ -361,7 +361,7 @@ Visually distinct from review queue. This is a cultural gift, not a task.
 - Container: no card background. Thin top/bottom borders in `--border-subtle` for separation.
 - Row 1: Solar term name in small caps (13px, uppercase, `--text-secondary`, 0.08em tracking)
 - Row 2: poem title in font-heading (17px, Noto Serif SC 600) + author in `--text-secondary` + chevron-right
-- Row 3: first line of poem in font-poetry (KingHwa_OldSong, 17px, `--text-secondary`)
+- Row 3: first line of poem in font-poetry (思源屏显臻宋, 17px, `--text-secondary`)
 - Tap behavior: navigates to `/review?id=[poem_id]` for a single-poem read (not a review with ratings)
 - Total height: ~96px. Never pushes CTA below fold.
 
@@ -375,7 +375,7 @@ Swipeable horizontal card layout. Each card:
 - Container: `bg-bg-subtle`, 12px radius, `p-4` (16px), relative positioned
 - Title: font-heading (Noto Serif SC 600), 17px, `--text`
 - Metadata: author + dynasty, 14px, `--text-secondary`
-- Poem text: font-poetry (KingHwa_OldSong 400), 16px, `--text-secondary`, 2 lines max (`line-clamp-2`)
+- Poem text: font-poetry (思源屏显臻宋 400), 16px, `--text-secondary`, 2 lines max (`line-clamp-2`)
 - Completion date: 12px, `--text-tertiary`, bottom of card
 - ChopStamp: 48px variant (smaller than standard 72px), positioned absolute `top-8 right-8`, student name, -5deg rotation
 - Card min-height: 160px

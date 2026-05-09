@@ -168,7 +168,7 @@ function ReviewContent() {
               <ellipse cx="100" cy="82" rx="9" ry="13" fill="var(--primary)" opacity="0.85" transform="rotate(144 100 100)" />
               <ellipse cx="100" cy="82" rx="9" ry="13" fill="var(--primary)" opacity="0.85" transform="rotate(216 100 100)" />
               <ellipse cx="100" cy="82" rx="9" ry="13" fill="var(--primary)" opacity="0.85" transform="rotate(288 100 100)" />
-              <circle cx="100" cy="100" r="7" fill="#f59e0b" opacity="0.95" />
+              <circle cx="100" cy="100" r="7" fill="var(--primary)" opacity="0.95" />
             </g>
           </svg>
         </div>
