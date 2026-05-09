@@ -7,7 +7,6 @@ import { createClient } from "@/lib/supabase/client";
 import { useStudent } from "@/hooks/useStudent";
 import { AppHeader } from "@/components/AppHeader";
 import { TabBar } from "@/components/TabBar";
-import { ThemeToggle } from "@/components/ThemeToggle";
 import { nameInitial, maxGradeForSchoolSystem } from "@/lib/format";
 
 interface Badge {
@@ -252,7 +251,6 @@ export default function ProfilePage() {
   return (
     <>
       <AppHeader />
-      <ThemeToggle />
       <main className="flex-1 px-6 py-10 md:px-12 md:py-14 lg:px-20 xl:px-32">
         <div className="flex items-center justify-between mb-8">
           <h1 className="font-heading font-semibold text-[28px] leading-tight tracking-tight">

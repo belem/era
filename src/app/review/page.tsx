@@ -7,7 +7,6 @@ import { useReviewQueue } from "@/hooks/useReviewQueue";
 import { useStudent } from "@/hooks/useStudent";
 import { createClient } from "@/lib/supabase/client";
 import { AppHeader } from "@/components/AppHeader";
-import { ThemeToggle } from "@/components/ThemeToggle";
 import { CardReview } from "@/components/CardReview";
 import { LivingScroll } from "@/components/LivingScroll";
 import { SessionSummary } from "@/components/SessionSummary";
@@ -107,7 +106,6 @@ function ReviewContent() {
     return (
       <>
         <AppHeader />
-        <ThemeToggle />
         <main className="flex-1 flex items-center justify-center px-6 py-20">
           <div className="text-text-tertiary text-[14px]">Loading...</div>
         </main>
@@ -119,7 +117,6 @@ function ReviewContent() {
     return (
       <>
         <AppHeader />
-        <ThemeToggle />
         <main className="flex-1 flex items-center justify-center px-6 py-20 text-center">
           <p className="text-text-tertiary text-[14px]">No poems to review</p>
         </main>
@@ -145,7 +142,6 @@ function ReviewContent() {
   return (
     <>
       <AppHeader />
-      <ThemeToggle />
       <main className="flex-1 px-6 py-8 md:px-12 md:py-14 lg:px-[20%] xl:px-[28%]">
         <div className="flex items-center justify-between mb-8">
           <p className="text-[12px] text-text-tertiary tracking-tight">

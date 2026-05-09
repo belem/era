@@ -5,7 +5,6 @@ import { useTranslations } from "next-intl";
 import { useStudent } from "@/hooks/useStudent";
 import { AppHeader } from "@/components/AppHeader";
 import { TabBar } from "@/components/TabBar";
-import { ThemeToggle } from "@/components/ThemeToggle";
 
 interface AnalyticsData {
   heatmap: { date: string; count: number }[];
@@ -121,7 +120,6 @@ export default function AnalyticsPage() {
   return (
     <>
       <AppHeader />
-      <ThemeToggle />
       <main className="flex-1 px-6 py-10 md:px-12 md:py-14 lg:px-20 xl:px-32">
         <h1 className="font-heading font-semibold text-[28px] leading-tight tracking-tight mb-8">
           {t("title")}

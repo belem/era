@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { useStudent } from "@/hooks/useStudent";
 import { usePoetrySearch } from "@/hooks/usePoetrySearch";
 import { AppHeader } from "@/components/AppHeader";
+import { TabBar } from "@/components/TabBar";
 
 interface CustomPoem {
   id: string;
@@ -280,6 +281,7 @@ export default function CustomPoemsPage() {
           </div>
         )}
       </main>
+      <TabBar />
     </>
   );
 }

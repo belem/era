@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useStudent } from "@/hooks/useStudent";
 import { AppHeader } from "@/components/AppHeader";
-import { ThemeToggle } from "@/components/ThemeToggle";
+import { TabBar } from "@/components/TabBar";
 import type { Fragment } from "@/types/fragment";
 
 export default function DeckDetailPage({ params }: { params: Promise<{ deckId: string }> }) {
@@ -70,7 +70,6 @@ export default function DeckDetailPage({ params }: { params: Promise<{ deckId: s
   return (
     <>
       <AppHeader />
-      <ThemeToggle />
       <main className="flex-1 px-6 py-10 md:px-12 md:py-14 lg:px-20 xl:px-32">
         <div className="flex items-center gap-3 mb-8">
           <Link href="/fragments" className="text-text-tertiary hover:text-text transition-colors">
@@ -198,6 +197,7 @@ export default function DeckDetailPage({ params }: { params: Promise<{ deckId: s
           </div>
         )}
       </main>
+      <TabBar />
     </>
   );
 }

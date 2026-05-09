@@ -7,7 +7,7 @@ import { useStudent } from "@/hooks/useStudent";
 import { useTTS } from "@/hooks/useTTS";
 import { generatePlaylist, expandPlaylist, type PlaylistItem } from "@/lib/audio/playlist";
 import { AppHeader } from "@/components/AppHeader";
-import { ThemeToggle } from "@/components/ThemeToggle";
+import { TabBar } from "@/components/TabBar";
 
 export default function PassiveListenPage() {
   const t = useTranslations("listen");
@@ -144,7 +144,6 @@ export default function PassiveListenPage() {
   return (
     <>
       <AppHeader />
-      <ThemeToggle />
       <main className="flex-1 flex items-center justify-center px-6 py-20">
         <div className="max-w-[360px] mx-auto text-center space-y-8">
           <h1 className="font-heading font-semibold text-[28px] leading-tight tracking-tight">
@@ -222,6 +221,8 @@ export default function PassiveListenPage() {
           )}
         </div>
       </main>
+
+      <TabBar />
 
       <style jsx global>{`
         @keyframes barBounce {
