@@ -74,9 +74,7 @@ export function AppHeader() {
             {ta("title")}
           </Link>
         )}
-        <div className="hidden md:block">
-          <ThemeToggle inline />
-        </div>
+        <ThemeToggle />
         <ProfileSwitcher />
       </div>
     </header>

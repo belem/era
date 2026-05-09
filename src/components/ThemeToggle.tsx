@@ -20,11 +20,7 @@ function IconMoon({ className }: { className?: string }) {
   );
 }
 
-interface ThemeToggleProps {
-  inline?: boolean;
-}
-
-export function ThemeToggle({ inline = false }: ThemeToggleProps) {
+export function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
@@ -33,9 +29,7 @@ export function ThemeToggle({ inline = false }: ThemeToggleProps) {
   if (!mounted) {
     return (
       <button
-        className={`min-w-[44px] min-h-[44px] rounded-full flex items-center justify-center opacity-0 ${
-          inline ? "" : "fixed top-1/2 -translate-y-1/2 right-14 z-50 md:hidden"
-        }`}
+        className="min-w-[44px] min-h-[44px] rounded-full flex items-center justify-center opacity-0"
         aria-label="Toggle theme"
       />
     );
@@ -44,11 +38,7 @@ export function ThemeToggle({ inline = false }: ThemeToggleProps) {
   return (
     <button
       onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
-      className={`min-w-[44px] min-h-[44px] rounded-full flex items-center justify-center transition-colors ${
-        inline
-          ? "text-text-secondary hover:text-text"
-          : "fixed right-14 top-1/2 -translate-y-1/2 z-50 text-text-secondary hover:text-text md:hidden"
-      }`}
+      className="min-w-[44px] min-h-[44px] rounded-full flex items-center justify-center transition-colors text-text-secondary hover:text-text"
       aria-label={`Switch to ${resolvedTheme === "dark" ? "light" : "dark"} mode`}
     >
       {resolvedTheme === "dark" ? <IconSun /> : <IconMoon />}
