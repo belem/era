@@ -89,7 +89,8 @@ function ReviewContent() {
       const scheduleBody: Record<string, string> = { studentId: student.id, rating, reviewMode: mode };
       if (poem.isCustom) scheduleBody.customPoemId = poem.id;
       else scheduleBody.poemId = poem.id;
-      await fetch("/api/schedule", {
+      // Fire-and-forget — don't block UI on network
+      fetch("/api/schedule", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(scheduleBody),
@@ -142,14 +143,14 @@ function ReviewContent() {
   return (
     <>
       <AppHeader />
-      <main className="flex-1 px-6 py-8 md:px-12 md:py-14 lg:px-[20%] xl:px-[28%]">
+      <main className="flex-1 px-6 py-6 md:px-12 md:py-14 lg:px-[20%] xl:px-[28%]">
         {mode === "card" ? (
           <CardReview poem={poem} onRate={handleRate} />
         ) : (
           <LivingScroll poem={poem} onComplete={handleRate} />
         )}
 
-        <div className="flex items-center justify-between mt-6">
+        <div className="flex items-center justify-between mt-4 mb-4">
           <p className="text-[12px] text-text-tertiary tracking-tight">
             {currentIndex + 1} / {poems.length}
           </p>

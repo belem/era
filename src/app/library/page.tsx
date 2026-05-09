@@ -77,7 +77,7 @@ export default function LibraryPage() {
     const supabase = createClient();
     supabase
       .from("poems")
-      .select("*, poem_editions(edition, school_system, grade, semester, page)")
+      .select("id, title, author, dynasty, poem_editions(edition, school_system, grade, semester, page)")
       .then(({ data }) => {
         if (data) {
           const mapped: PoemWithEditions[] = data.map((p: any) => ({
@@ -85,7 +85,7 @@ export default function LibraryPage() {
             title: p.title,
             author: p.author,
             dynasty: p.dynasty,
-            lines: p.content_lines,
+            lines: [],
             editions: (p.poem_editions ?? []).map((e: any) => ({
               edition: e.edition,
               school_system: e.school_system,

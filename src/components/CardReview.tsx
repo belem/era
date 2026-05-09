@@ -26,7 +26,7 @@ export function CardReview({ poem, onRate }: CardReviewProps) {
   };
 
   return (
-    <div className="max-w-[480px] mx-auto bg-bg-subtle rounded-[var(--radius-lg)] overflow-hidden px-2 pt-10 pb-8 text-center relative">
+    <div className="max-w-[480px] mx-auto bg-bg-subtle rounded-[var(--radius-lg)] overflow-hidden px-2 pt-8 pb-8 text-center relative">
       <div className="absolute top-4 right-4 flex items-center gap-1">
         <button
           onClick={togglePinyin}

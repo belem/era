@@ -32,15 +32,15 @@ export function LivingScroll({ poem, onComplete }: LivingScrollProps) {
   };
 
   return (
-    <div className="max-w-[480px] mx-auto bg-bg-subtle rounded-[var(--radius-lg)] overflow-hidden px-2 pt-10 pb-8 text-center">
+    <div className="max-w-[480px] mx-auto bg-bg-subtle rounded-[var(--radius-lg)] overflow-hidden px-2 pt-8 pb-8 text-center">
       <h2 className="font-heading font-semibold text-[21px] tracking-tight mb-1">
         {poem.title}
       </h2>
-      <p className="text-[14px] text-text-tertiary tracking-tight mb-8">
+      <p className="text-[14px] text-text-tertiary tracking-tight mb-6">
         〔{poem.dynasty}〕{poem.author}
       </p>
 
-      <div className="grid grid-cols-5 gap-1.5 max-w-[280px] mx-auto mb-8">
+      <div className="grid grid-cols-5 gap-1.5 max-w-[280px] mx-auto mb-6">
         {allChars.map((c, i) => {
           const isRevealed = i < revealedCount;
           const isActive = i === revealedCount;
