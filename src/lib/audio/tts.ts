@@ -93,7 +93,8 @@ function createTransformersEngine(): TTSEngine {
         loading = true;
         try {
           const [{ pipeline: createPipeline, env }, domain] = await Promise.all([
-            import("@xenova/transformers" as string),
+            // @ts-ignore — @xenova/transformers is loaded at runtime from CDN, not bundled
+            import(/* webpackIgnore: true */ "@xenova/transformers"),
             getHuggingFaceDomain(),
           ]);
 
