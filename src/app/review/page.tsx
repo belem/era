@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useState, useEffect, useCallback } from "react";
+import { Suspense, useState, useEffect, useCallback, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useReviewQueue } from "@/hooks/useReviewQueue";
@@ -32,7 +32,14 @@ function ReviewContent() {
   const [sessionComplete, setSessionComplete] = useState(false);
   const [sessionRatings, setSessionRatings] = useState<SessionRating[]>([]);
   const [editions, setEditions] = useState<PoemEdition[]>([]);
+  const exitingRef = useRef(false);
   const [exiting, setExiting] = useState(false);
+
+  // Read mode from URL param
+  useEffect(() => {
+    const urlMode = searchParams.get("mode");
+    if (urlMode === "card" || urlMode === "scroll") setMode(urlMode);
+  }, []);
 
   useEffect(() => {
     if (queueLoading) return;
@@ -85,7 +92,8 @@ function ReviewContent() {
   }, [poem?.id]);
 
   const handleRate = useCallback(async (rating: "forgot" | "hard" | "good" | "easy") => {
-    if (exiting) return;
+    if (exitingRef.current) return;
+    exitingRef.current = true;
     setExiting(true);
     if (student && poem) {
       setSessionRatings((prev) => [...prev, { poemId: poem.id, rating }]);
@@ -98,20 +106,21 @@ function ReviewContent() {
         body: JSON.stringify(scheduleBody),
       });
     }
+    exitingRef.current = false;
     setExiting(false);
     if (currentIndex < poems.length - 1) {
       setCurrentIndex((prev) => prev + 1);
     } else {
       setSessionComplete(true);
     }
-  }, [student, poem, currentIndex, poems.length, exiting]);
+  }, [student, poem, currentIndex, poems.length, mode]);
 
   if (loading) {
     return (
       <>
         <AppHeader />
         <main className="flex-1 flex items-center justify-center px-6 py-20">
-          <div className="text-text-tertiary text-[14px]">Loading...</div>
+          <div className="text-text-tertiary text-[14px]">{t("loading")}</div>
         </main>
       </>
     );
@@ -122,7 +131,7 @@ function ReviewContent() {
       <>
         <AppHeader />
         <main className="flex-1 flex items-center justify-center px-6 py-20 text-center">
-          <p className="text-text-tertiary text-[14px]">No poems to review</p>
+          <p className="text-text-tertiary text-[14px]">{t("noPoems")}</p>
         </main>
       </>
     );

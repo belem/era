@@ -14,6 +14,14 @@ export async function POST(request: Request) {
   const body = await request.json();
 
   if (body.action === "start") {
+    // Verify student belongs to this user (RLS-enforced)
+    const { data: studentCheck } = await supabase
+      .from("students")
+      .select("id")
+      .eq("id", body.studentId)
+      .single();
+    if (!studentCheck) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+
     const { data, error } = await supabase
       .from("listening_sessions")
       .insert({
@@ -28,6 +36,14 @@ export async function POST(request: Request) {
   }
 
   if (body.action === "end") {
+    // Verify session belongs to this user via student ownership (RLS-enforced)
+    const { data: sessionCheck } = await supabase
+      .from("listening_sessions")
+      .select("id, students!inner(id)")
+      .eq("id", body.sessionId)
+      .single();
+    if (!sessionCheck) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+
     const { error } = await supabase
       .from("listening_sessions")
       .update({

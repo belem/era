@@ -20,7 +20,7 @@ export function useFragmentQueue(deckId?: string) {
 
     let query = supabase
       .from("fragment_reviews")
-      .select("*, fragments(*)")
+      .select("*, fragments!inner(*)")
       .eq("student_id", student.id)
       .lte("next_review_at", new Date().toISOString())
       .order("next_review_at", { ascending: true });
@@ -44,9 +44,8 @@ export function useFragmentQueue(deckId?: string) {
           }));
         setFragments(mapped);
       }
-      setLoading(false);
-    });
-  }, [student, deckId]);
+    }).catch(() => { /* network error — keep empty queue */ }).finally(() => setLoading(false));
+  }, [student?.id, deckId]);
 
   return { fragments, loading };
 }

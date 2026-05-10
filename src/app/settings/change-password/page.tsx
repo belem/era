@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { AppHeader } from "@/components/AppHeader";
+import { Spinner } from "@/components/Spinner";
 
 export default function ChangePasswordPage() {
   const t = useTranslations("auth");
@@ -84,7 +85,7 @@ export default function ChangePasswordPage() {
               disabled={loading}
               className="w-full bg-primary text-white rounded-[var(--radius-pill)] py-3 font-medium hover:bg-primary-hover transition-colors disabled:opacity-50"
             >
-              {loading ? "..." : t("changePassword")}
+              {loading ? <Spinner size={18} /> : t("changePassword")}
             </button>
           </form>
         )}

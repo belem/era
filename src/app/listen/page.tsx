@@ -22,6 +22,7 @@ export default function PassiveListenPage() {
   const [poemsPlayed, setPoemsPlayed] = useState(0);
   const startTimeRef = useRef<number>(0);
   const wakeLockRef = useRef<WakeLockSentinel | null>(null);
+  const handleStopRef = useRef<() => Promise<void>>(() => Promise.resolve());
   const stopRequestedRef = useRef(false);
 
   // Load playlist
@@ -34,7 +35,7 @@ export default function PassiveListenPage() {
       setPlaylist(expandPlaylist(items));
       setLoading(false);
     });
-  }, [student]);
+  }, [student?.id]);
 
   const current = playlist[currentIndex];
 
@@ -60,7 +61,7 @@ export default function PassiveListenPage() {
       artist: current.author,
       album: "Kuibu",
     });
-    navigator.mediaSession.setActionHandler("pause", () => handleStop());
+    navigator.mediaSession.setActionHandler("pause", () => handleStopRef.current());
     navigator.mediaSession.setActionHandler("play", () => {
       if (!sessionActive) handleStart();
     });
@@ -107,14 +108,18 @@ export default function PassiveListenPage() {
     startTimeRef.current = Date.now();
     requestWakeLock();
 
-    // Start listening session
-    const res = await fetch("/api/listening", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "start", studentId: student.id, mode: "passive" }),
-    });
-    const data = await res.json();
-    setSessionId(data.id);
+    // Start listening session (best-effort — failure doesn't block playback)
+    try {
+      const res = await fetch("/api/listening", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "start", studentId: student.id, mode: "passive" }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setSessionId(data.id);
+      }
+    } catch { /* session tracking unavailable */ }
 
     playNext(0);
   }, [student, playlist, requestWakeLock, playNext]);
@@ -140,6 +145,9 @@ export default function PassiveListenPage() {
       });
     }
   }, [sessionId, student, poemsPlayed, stop, releaseWakeLock]);
+
+  // Keep ref current so media session handler always calls the latest version
+  handleStopRef.current = handleStop;
 
   return (
     <>

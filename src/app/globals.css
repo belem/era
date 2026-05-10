@@ -58,7 +58,7 @@
   --text-tertiary: #636366;
   --border: #38383a;
   --border-subtle: #2c2c2e;
-  --primary: #2997ff;
+  --primary: #003D74;
   --primary-hover: #40a9ff;
   --primary-soft: #1a3a5c;
   --accent: #ff6b6b;
@@ -66,10 +66,10 @@
   --accent-soft: #3a2020;
   --success: #30d158;
   --error: #ff453a;
-  --info: #2997ff;
+  --info: #003D74;
   --warning: #ff9f0a;
   --badge-1: #ff9f0a;
-  --badge-2: #2997ff;
+  --badge-2: #003D74;
   --badge-3: #30d158;
   --badge-4: #f5f5f7;
 }

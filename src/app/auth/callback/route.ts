@@ -6,6 +6,7 @@ export async function GET(request: Request) {
   const code = searchParams.get("code");
   const tokenHash = searchParams.get("token_hash");
   const type = searchParams.get("type");
+  const next = searchParams.get("next") ?? "/";
 
   const supabase = await createServerSupabase();
   let authenticated = false;
@@ -31,7 +32,7 @@ export async function GET(request: Request) {
         return NextResponse.redirect(`${origin}/onboarding`);
       }
     }
-    return NextResponse.redirect(origin);
+    return NextResponse.redirect(`${origin}${next}`);
   }
 
   return NextResponse.redirect(`${origin}/login?error=auth`);

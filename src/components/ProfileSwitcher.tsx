@@ -50,6 +50,8 @@ export function ProfileSwitcher() {
           {students.map((s) => (
             <div
               key={s.id}
+              role="button"
+              tabIndex={0}
               className={`w-full px-4 py-2.5 text-left text-[14px] transition-colors cursor-pointer ${
                 s.id === student.id
                   ? "text-primary font-medium"
@@ -58,6 +60,13 @@ export function ProfileSwitcher() {
               onClick={() => {
                 switchStudent(s.id);
                 setIsOpen(false);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  switchStudent(s.id);
+                  setIsOpen(false);
+                }
               }}
             >
               <div className="flex items-center gap-2.5">

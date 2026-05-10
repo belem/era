@@ -4,6 +4,8 @@ import { Suspense, useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Spinner } from "@/components/Spinner";
 
 interface InviteData {
   studentName: string;
@@ -11,6 +13,7 @@ interface InviteData {
 }
 
 function AcceptContent() {
+  const t = useTranslations("invite");
   const searchParams = useSearchParams();
   const router = useRouter();
   const token = searchParams.get("token");
@@ -31,7 +34,6 @@ function AcceptContent() {
 
     const supabase = createClient();
 
-    // Check auth status and validate token
     Promise.all([
       supabase.auth.getUser(),
       supabase
@@ -87,7 +89,10 @@ function AcceptContent() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-bg p-6">
-        <p className="text-text-tertiary text-[14px]">Validating invitation...</p>
+        <div className="flex items-center gap-2 text-text-tertiary text-[14px]">
+          <Spinner size={16} />
+          {t("validating")}
+        </div>
       </div>
     );
   }
@@ -96,9 +101,9 @@ function AcceptContent() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-bg p-6">
         <div className="w-full max-w-sm text-center bg-bg-subtle rounded-[var(--radius-lg)] p-8 space-y-4">
-          <h2 className="text-[17px] font-heading text-text">Invitation Expired</h2>
+          <h2 className="text-[17px] font-heading text-text">{t("expiredTitle")}</h2>
           <p className="text-text-secondary text-[14px]">
-            Ask {invite?.inviterName ?? "the inviter"} to send a new one.
+            {t("expiredDesc", { name: invite?.inviterName ?? t("inviter") })}
           </p>
         </div>
       </div>
@@ -109,12 +114,10 @@ function AcceptContent() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-bg p-6">
         <div className="w-full max-w-sm text-center bg-bg-subtle rounded-[var(--radius-lg)] p-8 space-y-4">
-          <h2 className="text-[17px] font-heading text-text">Already Connected</h2>
-          <p className="text-text-secondary text-[14px]">
-            You're already connected to this student.
-          </p>
+          <h2 className="text-[17px] font-heading text-text">{t("alreadyLinkedTitle")}</h2>
+          <p className="text-text-secondary text-[14px]">{t("alreadyLinkedDesc")}</p>
           <Link href="/" className="inline-block px-6 py-2.5 border border-primary text-primary rounded-[var(--radius-pill)] text-[14px] font-medium hover:bg-primary hover:text-white transition-colors">
-            Go to Home
+            {t("backHome")}
           </Link>
         </div>
       </div>
@@ -125,10 +128,8 @@ function AcceptContent() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-bg p-6">
         <div className="w-full max-w-sm text-center bg-bg-subtle rounded-[var(--radius-lg)] p-8 space-y-4">
-          <h2 className="text-[17px] font-heading text-text">Can't Accept</h2>
-          <p className="text-text-secondary text-[14px]">
-            You can't accept your own invitation.
-          </p>
+          <h2 className="text-[17px] font-heading text-text">{t("selfInviteTitle")}</h2>
+          <p className="text-text-secondary text-[14px]">{t("selfInviteDesc")}</p>
         </div>
       </div>
     );
@@ -138,8 +139,8 @@ function AcceptContent() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-bg p-6">
         <div className="w-full max-w-sm text-center bg-bg-subtle rounded-[var(--radius-lg)] p-8 space-y-4">
-          <h2 className="text-[17px] font-heading text-text">Invalid Invitation</h2>
-          <p className="text-text-secondary text-[14px]">This invitation link is not valid.</p>
+          <h2 className="text-[17px] font-heading text-text">{t("invalidTitle")}</h2>
+          <p className="text-text-secondary text-[14px]">{t("invalidDesc")}</p>
         </div>
       </div>
     );
@@ -149,12 +150,12 @@ function AcceptContent() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-bg p-6">
         <div className="w-full max-w-sm text-center bg-bg-subtle rounded-[var(--radius-lg)] p-8 space-y-4">
-          <h2 className="text-[17px] font-heading text-text">Connected!</h2>
+          <h2 className="text-[17px] font-heading text-text">{t("successTitle")}</h2>
           <p className="text-text-secondary text-[14px]">
-            You are now linked to {invite.studentName}.
+            {t("successDesc", { name: invite.studentName })}
           </p>
           <Link href="/" className="inline-block px-6 py-2.5 bg-primary text-white rounded-[var(--radius-pill)] text-[14px] font-medium hover:bg-primary-hover transition-colors">
-            Go to Home
+            {t("backHome")}
           </Link>
         </div>
       </div>
@@ -170,7 +171,7 @@ function AcceptContent() {
         <div>
           <h2 className="text-[17px] font-heading text-text mb-1">{invite.studentName}</h2>
           <p className="text-text-secondary text-[14px]">
-            Invited by {invite.inviterName}
+            {t("invitedBy", { name: invite.inviterName })}
           </p>
         </div>
 
@@ -178,16 +179,16 @@ function AcceptContent() {
           <button
             onClick={handleAccept}
             disabled={accepting}
-            className="w-full bg-primary text-white rounded-[var(--radius-pill)] py-3 font-medium hover:bg-primary-hover transition-colors disabled:opacity-50"
+            className="w-full bg-primary text-white rounded-[var(--radius-pill)] py-3 font-medium hover:bg-primary-hover transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
           >
-            {accepting ? "..." : "Accept Invitation"}
+            {accepting ? <><Spinner size={16} />{t("accepting")}</> : t("accept")}
           </button>
         ) : (
           <Link
-            href={`/login?redirect=/invite/accept?token=${token}`}
+            href={`/login?redirect=${encodeURIComponent(`/invite/accept?token=${token}`)}`}
             className="block w-full bg-primary text-white rounded-[var(--radius-pill)] py-3 font-medium hover:bg-primary-hover transition-colors text-center"
           >
-            Create Account to Accept
+            {t("loginToAccept")}
           </Link>
         )}
       </div>

@@ -56,16 +56,16 @@ export async function POST(request: Request) {
       const resendModule = await import("resend" as string) as { Resend: new (key: string) => { emails: { send: (opts: Record<string, unknown>) => Promise<unknown> } } };
       const resend = new resendModule.Resend(process.env.RESEND_API_KEY);
 
-      const acceptUrl = `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/invite/accept?token=${invitation.token}`;
+      const acceptUrl = `${process.env.NEXT_PUBLIC_SITE_URL || "https://kuibu.app"}/invite/accept?token=${invitation.token}`;
 
       await resend.emails.send({
         from: process.env.RESEND_FROM_EMAIL || "Kuibu <noreply@kuibu.app>",
         to: email,
-        subject: "You've been invited to Kuibu",
+        subject: "您已被邀请加入跬步",
         html: `
-          <p>You've been invited to help manage a student's poetry learning on Kuibu.</p>
-          <p><a href="${acceptUrl}">Accept Invitation</a></p>
-          <p>This link expires in 7 days.</p>
+          <p>您已被邀请协助管理一位学生在跬步上的古诗词学习。</p>
+          <p><a href="${acceptUrl}">接受邀请</a></p>
+          <p>此链接将在 7 天后过期。</p>
         `,
       });
     } catch {

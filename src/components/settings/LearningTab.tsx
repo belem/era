@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { useStudent } from "@/hooks/useStudent";
 import { createClient } from "@/lib/supabase/client";
@@ -61,6 +61,23 @@ export function LearningTab() {
 
   const settings = student?.settings_json;
 
+  const [userPlan, setUserPlan] = useState<string>("FREE");
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data }) => {
+      if (!data.user) return;
+      supabase
+        .from("users")
+        .select("plan")
+        .eq("id", data.user.id)
+        .single()
+        .then(({ data: row }) => {
+          if (row?.plan) setUserPlan(row.plan);
+        });
+    });
+  }, []);
+
   const [activeAlgo, setActiveAlgo] = useState<AlgorithmName>(
     (student?.algorithm as AlgorithmName) ?? "SM2"
   );
@@ -71,20 +88,37 @@ export function LearningTab() {
   const [maxReviews, setMaxReviews] = useState(settings?.max_reviews_per_session ?? 15);
   const [streakFreeze, setStreakFreeze] = useState(settings?.streak_freeze_enabled ?? true);
   const [switching, setSwitching] = useState(false);
+
+  // Sync settings state when student data loads (e.g. after cache miss)
+  useEffect(() => {
+    if (!student) return;
+    const s = student.settings_json;
+    setActiveAlgo((student.algorithm as AlgorithmName) ?? "SM2");
+    setShowPinyin(s?.show_pinyin ?? true);
+    setShowFirstLine(s?.show_first_line ?? false);
+    setNewPoems(s?.new_poems_per_day ?? 3);
+    setMaxReviews(s?.max_reviews_per_session ?? 15);
+    setStreakFreeze(s?.streak_freeze_enabled ?? true);
+  }, [student?.id]);
   const [resetting, setResetting] = useState(false);
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [resetDone, setResetDone] = useState(false);
 
-  const saveSettings = async (patch: Record<string, unknown>) => {
+  const saveDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const saveSettings = useCallback((patch: Record<string, unknown>) => {
     if (!student) return;
-    const supabase = createClient();
-    const merged = { ...settings, ...patch };
-    await supabase
-      .from("students")
-      .update({ settings_json: merged })
-      .eq("id", student.id);
-    refresh();
-  };
+    if (saveDebounceRef.current) clearTimeout(saveDebounceRef.current);
+    saveDebounceRef.current = setTimeout(async () => {
+      const supabase = createClient();
+      const merged = { ...(student.settings_json ?? {}), ...patch };
+      await supabase
+        .from("students")
+        .update({ settings_json: merged })
+        .eq("id", student.id);
+      refresh();
+    }, 600);
+  }, [student, refresh]);
 
   const handleAlgorithmSwitch = async (algo: AlgorithmName) => {
     if (algo === activeAlgo || !student) return;
@@ -132,26 +166,28 @@ export function LearningTab() {
           {algorithms.map((algo) => {
             const isActive = activeAlgo === algo.key;
             const isExpanded = expanded === algo.key;
+            const isLocked = algo.key === "FSRS" && userPlan === "FREE";
             return (
               <div
                 key={algo.key}
                 className={`bg-bg-subtle rounded-[var(--radius-lg)] transition-all ${
                   isActive ? "border-2 border-primary" : "border-2 border-transparent"
-                }`}
+                } ${isLocked ? "opacity-50" : ""}`}
               >
                 <button
                   role="radio"
                   aria-checked={isActive}
                   aria-expanded={isExpanded}
-                  disabled={switching}
+                  disabled={switching || isLocked}
                   onClick={() => {
+                    if (isLocked) return;
                     if (isExpanded) {
                       setExpanded(null);
                     } else {
                       setExpanded(algo.key);
                     }
                   }}
-                  className="w-full flex items-center px-4 h-[52px] gap-3"
+                  className={`w-full flex items-center px-4 h-[52px] gap-3 ${isLocked ? "cursor-not-allowed" : ""}`}
                 >
                   <div
                     className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
@@ -161,6 +197,11 @@ export function LearningTab() {
                     {isActive && <div className="w-2.5 h-2.5 rounded-full bg-primary" />}
                   </div>
                   <span className="flex-1 text-left text-[15px] text-text font-medium">{algo.key}</span>
+                  {isLocked ? (
+                    <span className="text-[11px] font-semibold text-amber-600 bg-amber-100 dark:bg-amber-900/30 dark:text-amber-400 px-2 py-0.5 rounded-full">
+                      Pro
+                    </span>
+                  ) : (
                   <svg
                     className={`w-4 h-4 text-text-tertiary transition-transform ${isExpanded ? "rotate-90" : ""}`}
                     fill="none"
@@ -170,9 +211,10 @@ export function LearningTab() {
                   >
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                   </svg>
+                  )}
                 </button>
 
-                {isExpanded && (
+                {isExpanded && !isLocked && (
                   <div className="px-4 pb-4 pt-1 space-y-3">
                     <div className="flex items-start gap-3">
                       <img

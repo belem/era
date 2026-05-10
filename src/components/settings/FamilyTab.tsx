@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { useStudent } from "@/hooks/useStudent";
 import { createClient } from "@/lib/supabase/client";
+import { Spinner } from "@/components/Spinner";
 
 interface Guardian {
   guardian_id: string;
@@ -115,7 +116,7 @@ export function FamilyTab() {
             disabled={sending}
             className="px-6 py-2.5 border border-primary text-primary rounded-[var(--radius-pill)] text-[14px] font-medium hover:bg-primary hover:text-white transition-colors disabled:opacity-50"
           >
-            {sending ? "..." : t("sendInvite")}
+            {sending ? <><Spinner size={15} />{t("sendInvite")}</> : t("sendInvite")}
           </button>
         </form>
       </section>

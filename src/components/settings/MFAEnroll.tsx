@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
+import { Spinner } from "@/components/Spinner";
 
 type MFAState = "loading" | "off" | "enrolling" | "verifying" | "enabled";
 
@@ -219,7 +220,7 @@ export function MFAEnroll() {
             disabled={disabling}
             className="text-[13px] text-error hover:underline disabled:opacity-50"
           >
-            {disabling ? "..." : t("disable")}
+            {disabling ? <Spinner size={14} /> : t("disable")}
           </button>
         </div>
       )}

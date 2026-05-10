@@ -23,10 +23,11 @@ export default function FragmentsPage() {
   const fetchDecks = useCallback(async () => {
     if (!student) return;
     const res = await fetch(`/api/fragments/decks?studentId=${student.id}`);
+    if (!res.ok) { setLoading(false); return; }
     const data = await res.json();
-    setDecks(data);
+    setDecks(Array.isArray(data) ? data : []);
     setLoading(false);
-  }, [student]);
+  }, [student?.id]);
 
   useEffect(() => { fetchDecks(); }, [fetchDecks]);
 
@@ -34,7 +35,7 @@ export default function FragmentsPage() {
     e.preventDefault();
     if (!student || !newName.trim()) return;
 
-    await fetch("/api/fragments/decks", {
+    const res = await fetch("/api/fragments/decks", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -45,13 +46,16 @@ export default function FragmentsPage() {
       }),
     });
 
+    if (!res.ok) return; // silently ignore — deck list will stay as-is
+
     setNewName("");
     setNewDesc("");
     setShowCreate(false);
     fetchDecks();
   };
 
-  const handleDelete = async (deckId: string) => {
+  const handleDelete = async (deckId: string, deckName: string) => {
+    if (!confirm(t("deleteConfirm", { name: deckName }))) return;
     await fetch(`/api/fragments/decks/${deckId}`, { method: "DELETE" });
     fetchDecks();
   };
@@ -164,7 +168,7 @@ export default function FragmentsPage() {
                     </Link>
                   )}
                   <button
-                    onClick={() => handleDelete(deck.id)}
+                    onClick={() => handleDelete(deck.id, deck.name)}
                     className="text-[13px] text-text-tertiary hover:text-error transition-colors"
                     aria-label={t("deleteDeck")}
                   >

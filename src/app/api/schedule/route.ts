@@ -24,13 +24,14 @@ export async function POST(request: Request) {
   const limited = await checkRateLimit(scheduleLimiter, studentId);
   if (limited) return limited;
 
-  // Fetch student to get active algorithm
+  // Fetch student and verify ownership
   const { data: student, error: studentError } = await supabase
     .from("students")
     .select("algorithm")
     .eq("id", studentId)
     .single();
 
+  // RLS ensures the student row is only returned if the user owns it
   if (studentError || !student) {
     return NextResponse.json({ error: "Student not found" }, { status: 404 });
   }

@@ -113,9 +113,11 @@ export default function AnalyticsPage() {
   useEffect(() => {
     if (!student) return;
     fetch(`/api/analytics?studentId=${student.id}`)
-      .then((r) => r.json())
-      .then((d) => { setData(d); setLoading(false); });
-  }, [student]);
+      .then((r) => { if (!r.ok) throw new Error("analytics error"); return r.json(); })
+      .then((d) => { setData(d); })
+      .catch(() => { /* show empty state */ })
+      .finally(() => setLoading(false));
+  }, [student?.id]);
 
   return (
     <>

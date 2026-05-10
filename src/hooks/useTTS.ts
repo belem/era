@@ -15,6 +15,12 @@ export function useTTS() {
       engineRef.current = engine;
       setBackend(engine.backend);
     });
+
+    return () => {
+      // Stop audio when the component using this hook unmounts (e.g. navigating away)
+      abortRef.current = true;
+      engineRef.current?.stop();
+    };
   }, []);
 
   const speak = useCallback(async (text: string) => {

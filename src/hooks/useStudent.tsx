@@ -77,6 +77,8 @@ export function StudentProvider({ children }: { children: ReactNode }) {
   }, [router, pathname]);
 
   useEffect(() => {
+    const isPublic = PUBLIC_PATHS.some((p) => pathname.startsWith(p));
+    if (isPublic) { setLoading(false); return; }
     const supabase = createClient();
     supabase.from("students").select("id, name, school_system, grade, edition, algorithm, settings_json").then(({ data }) => {
       if (data) {
@@ -91,9 +93,8 @@ export function StudentProvider({ children }: { children: ReactNode }) {
           return fallback;
         });
       }
-      setLoading(false);
-    });
-  }, [fetchKey]); // intentionally omit currentId — switching profiles doesn't need a refetch
+    }).catch(() => { /* network error — keep stale cache */ }).finally(() => setLoading(false));
+  }, [fetchKey, pathname]); // pathname needed to skip on public pages
 
   const refresh = useCallback(() => {
     try { localStorage.removeItem(CACHE_KEY); } catch { /* ignore */ }

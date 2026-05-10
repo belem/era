@@ -14,6 +14,14 @@ export async function GET(request: Request) {
   const studentId = searchParams.get("studentId");
   if (!studentId) return NextResponse.json({ error: "Missing studentId" }, { status: 400 });
 
+  // Verify the student belongs to the authenticated user (RLS-enforced)
+  const { data: studentCheck } = await supabase
+    .from("students")
+    .select("id")
+    .eq("id", studentId)
+    .single();
+  if (!studentCheck) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+
   // 1. Review events for the past 30 days
   const thirtyDaysAgo = new Date();
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);

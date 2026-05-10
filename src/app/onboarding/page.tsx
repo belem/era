@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { maxGradeForSchoolSystem } from "@/lib/format";
+import { Spinner } from "@/components/Spinner";
 
 type Algorithm = "SM2" | "LEITNER" | "FSRS";
 type SchoolSystem = "六三" | "五四" | "高中";
@@ -269,7 +270,7 @@ export default function OnboardingPage() {
                   disabled={loading}
                   className="flex-1 bg-primary text-white rounded-[var(--radius-pill)] py-3 font-medium hover:bg-primary-hover transition-colors disabled:opacity-50"
                 >
-                  {loading ? "..." : t("done")}
+                  {loading ? <Spinner size={18} /> : t("done")}
                 </button>
               </div>
             </>

@@ -19,7 +19,7 @@ function ResetPasswordContent() {
   useEffect(() => {
     // Supabase handles the token exchange via the URL hash automatically
     const supabase = createClient();
-    supabase.auth.onAuthStateChange((event) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
       if (event === "TOKEN_REFRESHED" || event === "SIGNED_IN") {
         // Token is valid, user can reset
       }
@@ -30,6 +30,8 @@ function ResetPasswordContent() {
     if (hash.includes("error=")) {
       setExpired(true);
     }
+
+    return () => subscription.unsubscribe();
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {

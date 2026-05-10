@@ -29,6 +29,7 @@ export default function CustomPoemsPage() {
   const [poems, setPoems] = useState<CustomPoem[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
+  const [createError, setCreateError] = useState("");
 
   // Create form state
   const [title, setTitle] = useState("");
@@ -45,6 +46,7 @@ export default function CustomPoemsPage() {
   const fetchPoems = useCallback(async () => {
     if (!student) return;
     const res = await fetch(`/api/custom-poems?studentId=${student.id}`);
+    if (!res.ok) { setLoading(false); return; }
     const data = await res.json();
     setPoems(Array.isArray(data) ? data : []);
     setLoading(false);
@@ -120,7 +122,7 @@ export default function CustomPoemsPage() {
       return { chars, punctuation };
     });
 
-    await fetch("/api/custom-poems", {
+    const res = await fetch("/api/custom-poems", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -132,11 +134,18 @@ export default function CustomPoemsPage() {
       }),
     });
 
+    if (!res.ok) {
+      const errData = await res.json().catch(() => ({}));
+      setCreateError(errData.error || t("requiresPro"));
+      return;
+    }
+
     setTitle("");
     setAuthor("");
     setDynasty("");
     setLines("");
     setPinyinMap([]);
+    setCreateError("");
     setShowCreate(false);
     fetchPoems();
   };
@@ -237,6 +246,10 @@ export default function CustomPoemsPage() {
               <div className="bg-bg rounded-[var(--radius-md)] p-3 text-[13px] text-text-secondary font-mono">
                 {pinyinMap.join(" ")}
               </div>
+            )}
+
+            {createError && (
+              <p className="text-[14px] text-error" role="alert">{createError}</p>
             )}
 
             <button

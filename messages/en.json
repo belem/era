@@ -1,4 +1,23 @@
 {
+  "invite": {
+    "validating": "Validating invitation...",
+    "expiredTitle": "Invitation Expired",
+    "expiredDesc": "Please ask {name} to send a new invitation.",
+    "inviter": "the inviter",
+    "alreadyLinkedTitle": "Already Connected",
+    "alreadyLinkedDesc": "You are already connected to this student.",
+    "selfInviteTitle": "Cannot Accept",
+    "selfInviteDesc": "You cannot accept your own invitation.",
+    "invalidTitle": "Invalid Invitation",
+    "invalidDesc": "This invitation link is invalid or has expired.",
+    "successTitle": "Connected!",
+    "successDesc": "You are now connected to {name}.",
+    "invitedBy": "Invited by {name}",
+    "accept": "Accept Invitation",
+    "accepting": "Accepting...",
+    "loginToAccept": "Sign up / Sign in to accept",
+    "backHome": "Back to Home"
+  },
   "home": {
     "title": "Today's Poems",
     "streak": "Day {days}",
@@ -17,7 +36,9 @@
     "complete": "Review Complete",
     "todayCount": "Reviewed {count} poems today",
     "tomorrow": "See you tomorrow",
-    "scrollDone": "Scroll Complete"
+    "scrollDone": "Scroll Complete",
+    "loading": "Loading...",
+    "noPoems": "No poems to review today"
   },
   "rating": {
     "forgot": "Forgot",
@@ -131,7 +152,8 @@
     "termsConsent": "I agree to the Terms of Service and Privacy Policy",
     "magicLink": "Sign in with email link instead",
     "magicLinkSent": "Check your email for a sign-in link",
-    "sessionExpired": "Your session has expired. Please sign in again."
+    "sessionExpired": "Your session has expired. Please sign in again.",
+    "authError": "Authentication link is invalid or expired. Please sign in again."
   },
   "auth": {
     "forgotTitle": "Reset Password",
@@ -169,6 +191,7 @@
     "algorithmConfirm": "This will recalculate your review schedule. Continue?",
     "switchTo": "Switch to {algo}",
     "migrating": "Recalculating schedule...",
+    "comingSoon": "Coming soon",
     "session": "Session",
     "showPinyin": "Show pinyin by default",
     "showFirstLine": "Show first line on home",
@@ -237,6 +260,7 @@
     "dueCount": "{count} due",
     "review": "Review",
     "deleteDeck": "Delete deck",
+    "deleteConfirm": "Delete deck \"{name}\"? All cards will be permanently deleted.",
     "cards": "Cards",
     "addCard": "Add Card",
     "frontPlaceholder": "Front (question)",
@@ -323,7 +347,8 @@
     "pinyin": "Pinyin",
     "char": "Character",
     "forbidden": "Admin access required",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "back": "Back"
   },
   "customPoems": {
     "title": "My Poems",

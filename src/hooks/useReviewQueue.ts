@@ -115,9 +115,8 @@ export function useReviewQueue() {
 
       writePoemCache(poemCache);
       setPoems(mapped);
-      setLoading(false);
-    });
-  }, [student]);
+    }).catch(() => { /* network error — keep empty queue */ }).finally(() => setLoading(false));
+  }, [student?.id]); // depend on ID only — avoids full reload on settings-only refresh
 
   return { poems, loading };
 }

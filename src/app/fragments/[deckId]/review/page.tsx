@@ -12,7 +12,7 @@ import { RatingButtons } from "@/components/RatingButtons";
 export default function FragmentReviewPage({ params }: { params: Promise<{ deckId: string }> }) {
   const { deckId } = use(params);
   const t = useTranslations("fragments");
-  const tRating = useTranslations("review");
+  const tRating = useTranslations("rating");
   const { student } = useStudent();
   const { fragments, loading } = useFragmentQueue(deckId);
 

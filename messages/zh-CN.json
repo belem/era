@@ -1,4 +1,23 @@
 {
+  "invite": {
+    "validating": "正在验证邀请...",
+    "expiredTitle": "邀请已过期",
+    "expiredDesc": "请联系 {name} 重新发送邀请。",
+    "inviter": "邀请人",
+    "alreadyLinkedTitle": "已连接",
+    "alreadyLinkedDesc": "您已与该学生建立连接。",
+    "selfInviteTitle": "无法接受邀请",
+    "selfInviteDesc": "您不能接受自己发送的邀请。",
+    "invalidTitle": "无效的邀请",
+    "invalidDesc": "此邀请链接无效或已失效。",
+    "successTitle": "连接成功！",
+    "successDesc": "您已与 {name} 建立连接。",
+    "invitedBy": "邀请人：{name}",
+    "accept": "接受邀请",
+    "accepting": "接受中...",
+    "loginToAccept": "注册 / 登录以接受邀请",
+    "backHome": "返回首页"
+  },
   "home": {
     "title": "今日诗词",
     "streak": "连续 {days} 天",
@@ -17,7 +36,9 @@
     "complete": "复习完成",
     "todayCount": "今日复习 {count} 首诗",
     "tomorrow": "明日再见",
-    "scrollDone": "卷轴完成"
+    "scrollDone": "卷轴完成",
+    "loading": "加载中...",
+    "noPoems": "今日无诗可复习"
   },
   "rating": {
     "forgot": "淡忘",
@@ -131,7 +152,8 @@
     "termsConsent": "我同意服务条款和隐私政策",
     "magicLink": "使用邮箱链接登录",
     "magicLinkSent": "请查收邮箱中的登录链接",
-    "sessionExpired": "登录已过期，请重新登录。"
+    "sessionExpired": "登录已过期，请重新登录。",
+    "authError": "验证链接无效或已过期，请重新登录。"
   },
   "auth": {
     "forgotTitle": "重置密码",
@@ -169,6 +191,7 @@
     "algorithmConfirm": "这将重新计算复习计划，确认切换？",
     "switchTo": "切换到 {algo}",
     "migrating": "正在重新计算...",
+    "comingSoon": "敬请期待",
     "session": "学习设置",
     "showPinyin": "默认显示拼音",
     "showFirstLine": "首页显示诗词首句",
@@ -237,6 +260,7 @@
     "dueCount": "{count} 待复习",
     "review": "复习",
     "deleteDeck": "删除分组",
+    "deleteConfirm": "确认删除“{name}”分组？其中所有卡片将被永久删除。",
     "cards": "卡片",
     "addCard": "添加卡片",
     "frontPlaceholder": "正面（问题）",
@@ -323,7 +347,8 @@
     "pinyin": "拼音",
     "char": "汉字",
     "forbidden": "需要管理员权限",
-    "loading": "加载中..."
+    "loading": "加载中...",
+    "back": "返回"
   },
   "customPoems": {
     "title": "拾诗",

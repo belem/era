@@ -107,28 +107,31 @@ export default function AdminPage() {
 
   const handleDeletePoem = async (id: string) => {
     if (!confirm(t("deleteConfirm"))) return;
-    await fetch(`/api/admin/poems/${id}`, { method: "DELETE" });
-    fetchPoems();
+    const res = await fetch(`/api/admin/poems/${id}`, { method: "DELETE" });
+    if (res.ok) fetchPoems();
   };
 
   const handleSavePoem = async (poem: PoemRow) => {
     const { id, poem_editions, ...fields } = poem;
     const payload = { ...fields, editions: poem_editions };
+    let res: Response;
     if (id) {
-      await fetch(`/api/admin/poems/${id}`, {
+      res = await fetch(`/api/admin/poems/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
     } else {
-      await fetch("/api/admin/poems", {
+      res = await fetch("/api/admin/poems", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
     }
-    setEditingPoem(null);
-    fetchPoems();
+    if (res.ok) {
+      setEditingPoem(null);
+      fetchPoems();
+    }
   };
 
   if (isAdmin === null) {
@@ -163,7 +166,7 @@ export default function AdminPage() {
             onClick={() => router.push("/")}
             className="text-[14px] text-text-secondary hover:text-primary transition-colors"
           >
-            Back
+            {t("back")}
           </button>
         </div>
         <div className="px-6 md:px-12 lg:px-20 xl:px-32 flex gap-6">

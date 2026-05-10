@@ -43,30 +43,7 @@ function StudentCard() {
     ? schoolSystem !== student.school_system || grade !== student.grade || edition !== student.edition
     : false;
 
-  const doSave = async (resetProgress: boolean) => {
-    if (!student || !name.trim()) return;
-    setSaving(true);
-    const supabase = createClient();
-    await supabase
-      .from("students")
-      .update({ name: name.trim(), school_system: schoolSystem, grade, edition })
-      .eq("id", student.id);
-
-    if (resetProgress) {
-      await fetch("/api/students/reset-progress", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ studentId: student.id }),
-      });
-    }
-
-    setSaving(false);
-    setSaved(true);
-    setEditing(false);
-    setShowResetChoice(false);
-    setTimeout(() => setSaved(false), 2000);
-    window.location.reload();
-  };
+  const [saveError, setSaveError] = useState("");\n\n  const doSave = async (resetProgress: boolean) => {\n    if (!student || !name.trim()) return;\n    setSaving(true);\n    setSaveError(\"\");\n    const supabase = createClient();\n    const { error: updateError } = await supabase\n      .from(\"students\")\n      .update({ name: name.trim(), school_system: schoolSystem, grade, edition })\n      .eq(\"id\", student.id);\n\n    if (updateError) {\n      setSaveError(updateError.message);\n      setSaving(false);\n      return;\n    }\n\n    if (resetProgress) {\n      await fetch(\"/api/students/reset-progress\", {\n        method: \"POST\",\n        headers: { \"Content-Type\": \"application/json\" },\n        body: JSON.stringify({ studentId: student.id }),\n      });\n    }\n\n    setSaving(false);\n    setSaved(true);\n    setEditing(false);\n    setShowResetChoice(false);\n    setTimeout(() => setSaved(false), 2000);\n    window.location.reload();\n  };
 
   const handleSave = async () => {
     if (!student || !name.trim()) return;
@@ -148,6 +125,7 @@ function StudentCard() {
               onClick={() => {
                 setEditing(false);
                 setShowResetChoice(false);
+                setSaveError("");
                 setName(student.name);
                 setSchoolSystem(student.school_system);
                 setGrade(student.grade);
@@ -160,6 +138,7 @@ function StudentCard() {
           </div>
         ) : (
           <div className="bg-bg rounded-[var(--radius-lg)] border border-border p-4 space-y-3 mt-1">
+            {saveError && <p className="text-[13px] text-error" role="alert">{saveError}</p>}
             <p className="text-[14px] text-text font-medium">{t("resetChoiceTitle")}</p>
             <p className="text-[13px] text-text-tertiary">{t("resetChoiceDesc")}</p>
             <div className="flex flex-col gap-2">
