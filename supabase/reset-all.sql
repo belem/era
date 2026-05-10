@@ -368,6 +368,18 @@ GRANT SELECT, INSERT ON listening_sessions TO authenticated;
 GRANT ALL ON poems TO service_role;
 GRANT ALL ON poem_editions TO service_role;
 GRANT ALL ON badges TO service_role;
+GRANT ALL ON users TO service_role;
+GRANT ALL ON profiles TO service_role;
+GRANT ALL ON students TO service_role;
+GRANT ALL ON student_guardians TO service_role;
+GRANT ALL ON review_events TO service_role;
+GRANT ALL ON fragment_decks TO service_role;
+GRANT ALL ON fragments TO service_role;
+GRANT ALL ON fragment_reviews TO service_role;
+GRANT ALL ON fragment_review_events TO service_role;
+GRANT ALL ON custom_poems TO service_role;
+GRANT ALL ON guardian_invitations TO service_role;
+GRANT ALL ON listening_sessions TO service_role;
 
 -- Profiles
 CREATE POLICY profiles_select ON profiles FOR SELECT USING (auth.uid() = id);

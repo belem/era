@@ -12,7 +12,7 @@ const PLAN_BADGE: Record<Plan, { label: string; className: string }> = {
   FREE: { label: "Free", className: "text-text-secondary bg-bg-muted" },
   PRO: { label: "Pro", className: "text-blue-600 bg-blue-100 dark:text-blue-400 dark:bg-blue-900/30" },
   MAX: { label: "Max", className: "text-green-700 bg-green-100 dark:text-green-400 dark:bg-green-900/30" },
-  ADMIN: { label: "Admin", className: "text-purple-700 bg-purple-100 dark:text-purple-400 dark:bg-purple-900/30" },
+  ADMIN: { label: "Enterprise", className: "text-purple-700 bg-purple-100 dark:text-purple-400 dark:bg-purple-900/30" },
 };
 
 export function AccountTab() {
