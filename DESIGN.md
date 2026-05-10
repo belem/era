@@ -87,10 +87,10 @@ In Apple's system, there is no separate accent — blue is the only chromatic co
 
 | Token | Light | Dark | Usage |
 |---|---|---|---|
-| `--success` | `#34c759` | `#30d158` | Positive states, "Easy" rating |
-| `--error` | `#ff3b30` | `#ff453a` | Errors, "Forgot" indication |
+| `--success` | `#34c759` | `#4c8045` | Positive states, "Easy" rating |
+| `--error` | `#ff3b30` | `#9d2932` | Errors, "Forgot" indication |
 | `--info` | `#003D74` | `#2997ff` | Informational (same as primary) |
-| `--warning` | `#ff9500` | `#ff9f0a` | Warnings |
+| `--warning` | `#ea5414` | `#ff9f0a` | Warnings |
 
 #### Extended Palette (Content Layer Only)
 
@@ -98,7 +98,7 @@ Available for badges, heatmaps, and charts. These never appear as UI chrome — 
 
 | Token | Hex | Usage |
 |---|---|---|
-| `--badge-1` | `#ff9500` | 10 poems mastered (十) |
+| `--badge-1` | `#ea5414` | 10 poems mastered (十) |
 | `--badge-2` | `#003D74` | 30-day streak (月) |
 | `--badge-3` | `#34c759` | 100 poems mastered (百) |
 | `--badge-4` | `#1d1d1f` | 365-day streak (年) |

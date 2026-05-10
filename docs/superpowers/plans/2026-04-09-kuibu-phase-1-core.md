@@ -137,7 +137,7 @@ Replace `src/app/globals.css` with the full token file. Key tokens:
   --success: #34c759;
   --error: #ff3b30;
   --info: #003D74;
-  --warning: #ff9500;
+  --warning: #ea5414;
   --radius-sm: 5px;
   --radius-md: 8px;
   --radius-lg: 12px;
@@ -161,8 +161,8 @@ Replace `src/app/globals.css` with the full token file. Key tokens:
   --accent: #ff6b6b;
   --accent-hover: #ff8a8a;
   --accent-soft: #3a2020;
-  --success: #30d158;
-  --error: #ff453a;
+  --success: #4c8045;
+  --error: #9d2932;
   --info: #2997ff;
   --warning: #ff9f0a;
 }

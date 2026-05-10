@@ -324,7 +324,7 @@ querying `review_events` for just-completed data that's already in memory.
 4. **Rating breakdown bars** — horizontal bar chart, pure CSS:
    - 4 rows: Easy / Good / Hard / Forgot
    - Each row: label left (14px, `--text-secondary`) + bar + count right (14px)
-   - Bar colors: Easy = `--success`, Good = `--primary`, Hard = `--warning (#ff9500)`, Forgot = `--error`
+   - Bar colors: Easy = `--success`, Good = `--primary`, Hard = `--warning (#ea5414)`, Forgot = `--error`
    - Bar max-width: 200px, height: 8px, border-radius: 4px, bg-bg-muted for empty track
    - Bars animate from 0 to actual width over 0.4s ease-out
 5. **Badge notification** (conditional) — only if new badge unlocked:
@@ -418,8 +418,8 @@ Initial badge catalog (5 badges, expand later):
 
 | Badge | Criteria | Icon | Color Token |
 |-------|----------|------|-------------|
-| First Scroll (初卷) | Complete 1 Living Scroll | SVG scroll | `--badge-1` (#ff9500) |
-| Seven Days (七日) | 7-day streak | SVG flame x7 | `--badge-1` (#ff9500) |
+| First Scroll (初卷) | Complete 1 Living Scroll | SVG scroll | `--badge-1` (#ea5414) |
+| Seven Days (七日) | 7-day streak | SVG flame x7 | `--badge-1` (#ea5414) |
 | Moon (明月) | 30-day streak | SVG crescent moon | `--badge-2` (#003D74) |
 | Grade Master (年级通) | All poems in one grade mastered | SVG star | `--badge-3` (#34c759) |
 | Hundred (百篇) | 100 poems reviewed total | SVG seal/stamp | `--badge-4` (#1d1d1f) |

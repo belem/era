@@ -30,15 +30,15 @@
 
   /* Semantic */
   --success: #34c759;
-  --error: #ff3b30;
+  --error: #9d2932;
   --info: #003D74;
-  --warning: #ff9500;
+  --warning: #ea5414;
 
   /* Badge palette (content layer only) */
-  --badge-1: #ff9500;
+  --badge-1: #2e59a7;
   --badge-2: #003D74;
   --badge-3: #34c759;
-  --badge-4: #1d1d1f;
+  --badge-4: #494166;
 
   /* Radii */
   --radius-sm: 5px;
@@ -64,13 +64,13 @@
   --accent: #ff6b6b;
   --accent-hover: #ff8a8a;
   --accent-soft: #3a2020;
-  --success: #30d158;
-  --error: #ff453a;
+  --success: #4c8045;
+  --error: #9d2932;
   --info: #003D74;
   --warning: #ff9f0a;
   --badge-1: #ff9f0a;
   --badge-2: #003D74;
-  --badge-3: #30d158;
+  --badge-3: #4c8045;
   --badge-4: #f5f5f7;
 }
 
