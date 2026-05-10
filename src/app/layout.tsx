@@ -42,11 +42,14 @@ export default async function RootLayout({
           rel="stylesheet"
         />
         <link rel="stylesheet" href="https://chinese-fonts-cdn.konghayao.deno.net/packages/sypxzs/dist/思源屏显臻宋/result.css" />
+        <link rel="icon" href="/favicon_io/favicon.ico" sizes="any" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon_io/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon_io/favicon-16x16.png" />
+        <link rel="apple-touch-icon" href="/favicon_io/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#003D74" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <link rel="apple-touch-icon" href="/icons/icon-192.svg" />
       </head>
       <body className="min-h-dvh flex flex-col bg-bg text-text antialiased">
         <NextIntlClientProvider messages={messages}>
