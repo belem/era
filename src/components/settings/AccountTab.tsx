@@ -57,7 +57,13 @@ export function AccountTab() {
         redirectTo: `${window.location.origin}/settings`,
       },
     });
-    if (error) setLinkError(error.message);
+    if (error) {
+      if (error.message.toLowerCase().includes("manual linking")) {
+        setLinkError(t("linkDisabled"));
+      } else {
+        setLinkError(error.message);
+      }
+    }
   };
 
   const providerList = [

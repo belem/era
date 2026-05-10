@@ -153,7 +153,9 @@
     "magicLink": "Sign in with email link instead",
     "magicLinkSent": "Check your email for a sign-in link",
     "sessionExpired": "Your session has expired. Please sign in again.",
-    "authError": "Authentication link is invalid or expired. Please sign in again."
+    "authError": "Authentication link is invalid or expired. Please sign in again.",
+    "otpExpired": "Confirmation link failed — this usually happens when the link is opened in a different browser. Please sign up again or resend the confirmation email.",
+    "otpExpiredHint": "Enter your email below to resend the confirmation."
   },
   "auth": {
     "forgotTitle": "Reset Password",
@@ -215,6 +217,7 @@
     "linkedProviders": "Linked Accounts",
     "connected": "Connected",
     "link": "Link",
+    "linkDisabled": "Account linking is not enabled. Please contact support.",
     "logout": "Log out",
     "plan": {
       "label": "Plan",

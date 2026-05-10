@@ -51,15 +51,24 @@ function clearStudentStorage() {
 }
 
 export function StudentProvider({ children }: { children: ReactNode }) {
-  const cached = typeof window !== "undefined" ? readCache() : [];
-  const savedId = typeof window !== "undefined" ? (localStorage.getItem(CURRENT_ID_KEY) || null) : null;
-  const initialId = cached.find((s) => s.id === savedId) ? savedId : (cached[0]?.id ?? null);
-  const [students, setStudents] = useState<Student[]>(cached);
-  const [currentId, setCurrentId] = useState<string | null>(initialId);
-  const [loading, setLoading] = useState(cached.length === 0); // skip spinner if cache hit
+  const [students, setStudents] = useState<Student[]>([]);
+  const [currentId, setCurrentId] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
   const [fetchKey, setFetchKey] = useState(0);
   const router = useRouter();
   const pathname = usePathname();
+
+  // Hydrate from localStorage after mount (avoids SSR/client mismatch)
+  useEffect(() => {
+    const cached = readCache();
+    const savedId = localStorage.getItem(CURRENT_ID_KEY) || null;
+    const initialId = cached.find((s) => s.id === savedId) ? savedId : (cached[0]?.id ?? null);
+    if (cached.length > 0) {
+      setStudents(cached);
+      setCurrentId(initialId);
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
     const supabase = createClient();

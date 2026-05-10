@@ -13,6 +13,15 @@ function LoginForm() {
   const searchParams = useSearchParams();
   const sessionExpired = searchParams.get("expired") === "1";
   const authError = searchParams.get("error") === "auth";
+  const [otpExpired, setOtpExpired] = useState(false);
+
+  // Detect otp_expired from URL hash (can't read hash server-side)
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash.includes("otp_expired") || hash.includes("error_code=otp_expired")) {
+      setOtpExpired(true);
+    }
+  }, []);
   const redirectTo = searchParams.get("redirect") || "/";
 
   const [mode, setMode] = useState<"signin" | "signup">("signin");
@@ -166,8 +175,20 @@ function LoginForm() {
         )}
 
         {authError && !sessionExpired && (
-          <div className="mb-4 px-4 py-3 rounded-[var(--radius-md)] border border-error bg-error/10 text-[14px] text-text-secondary">
-            {t("authError")}
+          <div className="mb-4 px-4 py-3 rounded-[var(--radius-md)] border border-error bg-error/10 text-[14px] text-text-secondary space-y-2">
+            <p>{otpExpired ? t("otpExpired") : t("authError")}</p>
+            {otpExpired && email && (
+              <button
+                onClick={handleResendConfirmation}
+                disabled={resendCooldown > 0}
+                className="text-primary hover:underline text-[13px] disabled:opacity-50"
+              >
+                {resendCooldown > 0 ? t("resendCooldown", { seconds: resendCooldown }) : t("resendEmail")}
+              </button>
+            )}
+            {otpExpired && !email && (
+              <p className="text-[13px]">{t("otpExpiredHint")}</p>
+            )}
           </div>
         )}
 
@@ -341,7 +362,7 @@ function LoginForm() {
             <button
               type="submit"
               disabled={loading || lockedUntil > 0 || (mode === "signup" && !termsAccepted)}
-              className="w-full bg-primary text-white rounded-[var(--radius-pill)] py-3 font-medium hover:bg-primary-hover transition-colors disabled:opacity-50"
+              className="w-full bg-primary text-white rounded-[var(--radius-pill)] py-3 font-medium hover:bg-primary-hover transition-colors disabled:opacity-50 flex items-center justify-center"
             >
               {loading ? <Spinner size={18} /> : mode === "signin" ? t("signIn") : t("signUp")}
             </button>
