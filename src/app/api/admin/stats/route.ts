@@ -6,11 +6,15 @@ export async function GET() {
   if (error) return error;
 
   const [poems, users, students, reviews] = await Promise.all([
-    supabase!.from("poems").select("id", { count: "exact", head: true }),
-    supabase!.from("users").select("id", { count: "exact", head: true }),
-    supabase!.from("students").select("id", { count: "exact", head: true }),
-    supabase!.from("review_events").select("id", { count: "exact", head: true }),
+    supabase!.from("poems").select("*", { count: "exact", head: true }),
+    supabase!.from("users").select("*", { count: "exact", head: true }),
+    supabase!.from("students").select("*", { count: "exact", head: true }),
+    supabase!.from("review_events").select("*", { count: "exact", head: true }),
   ]);
+
+  if (users.error) console.error("[admin/stats] users:", users.error.message);
+  if (students.error) console.error("[admin/stats] students:", students.error.message);
+  if (reviews.error) console.error("[admin/stats] reviews:", reviews.error.message);
 
   return NextResponse.json({
     totalPoems: poems.count ?? 0,
