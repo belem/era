@@ -15,7 +15,7 @@ export async function GET(request: Request) {
 
   let query = supabase!
     .from("poems")
-    .select("*, poem_editions(*)", { count: "exact" })
+    .select("id, title, author, dynasty, tags, poem_editions(edition, school_system, grade, semester, page)", { count: "exact" })
     .order("title", { ascending: true })
     .range((page - 1) * limit, page * limit - 1);
 
