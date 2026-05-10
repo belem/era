@@ -1,6 +1,21 @@
 import { requireAdmin } from "@/lib/admin";
 import { NextResponse } from "next/server";
 
+export async function GET(request: Request, { params }: { params: Promise<{ poemId: string }> }) {
+  const { error, supabase } = await requireAdmin();
+  if (error) return error;
+
+  const { poemId } = await params;
+  const { data, error: queryError } = await supabase!
+    .from("poems")
+    .select("*, poem_editions(*)")
+    .eq("id", poemId)
+    .single();
+
+  if (queryError) return NextResponse.json({ error: queryError.message }, { status: 404 });
+  return NextResponse.json(data);
+}
+
 export async function PATCH(request: Request, { params }: { params: Promise<{ poemId: string }> }) {
   const { error, supabase } = await requireAdmin();
   if (error) return error;

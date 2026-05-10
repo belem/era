@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, Suspense } from "react";
 import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
 type Tab = "overview" | "poems" | "users";
@@ -41,10 +41,19 @@ interface UserRow {
 }
 
 export default function AdminPage() {
+  return (
+    <Suspense>
+      <AdminPageInner />
+    </Suspense>
+  );
+}
+
+function AdminPageInner() {
   const t = useTranslations("admin");
   const router = useRouter();
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
-  const [tab, setTab] = useState<Tab>("overview");
+  const searchParams = useSearchParams();
+  const [tab, setTab] = useState<Tab>((searchParams.get("tab") as Tab) ?? "overview");
 
   const [stats, setStats] = useState<Stats | null>(null);
   const [poems, setPoems] = useState<PoemRow[]>([]);
@@ -54,7 +63,6 @@ export default function AdminPage() {
   const [poemEdition, setPoemEdition] = useState("");
   const [poemSchoolSystem, setPoemSchoolSystem] = useState("");
   const [poemGrade, setPoemGrade] = useState("");
-  const [editingPoem, setEditingPoem] = useState<PoemRow | null>(null);
 
   const [users, setUsers] = useState<UserRow[]>([]);
   const [userTotal, setUserTotal] = useState(0);
@@ -109,29 +117,6 @@ export default function AdminPage() {
     if (!confirm(t("deleteConfirm"))) return;
     const res = await fetch(`/api/admin/poems/${id}`, { method: "DELETE" });
     if (res.ok) fetchPoems();
-  };
-
-  const handleSavePoem = async (poem: PoemRow) => {
-    const { id, poem_editions, ...fields } = poem;
-    const payload = { ...fields, editions: poem_editions };
-    let res: Response;
-    if (id) {
-      res = await fetch(`/api/admin/poems/${id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-    } else {
-      res = await fetch("/api/admin/poems", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-    }
-    if (res.ok) {
-      setEditingPoem(null);
-      fetchPoems();
-    }
   };
 
   if (isAdmin === null) {
@@ -198,16 +183,12 @@ export default function AdminPage() {
             edition={poemEdition}
             schoolSystem={poemSchoolSystem}
             grade={poemGrade}
-            editing={editingPoem}
             onSearchChange={setPoemSearch}
             onEditionChange={setPoemEdition}
             onSchoolSystemChange={setPoemSchoolSystem}
             onGradeChange={setPoemGrade}
             onPageChange={setPoemPage}
-            onEdit={setEditingPoem}
             onDelete={handleDeletePoem}
-            onSave={handleSavePoem}
-            onCancelEdit={() => setEditingPoem(null)}
           />
         )}
         {tab === "users" && <UsersTab t={t} users={users} total={userTotal} />}
@@ -242,8 +223,8 @@ const KNOWN_EDITIONS = ["人教", "苏教", "沪教", "北师", "语文", "长�
 const SCHOOL_SYSTEMS = ["六三", "五四", "高中"];
 
 function PoemsTab({
-  t, poems, total, page, search, edition, schoolSystem, grade, editing,
-  onSearchChange, onEditionChange, onSchoolSystemChange, onGradeChange, onPageChange, onEdit, onDelete, onSave, onCancelEdit,
+  t, poems, total, page, search, edition, schoolSystem, grade,
+  onSearchChange, onEditionChange, onSchoolSystemChange, onGradeChange, onPageChange, onDelete,
 }: {
   t: any;
   poems: PoemRow[];
@@ -253,17 +234,14 @@ function PoemsTab({
   edition: string;
   schoolSystem: string;
   grade: string;
-  editing: PoemRow | null;
   onSearchChange: (v: string) => void;
   onEditionChange: (v: string) => void;
   onSchoolSystemChange: (v: string) => void;
   onGradeChange: (v: string) => void;
   onPageChange: (v: number) => void;
-  onEdit: (p: PoemRow | null) => void;
   onDelete: (id: string) => void;
-  onSave: (p: PoemRow) => void;
-  onCancelEdit: () => void;
 }) {
+  const router = useRouter();
   const totalPages = Math.ceil(total / 50);
 
   return (
@@ -312,16 +290,12 @@ function PoemsTab({
           ))}
         </select>
         <button
-          onClick={() => onEdit({ id: "", title: "", author: "", dynasty: "", content_lines: [], tags: [], poem_editions: [] })}
+          onClick={() => router.push("/admin/poems/new")}
           className="px-4 py-2 bg-primary text-white rounded-[var(--radius-pill)] text-[14px] hover:bg-primary-hover transition-colors"
         >
           {t("addPoem")}
         </button>
       </div>
-
-      {editing && (
-        <PoemEditor poem={editing} t={t} onSave={onSave} onCancel={onCancelEdit} />
-      )}
 
       {poems.length === 0 ? (
         <p className="py-12 text-center text-text-tertiary text-[14px]">{t("noPoems")}</p>
@@ -350,7 +324,7 @@ function PoemsTab({
                   </td>
                   <td className="px-4 py-3 text-right">
                     <button
-                      onClick={() => onEdit(poem)}
+                      onClick={() => router.push(`/admin/poems/${poem.id}`)}
                       className="text-primary hover:underline mr-3"
                     >
                       {t("editPoem")}
@@ -394,239 +368,6 @@ function PoemsTab({
   );
 }
 
-function PoemEditor({
-  poem, t, onSave, onCancel,
-}: {
-  poem: PoemRow;
-  t: any;
-  onSave: (p: PoemRow) => void;
-  onCancel: () => void;
-}) {
-  const [title, setTitle] = useState(poem.title);
-  const [author, setAuthor] = useState(poem.author);
-  const [dynasty, setDynasty] = useState(poem.dynasty);
-  const [editions, setEditions] = useState<PoemEdition[]>(poem.poem_editions ?? []);
-  const [tags, setTags] = useState(poem.tags.join(", "));
-  const [linesText, setLinesText] = useState(() => {
-    return poem.content_lines
-      .map((line: any) => {
-        const chars = line.chars?.map((c: any) => c.char).join("") ?? "";
-        return chars + (line.punctuation ?? "");
-      })
-      .join("\n");
-  });
-  const [pinyinText, setPinyinText] = useState(() => {
-    return poem.content_lines
-      .map((line: any) => line.chars?.map((c: any) => c.pinyin).join(" ") ?? "")
-      .join("\n");
-  });
-
-  const addEdition = () => {
-    setEditions([...editions, { edition: "人教", school_system: "六三", grade: 1, semester: "上册" }]);
-  };
-
-  const removeEdition = (i: number) => {
-    setEditions(editions.filter((_, idx) => idx !== i));
-  };
-
-  const updateEdition = (i: number, field: keyof PoemEdition, value: string | number | null) => {
-    const next = [...editions];
-    if (field === "school_system") {
-      const sys = value as string;
-      next[i] = { ...next[i], school_system: sys };
-      if (next[i].grade > (sys === "高中" ? 3 : 9)) next[i].grade = 1;
-    } else {
-      next[i] = { ...next[i], [field]: value };
-    }
-    setEditions(next);
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const rawLines = linesText.split("\n").filter((l) => l.trim());
-    const pinyinLines = pinyinText.split("\n");
-
-    const content_lines = rawLines.map((line, li) => {
-      const pinyinArr = (pinyinLines[li] ?? "").split(/\s+/).filter(Boolean);
-      const chars: { char: string; pinyin: string }[] = [];
-      let punctuation = "";
-      let pi = 0;
-      for (const ch of line) {
-        if (/[\u4e00-\u9fff]/.test(ch)) {
-          chars.push({ char: ch, pinyin: pinyinArr[pi] ?? "" });
-          pi++;
-        } else if (/[，。！？；：、]/.test(ch)) {
-          punctuation = ch;
-        }
-      }
-      return { chars, punctuation };
-    });
-
-    onSave({
-      id: poem.id,
-      title,
-      author,
-      dynasty,
-      content_lines,
-      tags: tags.split(",").map((t) => t.trim()).filter(Boolean),
-      poem_editions: editions,
-    });
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className="bg-bg-subtle rounded-[var(--radius-lg)] p-6 mb-6 space-y-4">
-      <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
-        <div>
-          <label className="block text-[12px] text-text-tertiary mb-1">{t("poemTitle")}</label>
-          <input
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-            className="w-full border border-border rounded-[var(--radius-md)] bg-bg px-3 py-2 text-[14px] text-text focus:outline-none focus:ring-2 focus:ring-primary"
-          />
-        </div>
-        <div>
-          <label className="block text-[12px] text-text-tertiary mb-1">{t("poemAuthor")}</label>
-          <input
-            value={author}
-            onChange={(e) => setAuthor(e.target.value)}
-            required
-            className="w-full border border-border rounded-[var(--radius-md)] bg-bg px-3 py-2 text-[14px] text-text focus:outline-none focus:ring-2 focus:ring-primary"
-          />
-        </div>
-        <div>
-          <label className="block text-[12px] text-text-tertiary mb-1">{t("poemDynasty")}</label>
-          <input
-            value={dynasty}
-            onChange={(e) => setDynasty(e.target.value)}
-            required
-            className="w-full border border-border rounded-[var(--radius-md)] bg-bg px-3 py-2 text-[14px] text-text focus:outline-none focus:ring-2 focus:ring-primary"
-          />
-        </div>
-      </div>
-
-      <div>
-        <div className="flex items-center justify-between mb-2">
-          <label className="text-[12px] text-text-tertiary">版本/学制/年级/册次/页码</label>
-          <button
-            type="button"
-            onClick={addEdition}
-            className="text-[12px] text-primary hover:underline"
-          >
-            + 添加版本
-          </button>
-        </div>
-        {editions.length === 0 && (
-          <p className="text-[13px] text-text-tertiary py-2">未关联任何版本</p>
-        )}
-        <div className="space-y-2">
-          {editions.map((ed, i) => (
-            <div key={i} className="flex items-center gap-2 flex-wrap">
-              <select
-                value={ed.edition}
-                onChange={(e) => updateEdition(i, "edition", e.target.value)}
-                className="border border-border rounded-[var(--radius-md)] bg-bg px-2 py-1.5 text-[13px] text-text focus:outline-none focus:ring-2 focus:ring-primary"
-              >
-                {KNOWN_EDITIONS.map((k) => (
-                  <option key={k} value={k}>{k}版</option>
-                ))}
-              </select>
-              <select
-                value={ed.school_system}
-                onChange={(e) => updateEdition(i, "school_system", e.target.value)}
-                className="border border-border rounded-[var(--radius-md)] bg-bg px-2 py-1.5 text-[13px] text-text focus:outline-none focus:ring-2 focus:ring-primary"
-              >
-                {SCHOOL_SYSTEMS.map((sys) => (
-                  <option key={sys} value={sys}>{sys === "高中" ? "高中" : `${sys}学制`}</option>
-                ))}
-              </select>
-              <select
-                value={ed.grade}
-                onChange={(e) => updateEdition(i, "grade", parseInt(e.target.value, 10))}
-                className="border border-border rounded-[var(--radius-md)] bg-bg px-2 py-1.5 text-[13px] text-text focus:outline-none focus:ring-2 focus:ring-primary"
-              >
-                {Array.from({ length: ed.school_system === "高中" ? 3 : 9 }, (_, g) => g + 1).map((g) => (
-                  <option key={g} value={g}>{g}年级</option>
-                ))}
-              </select>
-              <select
-                value={ed.semester ?? ""}
-                onChange={(e) => updateEdition(i, "semester", e.target.value || null)}
-                className="border border-border rounded-[var(--radius-md)] bg-bg px-2 py-1.5 text-[13px] text-text focus:outline-none focus:ring-2 focus:ring-primary"
-              >
-                <option value="">册次</option>
-                <option value="上册">上册</option>
-                <option value="下册">下册</option>
-              </select>
-              <input
-                type="number"
-                placeholder="页码"
-                value={ed.page ?? ""}
-                onChange={(e) => updateEdition(i, "page", e.target.value ? parseInt(e.target.value, 10) : null)}
-                className="w-16 border border-border rounded-[var(--radius-md)] bg-bg px-2 py-1.5 text-[13px] text-text focus:outline-none focus:ring-2 focus:ring-primary"
-              />
-              <button
-                type="button"
-                onClick={() => removeEdition(i)}
-                className="text-error text-[13px] hover:underline"
-              >
-                x
-              </button>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div>
-        <label className="block text-[12px] text-text-tertiary mb-1">{t("poemTags")}</label>
-        <input
-          value={tags}
-          onChange={(e) => setTags(e.target.value)}
-          placeholder="spring, nature, moon"
-          className="w-full border border-border rounded-[var(--radius-md)] bg-bg px-3 py-2 text-[14px] text-text placeholder:text-text-tertiary focus:outline-none focus:ring-2 focus:ring-primary"
-        />
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div>
-          <label className="block text-[12px] text-text-tertiary mb-1">{t("poemLines")}</label>
-          <textarea
-            value={linesText}
-            onChange={(e) => setLinesText(e.target.value)}
-            rows={8}
-            required
-            className="w-full border border-border rounded-[var(--radius-md)] bg-bg px-3 py-2 text-[14px] font-poetry leading-[2] text-text focus:outline-none focus:ring-2 focus:ring-primary resize-none"
-          />
-        </div>
-        <div>
-          <label className="block text-[12px] text-text-tertiary mb-1">{t("pinyin")}</label>
-          <textarea
-            value={pinyinText}
-            onChange={(e) => setPinyinText(e.target.value)}
-            rows={8}
-            className="w-full border border-border rounded-[var(--radius-md)] bg-bg px-3 py-2 text-[14px] font-mono text-text focus:outline-none focus:ring-2 focus:ring-primary resize-none"
-          />
-        </div>
-      </div>
-
-      <div className="flex gap-3">
-        <button
-          type="submit"
-          className="px-6 py-2 bg-primary text-white rounded-[var(--radius-pill)] text-[14px] hover:bg-primary-hover transition-colors"
-        >
-          {t("save")}
-        </button>
-        <button
-          type="button"
-          onClick={onCancel}
-          className="px-6 py-2 border border-border rounded-[var(--radius-pill)] text-[14px] text-text-secondary hover:border-primary hover:text-primary transition-colors"
-        >
-          {t("cancel")}
-        </button>
-      </div>
-    </form>
-  );
-}
 
 function UsersTab({ t, users, total }: { t: any; users: UserRow[]; total: number }) {
   return (
