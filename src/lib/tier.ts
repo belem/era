@@ -26,7 +26,7 @@ export function planLabel(plan: Plan): string {
     FREE: "Free",
     PRO: "Pro",
     MAX: "Max",
-    ADMIN: "Admin",
+    ADMIN: "Enterprise",
   };
   return labels[plan];
 }

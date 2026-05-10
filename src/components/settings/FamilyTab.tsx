@@ -116,7 +116,7 @@ export function FamilyTab() {
           <button
             type="submit"
             disabled={sending}
-            className="px-6 py-2.5 border border-primary text-primary rounded-[var(--radius-pill)] text-[14px] font-medium hover:bg-primary hover:text-white transition-colors disabled:opacity-50"
+            className="px-6 py-2.5 border border-primary text-primary rounded-[var(--radius-pill)] text-[14px] font-medium hover:bg-primary hover:text-white transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5"
           >
             {sending ? <><Spinner size={15} />{t("sendInvite")}</> : t("sendInvite")}
           </button>

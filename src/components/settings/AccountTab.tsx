@@ -154,7 +154,7 @@ export function AccountTab() {
       <button
         onClick={handleLogout}
         disabled={loggingOut}
-        className="w-full text-center text-[14px] text-error hover:text-error/80 transition-colors py-3 disabled:opacity-50"
+        className="w-full flex items-center justify-center text-[14px] text-error hover:text-error/80 transition-colors py-3 disabled:opacity-50"
       >
         {loggingOut ? <Spinner size={16} /> : t("logout")}
       </button>

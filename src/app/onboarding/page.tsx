@@ -268,7 +268,7 @@ export default function OnboardingPage() {
                 <button
                   onClick={handleSubmit}
                   disabled={loading}
-                  className="flex-1 bg-primary text-white rounded-[var(--radius-pill)] py-3 font-medium hover:bg-primary-hover transition-colors disabled:opacity-50"
+                  className="flex-1 bg-primary text-white rounded-[var(--radius-pill)] py-3 font-medium hover:bg-primary-hover transition-colors disabled:opacity-50 flex items-center justify-center"
                 >
                   {loading ? <Spinner size={18} /> : t("done")}
                 </button>

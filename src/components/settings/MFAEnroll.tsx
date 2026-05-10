@@ -218,7 +218,7 @@ export function MFAEnroll() {
           <button
             onClick={handleDisable}
             disabled={disabling}
-            className="text-[13px] text-error hover:underline disabled:opacity-50"
+            className="text-[13px] text-error hover:underline disabled:opacity-50 flex items-center justify-center"
           >
             {disabling ? <Spinner size={14} /> : t("disable")}
           </button>

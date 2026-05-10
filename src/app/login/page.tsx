@@ -406,7 +406,7 @@ function LoginForm() {
                       }
                       setMagicLinkLoading(false);
                     }}
-                    className="w-full text-center text-text-tertiary text-sm hover:text-primary transition-colors disabled:opacity-50"
+                    className="w-full flex items-center justify-center text-text-tertiary text-sm hover:text-primary transition-colors disabled:opacity-50"
                   >
                     {magicLinkLoading ? <Spinner size={16} /> : t("magicLink")}
                   </button>
