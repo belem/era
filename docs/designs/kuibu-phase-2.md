@@ -420,7 +420,7 @@ Initial badge catalog (5 badges, expand later):
 |-------|----------|------|-------------|
 | First Scroll (初卷) | Complete 1 Living Scroll | SVG scroll | `--badge-1` (#ff9500) |
 | Seven Days (七日) | 7-day streak | SVG flame x7 | `--badge-1` (#ff9500) |
-| Moon (明月) | 30-day streak | SVG crescent moon | `--badge-2` (#0071e3) |
+| Moon (明月) | 30-day streak | SVG crescent moon | `--badge-2` (#003D74) |
 | Grade Master (年级通) | All poems in one grade mastered | SVG star | `--badge-3` (#34c759) |
 | Hundred (百篇) | 100 poems reviewed total | SVG seal/stamp | `--badge-4` (#1d1d1f) |
 

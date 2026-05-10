@@ -42,7 +42,7 @@ export function AppHeader() {
   return (
     <header className="app-header sticky top-0 z-40 flex items-center justify-between px-5 h-12 border-b border-border-subtle md:h-14 md:px-8">
       <Link href="/" className="flex items-center gap-2 font-heading font-semibold text-[17px] tracking-tight text-text">
-        <svg width="22" height="28" viewBox="0 0 220 283" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 220 220" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <rect x="180" y="180" width="40" height="40" fill="#235994"/>
           <rect x="60" y="180" width="40" height="40" fill="#1781B5"/>
           <rect x="120" y="180" width="40" height="40" fill="#106898"/>
@@ -53,7 +53,6 @@ export function AppHeader() {
           <rect x="180" y="60" width="40" height="40" fill="#93B5CF"/>
           <rect x="180" width="40" height="40" fill="#E3F9FD"/>
           <rect x="180" y="120" width="40" height="40" fill="#2486B9"/>
-          <rect y="241" width="220" height="40" fill="#003D74"/>
         </svg>
         跬步
       </Link>

@@ -128,7 +128,7 @@ Replace `src/app/globals.css` with the full token file. Key tokens:
   --text-tertiary: #86868b;
   --border: #d2d2d7;
   --border-subtle: #e5e5ea;
-  --primary: #0071e3;
+  --primary: #003D74;
   --primary-hover: #0077ed;
   --primary-soft: #e1ecf7;
   --accent: #ff6b6b;
@@ -136,7 +136,7 @@ Replace `src/app/globals.css` with the full token file. Key tokens:
   --accent-soft: #fff0f0;
   --success: #34c759;
   --error: #ff3b30;
-  --info: #0071e3;
+  --info: #003D74;
   --warning: #ff9500;
   --radius-sm: 5px;
   --radius-md: 8px;

@@ -19,7 +19,7 @@
   --border-subtle: #e5e5ea;
 
   /* Primary: Apple Blue — the only interactive accent */
-  --primary: #0071e3;
+  --primary: #003D74;
   --primary-hover: #0077ed;
   --primary-soft: #e1ecf7;
 
@@ -31,12 +31,12 @@
   /* Semantic */
   --success: #34c759;
   --error: #ff3b30;
-  --info: #0071e3;
+  --info: #003D74;
   --warning: #ff9500;
 
   /* Badge palette (content layer only) */
   --badge-1: #ff9500;
-  --badge-2: #0071e3;
+  --badge-2: #003D74;
   --badge-3: #34c759;
   --badge-4: #1d1d1f;
 

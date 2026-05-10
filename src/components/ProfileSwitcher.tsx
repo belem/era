@@ -37,7 +37,7 @@ export function ProfileSwitcher() {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full hover:bg-bg-muted transition-colors"
+        className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full hover:bg-bg-muted transition-colors cursor-pointer"
         aria-label="Switch profile"
       >
         <div className="w-7 h-7 rounded-full bg-primary/10 text-primary flex items-center justify-center text-[12px] font-medium">
@@ -48,11 +48,10 @@ export function ProfileSwitcher() {
       {isOpen && (
         <div className="absolute right-0 top-[calc(100%+8px)] min-w-[160px] bg-bg-subtle rounded-[var(--radius-lg)] shadow-lg overflow-hidden border border-border-subtle">
           {students.map((s) => (
-            <div
+            <Link
               key={s.id}
-              role="button"
-              tabIndex={0}
-              className={`w-full px-4 py-2.5 text-left text-[14px] transition-colors cursor-pointer ${
+              href="/profile"
+              className={`w-full px-4 py-2.5 text-left text-[14px] transition-colors cursor-pointer flex items-center gap-2.5 ${
                 s.id === student.id
                   ? "text-primary font-medium"
                   : "text-text hover:bg-bg-muted"
@@ -61,33 +60,20 @@ export function ProfileSwitcher() {
                 switchStudent(s.id);
                 setIsOpen(false);
               }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  switchStudent(s.id);
-                  setIsOpen(false);
-                }
-              }}
             >
-              <div className="flex items-center gap-2.5">
-                <Link
-                  href="/profile"
-                  onClick={(e) => { e.stopPropagation(); setIsOpen(false); }}
-                  className="w-6 h-6 rounded-full bg-primary/20 text-primary flex items-center justify-center text-[11px] font-medium hover:opacity-70 transition-opacity shrink-0"
-                >
-                  {nameInitial(s.name)}
-                </Link>
-                <div>
-                  <div className="leading-tight">{s.name}</div>
-                  <div className="text-[11px] text-text-secondary">
-                    {s.edition} · {s.school_system === "高中" ? "高中" : s.school_system}
-                  </div>
-                  <div className="text-[11px] text-text-secondary">
-                    {s.grade ? `${"一二三四五六七八九".at(Number(s.grade) - 1) ?? s.grade}年级` : ""}
-                  </div>
+              <div className="w-6 h-6 rounded-full bg-primary/20 text-primary flex items-center justify-center text-[11px] font-medium shrink-0">
+                {nameInitial(s.name)}
+              </div>
+              <div>
+                <div className="leading-tight">{s.name}</div>
+                <div className="text-[11px] text-text-secondary">
+                  {s.edition} · {s.school_system === "高中" ? "高中" : s.school_system}
+                </div>
+                <div className="text-[11px] text-text-secondary">
+                  {s.grade ? `${"一二三四五六七八九".at(Number(s.grade) - 1) ?? s.grade}年级` : ""}
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       )}

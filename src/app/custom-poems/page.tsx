@@ -37,14 +37,14 @@ export default function CustomPoemsPage() {
 
   useEffect(() => {
     const supabase = createClient();
-    supabase.auth.getUser().then(({ data }) => {
+    supabase.auth.getUser().then(async ({ data }) => {
       if (!data.user) return;
-      supabase
+      const { data: row } = await supabase
         .from("users")
         .select("plan")
         .eq("id", data.user.id)
-        .single()
-        .then(({ data: row }) => { if (row?.plan) setUserPlan(row.plan as Plan); });
+        .single();
+      if (row?.plan) setUserPlan(row.plan as Plan);
     });
   }, []);
 

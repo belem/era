@@ -231,6 +231,8 @@
     "inviteEmailPlaceholder": "监护人邮箱地址",
     "inviteSent": "邀请已发送！",
     "sendInvite": "发送邀请",
+    "alreadyPending": "该邮箱已有待处理的邀请",
+    "inviteError": "发送邀请失败，请重试",
     "mfa": {
       "title": "两步验证",
       "description": "使用验证器应用（如 Google Authenticator、Authy）为账户添加额外安全保护。",

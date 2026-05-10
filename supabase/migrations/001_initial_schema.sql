@@ -297,7 +297,7 @@ CREATE TABLE fragment_decks (
   student_id UUID NOT NULL REFERENCES students ON DELETE CASCADE,
   name TEXT NOT NULL,
   description TEXT,
-  color TEXT DEFAULT '#0071e3',
+  color TEXT DEFAULT '#003D74',
   created_at TIMESTAMPTZ DEFAULT now(),
   updated_at TIMESTAMPTZ DEFAULT now()
 );

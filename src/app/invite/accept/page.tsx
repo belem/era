@@ -38,10 +38,10 @@ function AcceptContent() {
       supabase.auth.getUser(),
       supabase
         .from("guardian_invitations")
-        .select("*, students(name), profiles!guardian_invitations_invited_by_fkey(display_name)")
+        .select("*, students(name)")
         .eq("token", token)
         .single(),
-    ]).then(([{ data: { user: authUser } }, { data: invitation, error: invError }]) => {
+    ]).then(async ([{ data: { user: authUser } }, { data: invitation, error: invError }]) => {
       setUser(authUser);
 
       if (invError || !invitation) {
@@ -51,9 +51,15 @@ function AcceptContent() {
       } else if (new Date(invitation.expires_at) < new Date()) {
         setError("expired");
       } else {
+        // Fetch inviter profile separately to avoid FK hint issues
+        const { data: inviterProfile } = await supabase
+          .from("profiles")
+          .select("display_name")
+          .eq("id", invitation.invited_by)
+          .single();
         setInvite({
           studentName: (invitation as any).students?.name ?? "Student",
-          inviterName: (invitation as any).profiles?.display_name ?? "Someone",
+          inviterName: inviterProfile?.display_name ?? "Someone",
         });
       }
 

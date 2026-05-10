@@ -55,7 +55,9 @@ export function FamilyTab() {
       setSent(true);
       setInviteEmail("");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to send invitation");
+      const msg = err instanceof Error ? err.message : "";
+      if (msg.includes("already pending")) setError(t("alreadyPending"));
+      else setError(t("inviteError"));
     } finally {
       setSending(false);
     }

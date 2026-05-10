@@ -27,15 +27,22 @@ function FlagZH() {
 
 function FlagEN() {
   return (
-    <svg width="20" height="15" viewBox="0 0 60 30" aria-label="English">
-      <clipPath id="t">
-        <path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z" />
-      </clipPath>
-      <path d="M0,0 v30 h60 v-30 z" fill="#012169" />
-      <path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" strokeWidth="6" />
-      <path d="M0,0 L60,30 M60,0 L0,30" stroke="#C8102E" strokeWidth="4" clipPath="url(#t)" />
-      <path d="M30,0 v30 M0,15 h60" stroke="#fff" strokeWidth="10" />
-      <path d="M30,0 v30 M0,15 h60" stroke="#C8102E" strokeWidth="6" />
+    <svg width="20" height="15" viewBox="0 0 190 100" aria-label="English">
+      {/* Stripes */}
+      {[0,1,2,3,4,5,6,7,8,9,10,11,12].map((i) => (
+        <rect key={i} x="0" y={i * (100/13)} width="190" height={100/13}
+          fill={i % 2 === 0 ? "#B22234" : "#FFFFFF"} />
+      ))}
+      {/* Canton (blue field) */}
+      <rect x="0" y="0" width="76" height={100 * 7/13} fill="#3C3B6E" />
+      {/* Stars — 5×6 + 4×5 grid */}
+      {Array.from({ length: 50 }, (_, i) => {
+        const row = Math.floor(i / (i < 30 ? 6 : 5));
+        const col = i % (i < 30 ? 6 : 5);
+        const x = i < 30 ? 6.3 + col * 12.7 : 12.7 + col * 12.7;
+        const y = i < 30 ? 5.4 + row * 10.8 : 10.8 + row * 10.8;
+        return <circle key={i} cx={x} cy={y} r="2.5" fill="#FFFFFF" />;
+      })}
     </svg>
   );
 }
@@ -53,7 +60,7 @@ export function LocaleSwitcher() {
   return (
     <button
       onClick={toggle}
-      className="flex items-center gap-1 px-2 py-1 rounded-[var(--radius-md)] hover:bg-bg-subtle transition-colors"
+      className="flex items-center gap-1 px-2 py-1 rounded-[var(--radius-md)] hover:bg-bg-subtle transition-colors cursor-pointer"
       aria-label={locale === "zh-CN" ? "Switch to English" : "切换到中文"}
       title={locale === "zh-CN" ? "Switch to English" : "切换到中文"}
     >

@@ -102,7 +102,7 @@ export default function FragmentReviewPage({ params }: { params: Promise<{ deckI
                         className="h-full rounded-full transition-all duration-700"
                         style={{
                           width: `${pct}%`,
-                          backgroundColor: r === "easy" ? "#34c759" : r === "good" ? "#0071e3" : r === "hard" ? "#ff9500" : "#ff3b30",
+                          backgroundColor: r === "easy" ? "#34c759" : r === "good" ? "#003D74" : r === "hard" ? "#ff9500" : "#ff3b30",
                         }}
                       />
                     </div>
