@@ -29,7 +29,7 @@ export function useFragmentQueue(deckId?: string) {
       query = query.eq("fragments.deck_id", deckId);
     }
 
-    query.then(({ data }) => {
+    Promise.resolve(query).then(({ data }) => {
       if (data) {
         const mapped: Fragment[] = data
           .filter((r: any) => r.fragments)

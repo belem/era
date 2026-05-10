@@ -1,6 +1,7 @@
 import { createServerSupabase } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
 import { pinyinLimiter, checkRateLimit } from "@/lib/ratelimit";
+import { hasPlan, tierConfig, type Plan } from "@/lib/tier";
 
 /**
  * Generate pinyin for Chinese text.
@@ -22,7 +23,7 @@ export async function POST(request: Request) {
     .eq("id", user.id)
     .single();
 
-  if (!userData || (userData.plan !== "PRO" && userData.plan !== "MAX" && userData.plan !== "ADMIN")) {
+  if (!userData || !hasPlan(userData.plan as Plan, tierConfig.pinyinGen)) {
     return NextResponse.json({ error: "Requires Pro or Max plan" }, { status: 403 });
   }
 

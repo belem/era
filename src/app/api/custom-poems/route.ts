@@ -1,6 +1,7 @@
 import { createServerSupabase } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
 import { generalLimiter, checkRateLimit } from "@/lib/ratelimit";
+import { hasPlan, tierConfig, type Plan } from "@/lib/tier";
 
 export async function GET(request: Request) {
   const supabase = await createServerSupabase();
@@ -39,7 +40,7 @@ export async function POST(request: Request) {
     .eq("id", user.id)
     .single();
 
-  if (!userData || (userData.plan !== "PRO" && userData.plan !== "MAX" && userData.plan !== "ADMIN")) {
+  if (!userData || !hasPlan(userData.plan as Plan, tierConfig.customPoems)) {
     return NextResponse.json({ error: "Requires Pro or Max plan" }, { status: 403 });
   }
 

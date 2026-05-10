@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { useStudent } from "@/hooks/useStudent";
 import { createClient } from "@/lib/supabase/client";
+import { hasPlan, tierConfig, type Plan } from "@/lib/tier";
 import type { AlgorithmName } from "@/lib/srs/types";
 
 const algorithms: { key: AlgorithmName; icon: string; descKey: string }[] = [
@@ -73,7 +74,7 @@ export function LearningTab() {
         .eq("id", data.user.id)
         .single()
         .then(({ data: row }) => {
-          if (row?.plan) setUserPlan(row.plan);
+          if (row?.plan) setUserPlan(row.plan as Plan);
         });
     });
   }, []);
@@ -166,7 +167,7 @@ export function LearningTab() {
           {algorithms.map((algo) => {
             const isActive = activeAlgo === algo.key;
             const isExpanded = expanded === algo.key;
-            const isLocked = algo.key === "FSRS" && userPlan === "FREE";
+            const isLocked = algo.key === "FSRS" && !hasPlan(userPlan as Plan, tierConfig.fsrs);
             return (
               <div
                 key={algo.key}

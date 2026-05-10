@@ -80,7 +80,7 @@ export function StudentProvider({ children }: { children: ReactNode }) {
     const isPublic = PUBLIC_PATHS.some((p) => pathname.startsWith(p));
     if (isPublic) { setLoading(false); return; }
     const supabase = createClient();
-    supabase.from("students").select("id, name, school_system, grade, edition, algorithm, settings_json").then(({ data }) => {
+    Promise.resolve(supabase.from("students").select("id, name, school_system, grade, edition, algorithm, settings_json")).then(({ data }) => {
       if (data) {
         const fresh = data as Student[];
         setStudents(fresh);

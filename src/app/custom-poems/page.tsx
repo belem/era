@@ -6,6 +6,8 @@ import { useStudent } from "@/hooks/useStudent";
 import { usePoetrySearch } from "@/hooks/usePoetrySearch";
 import { AppHeader } from "@/components/AppHeader";
 import { TabBar } from "@/components/TabBar";
+import { createClient } from "@/lib/supabase/client";
+import { hasPlan, tierConfig, type Plan } from "@/lib/tier";
 
 interface CustomPoem {
   id: string;
@@ -30,6 +32,21 @@ export default function CustomPoemsPage() {
   const [loading, setLoading] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
   const [createError, setCreateError] = useState("");
+  const [userPlan, setUserPlan] = useState<Plan>("FREE");
+  const canCreate = hasPlan(userPlan, tierConfig.customPoems);
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data }) => {
+      if (!data.user) return;
+      supabase
+        .from("users")
+        .select("plan")
+        .eq("id", data.user.id)
+        .single()
+        .then(({ data: row }) => { if (row?.plan) setUserPlan(row.plan as Plan); });
+    });
+  }, []);
 
   // Create form state
   const [title, setTitle] = useState("");
@@ -158,12 +175,19 @@ export default function CustomPoemsPage() {
           <h1 className="font-heading font-semibold text-[28px] leading-tight tracking-tight">
             {t("title")}
           </h1>
-          <button
-            onClick={() => setShowCreate(!showCreate)}
-            className="text-[14px] text-primary hover:underline"
-          >
-            {showCreate ? t("cancel") : t("newPoem")}
-          </button>
+          {canCreate ? (
+            <button
+              onClick={() => setShowCreate(!showCreate)}
+              className="text-[14px] text-primary hover:underline"
+            >
+              {showCreate ? t("cancel") : t("newPoem")}
+            </button>
+          ) : (
+            <a href="/pricing" className="flex items-center gap-1.5 text-[13px] text-text-secondary hover:text-primary transition-colors">
+              <span className="text-[11px] font-semibold text-amber-600 bg-amber-100 dark:bg-amber-900/30 dark:text-amber-400 px-2 py-0.5 rounded-full">Pro</span>
+              {t("upgradeToPro")}
+            </a>
+          )}
         </div>
 
         {showCreate && (

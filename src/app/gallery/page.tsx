@@ -115,7 +115,7 @@ export default function GalleryPage() {
               >
                 {/* ChopStamp */}
                 <div className="absolute top-2 right-2">
-                  <ChopStamp name={student?.name.slice(-1) ?? "学"} size={48} />
+                  <ChopStamp name={student?.name.slice(-1) ?? "学"} size={36} />
                 </div>
 
                 <h3 className="font-heading font-semibold text-[17px] text-text tracking-tight mb-0.5 pr-14">

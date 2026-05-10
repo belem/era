@@ -216,6 +216,14 @@
     "connected": "Connected",
     "link": "Link",
     "logout": "Log out",
+    "plan": {
+      "label": "Plan",
+      "free": "Free",
+      "pro": "Pro",
+      "max": "Max",
+      "admin": "Admin"
+    },
+    "upgrade": "Upgrade",
     "guardians": "Guardians",
     "noGuardians": "No other guardians linked. Invite someone to help manage {name}'s learning.",
     "unknownGuardian": "Guardian",
@@ -363,6 +371,32 @@
     "pinyinGenerated": "{count} characters",
     "savePoem": "Save Poem",
     "empty": "No custom poems yet",
-    "requiresPro": "Custom poems require a Pro or Max subscription"
+    "requiresPro": "Custom poems require a Pro or Max subscription",
+    "upgradeToPro": "Upgrade to use"
+  },
+  "pricing": {
+    "title": "Plans",
+    "subtitle": "Choose the plan that fits your learning journey",
+    "free": "Free",
+    "pro": "Pro",
+    "max": "Max",
+    "month": "mo",
+    "freePrice": "Free",
+    "proPrice": "TBD",
+    "maxPrice": "TBD",
+    "current": "Current plan",
+    "contactUs": "Contact us",
+    "contactDesc": "To upgrade, email us at",
+    "features": {
+      "review": "Poetry review (SM-2 + Leitner)",
+      "students": "Student profiles",
+      "fsrs": "FSRS algorithm",
+      "customPoems": "Custom poems",
+      "pinyin": "Auto pinyin generation",
+      "analytics": "Advanced analytics"
+    },
+    "students": "{n}",
+    "backHome": "Back to home"
   }
 }
+

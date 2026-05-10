@@ -6,6 +6,14 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { MFAEnroll } from "./MFAEnroll";
 import { Spinner } from "@/components/Spinner";
+import type { Plan } from "@/lib/tier";
+
+const PLAN_BADGE: Record<Plan, { label: string; className: string }> = {
+  FREE: { label: "Free", className: "text-text-secondary bg-bg-muted" },
+  PRO: { label: "Pro", className: "text-blue-600 bg-blue-100 dark:text-blue-400 dark:bg-blue-900/30" },
+  MAX: { label: "Max", className: "text-green-700 bg-green-100 dark:text-green-400 dark:bg-green-900/30" },
+  ADMIN: { label: "Admin", className: "text-purple-700 bg-purple-100 dark:text-purple-400 dark:bg-purple-900/30" },
+};
 
 export function AccountTab() {
   const t = useTranslations("settings");
@@ -14,6 +22,7 @@ export function AccountTab() {
   const [providers, setProviders] = useState<string[]>([]);
   const [loggingOut, setLoggingOut] = useState(false);
   const [linkError, setLinkError] = useState("");
+  const [plan, setPlan] = useState<Plan | null>(null);
 
   useEffect(() => {
     const supabase = createClient();
@@ -22,6 +31,12 @@ export function AccountTab() {
         setEmail(user.email ?? "");
         const linked = user.identities?.map((i) => i.provider) ?? [];
         setProviders(linked);
+        supabase
+          .from("users")
+          .select("plan")
+          .eq("id", user.id)
+          .single()
+          .then(({ data }) => { if (data?.plan) setPlan(data.plan as Plan); });
       }
     });
   }, []);
@@ -109,6 +124,25 @@ export function AccountTab() {
           })}
         </div>
       </section>
+
+      {/* Plan */}
+      {plan && (
+        <section>
+          <h3 className="text-[13px] uppercase tracking-[0.08em] text-text-secondary mb-3">
+            {t("plan.label")}
+          </h3>
+          <div className="flex items-center justify-between bg-bg-subtle rounded-[var(--radius-lg)] px-4 py-3">
+            <span className={`text-[12px] font-semibold px-2.5 py-1 rounded-full ${PLAN_BADGE[plan].className}`}>
+              {PLAN_BADGE[plan].label}
+            </span>
+            {plan === "FREE" && (
+              <a href="/pricing" className="text-[13px] text-primary hover:underline">
+                {t("upgrade")}
+              </a>
+            )}
+          </div>
+        </section>
+      )}
 
       {/* Logout */}
       <button
