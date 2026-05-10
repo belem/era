@@ -149,7 +149,7 @@ function AdminPageInner() {
           <h1 className="font-heading font-semibold text-[22px] text-text">{t("title")}</h1>
           <button
             onClick={() => router.push("/")}
-            className="text-[14px] text-text-secondary hover:text-primary transition-colors"
+            className="text-[14px] text-text-secondary hover:text-primary transition-colors cursor-pointer"
           >
             {t("back")}
           </button>
@@ -291,7 +291,7 @@ function PoemsTab({
         </select>
         <button
           onClick={() => router.push("/admin/poems/new")}
-          className="px-4 py-2 bg-primary text-white rounded-[var(--radius-pill)] text-[14px] hover:bg-primary-hover transition-colors"
+          className="px-4 py-2 bg-primary text-white rounded-[var(--radius-pill)] text-[14px] hover:bg-primary-hover transition-colors cursor-pointer"
         >
           {t("addPoem")}
         </button>
@@ -323,15 +323,17 @@ function PoemsTab({
                       : "-"}
                   </td>
                   <td className="px-4 py-3 text-right">
-                    <button
-                      onClick={() => router.push(`/admin/poems/${poem.id}`)}
-                      className="text-primary hover:underline mr-3"
+                    <a
+                      href={`/admin/poems/${poem.id}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-primary hover:underline cursor-pointer mr-3"
                     >
                       {t("editPoem")}
-                    </button>
+                    </a>
                     <button
                       onClick={() => onDelete(poem.id)}
-                      className="text-error hover:underline"
+                      className="text-error hover:underline cursor-pointer"
                     >
                       {t("deletePoem")}
                     </button>
@@ -348,7 +350,7 @@ function PoemsTab({
           <button
             disabled={page <= 1}
             onClick={() => onPageChange(page - 1)}
-            className="px-3 py-1.5 border border-border rounded-[var(--radius-md)] text-[14px] disabled:opacity-30 hover:border-primary transition-colors"
+            className="px-3 py-1.5 border border-border rounded-[var(--radius-md)] text-[14px] disabled:opacity-30 hover:border-primary transition-colors cursor-pointer"
           >
             &larr;
           </button>
@@ -358,7 +360,7 @@ function PoemsTab({
           <button
             disabled={page >= totalPages}
             onClick={() => onPageChange(page + 1)}
-            className="px-3 py-1.5 border border-border rounded-[var(--radius-md)] text-[14px] disabled:opacity-30 hover:border-primary transition-colors"
+            className="px-3 py-1.5 border border-border rounded-[var(--radius-md)] text-[14px] disabled:opacity-30 hover:border-primary transition-colors cursor-pointer"
           >
             &rarr;
           </button>
