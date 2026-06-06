@@ -55,6 +55,16 @@
     "gallery": "诗廊",
     "profile": "我的"
   },
+  "profileMenu": {
+    "openLabel": "打开个人菜单",
+    "switchProfile": "切换学习者",
+    "currentLabel": "当前",
+    "addProfile": "添加学习者",
+    "settings": "设置",
+    "logout": "退出登录",
+    "noStudentsYet": "还没有学习者",
+    "addFirstStudent": "创建第一位学习者"
+  },
   "library": {
     "title": "诗库",
     "searchPlaceholder": "搜索诗名、作者、诗句或拼音...",

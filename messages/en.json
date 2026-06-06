@@ -55,6 +55,16 @@
     "gallery": "Gallery",
     "profile": "Profile"
   },
+  "profileMenu": {
+    "openLabel": "Open profile menu",
+    "switchProfile": "Switch profile",
+    "currentLabel": "Current",
+    "addProfile": "Add another profile",
+    "settings": "Settings",
+    "logout": "Log out",
+    "noStudentsYet": "No profiles yet",
+    "addFirstStudent": "Create your first profile"
+  },
   "library": {
     "title": "Poetry Library",
     "searchPlaceholder": "Search by title, author, verse, or pinyin...",
