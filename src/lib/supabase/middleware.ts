@@ -40,8 +40,10 @@ export async function updateSession(request: NextRequest) {
     }
   }
 
-  // MFA enforcement: if user has enrolled TOTP factors, check AAL level
-  if (user && !request.nextUrl.pathname.startsWith("/auth/mfa")) {
+  // MFA enforcement: if user has enrolled TOTP factors, check AAL level.
+  // Skip on public paths so recovery flows (forgot/reset password, magic-link
+  // sign-in landing) don't bounce mid-flow.
+  if (user && !isPublic && !request.nextUrl.pathname.startsWith("/auth/mfa")) {
     const { data: aal } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
     const { data: factors } = await supabase.auth.mfa.listFactors();
     const hasVerifiedTOTP = (factors?.totp ?? []).some((f) => f.status === "verified");

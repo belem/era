@@ -15,23 +15,16 @@ function ResetPasswordContent() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [expired, setExpired] = useState(false);
+  const [checking, setChecking] = useState(true);
 
+  // The /auth/callback route exchanges the recovery code for a session before
+  // redirecting here. If there is no session, the link expired or was used twice.
   useEffect(() => {
-    // Supabase handles the token exchange via the URL hash automatically
     const supabase = createClient();
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
-      if (event === "TOKEN_REFRESHED" || event === "SIGNED_IN") {
-        // Token is valid, user can reset
-      }
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!session) setExpired(true);
+      setChecking(false);
     });
-
-    // Check if there's an error in the URL hash (expired token)
-    const hash = window.location.hash;
-    if (hash.includes("error=")) {
-      setExpired(true);
-    }
-
-    return () => subscription.unsubscribe();
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -45,20 +38,31 @@ function ResetPasswordContent() {
 
     try {
       const supabase = createClient();
-      const { error } = await supabase.auth.updateUser({ password });
-      if (error) throw error;
+      const { error: updateError } = await supabase.auth.updateUser({ password });
+      if (updateError) throw updateError;
+      // Sign out the recovery session — user must log in fresh with the new password.
+      await supabase.auth.signOut();
       setSuccess(true);
       setTimeout(() => router.push("/login"), 2000);
     } catch (err) {
-      if (err instanceof Error && err.message.includes("token")) {
+      const msg = err instanceof Error ? err.message : "Failed to reset password";
+      if (msg.toLowerCase().includes("token") || msg.toLowerCase().includes("session")) {
         setExpired(true);
       } else {
-        setError(err instanceof Error ? err.message : "Failed to reset password");
+        setError(msg);
       }
     } finally {
       setLoading(false);
     }
   };
+
+  if (checking) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-bg p-6">
+        <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
 
   if (expired) {
     return (

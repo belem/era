@@ -48,7 +48,7 @@ export function AccountTab() {
     router.push("/login");
   };
 
-  const handleLink = async (provider: "google" | "github" | "twitter") => {
+  const handleLink = async (provider: "github") => {
     setLinkError("");
     const supabase = createClient();
     const { error } = await supabase.auth.linkIdentity({
@@ -67,9 +67,7 @@ export function AccountTab() {
   };
 
   const providerList = [
-    { key: "google", label: "Google" },
     { key: "github", label: "GitHub" },
-    { key: "twitter", label: "X" },
   ] as const;
 
   return (

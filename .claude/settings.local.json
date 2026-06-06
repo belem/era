@@ -48,7 +48,8 @@
       "Bash(grep -n '\\\\\\\\\\\\\\\\1' scripts/seed-batches/seed-poems-18-editions.sql)",
       "Bash(grep *)",
       "Bash(git show *)",
-      "Read(//tmp/**)"
+      "Read(//tmp/**)",
+      "Bash(netstat -ano)"
     ]
   }
 }
