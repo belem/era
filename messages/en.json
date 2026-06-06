@@ -164,6 +164,8 @@
     "sessionExpired": "Your session has expired. Please sign in again.",
     "authError": "Authentication link is invalid or expired. Please sign in again.",
     "authErrorReason": "Reason: {reason}",
+    "authErrorIdentityExists": "This email is already registered with a password. Sign in with your email and password, then link GitHub from Settings.",
+    "authErrorServerHiccup": "Sign-in failed unexpectedly. Try again, or use email and password.",
     "otpExpired": "Confirmation link failed. This usually happens when the link is opened in a different browser, or after the link expired.",
     "otpExpiredHint": "Enter your email below to resend the confirmation."
   },

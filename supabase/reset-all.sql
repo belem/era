@@ -532,19 +532,38 @@ INSERT INTO badges (name, description, criteria_type, criteria_value, icon) VALU
 -- TRIGGERS
 -- ==========================================================================
 
--- Auto-create profile + user row on signup
+-- Auto-create profile + user row on signup.
+-- Each insert wrapped in BEGIN/EXCEPTION so a failure here NEVER aborts the
+-- auth.users INSERT — otherwise OAuth flows return generic `unexpected_failure`
+-- with no way for the user to recover. ON CONFLICT handles retries.
 CREATE OR REPLACE FUNCTION handle_new_user()
-RETURNS trigger AS $$
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
 BEGIN
-  INSERT INTO public.profiles (id) VALUES (new.id);
-  INSERT INTO public.users (id, accepted_terms_at)
-  VALUES (
-    new.id,
-    (new.raw_user_meta_data->>'accepted_terms_at')::TIMESTAMPTZ
-  );
+  BEGIN
+    INSERT INTO public.profiles (id) VALUES (new.id)
+    ON CONFLICT (id) DO NOTHING;
+  EXCEPTION WHEN OTHERS THEN
+    RAISE WARNING 'handle_new_user: profiles insert failed for %: %', new.id, SQLERRM;
+  END;
+
+  BEGIN
+    INSERT INTO public.users (id, accepted_terms_at)
+    VALUES (
+      new.id,
+      (new.raw_user_meta_data->>'accepted_terms_at')::TIMESTAMPTZ
+    )
+    ON CONFLICT (id) DO NOTHING;
+  EXCEPTION WHEN OTHERS THEN
+    RAISE WARNING 'handle_new_user: users insert failed for %: %', new.id, SQLERRM;
+  END;
+
   RETURN new;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
+$$;
 
 CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users

@@ -311,7 +311,19 @@ function LoginForm() {
 
           {authError && !sessionExpired && (
             <div className="mb-4 px-4 py-3 rounded-[var(--radius-md)] border border-error bg-error/10 text-[14px] text-text-secondary space-y-2">
-              <p>{authErrorReason?.includes("expired") ? t("otpExpired") : t("authError")}</p>
+              <p>
+                {(() => {
+                  const reason = authErrorReason ?? "";
+                  if (reason.includes("expired")) return t("otpExpired");
+                  if (
+                    reason.includes("identity_already_exists") ||
+                    reason.includes("email_exists") ||
+                    reason.includes("user_already_exists")
+                  ) return t("authErrorIdentityExists");
+                  if (reason.includes("unexpected_failure")) return t("authErrorServerHiccup");
+                  return t("authError");
+                })()}
+              </p>
               {authErrorReason && (
                 <p className="text-[12px] text-text-tertiary">
                   {t("authErrorReason", { reason: authErrorReason })}
