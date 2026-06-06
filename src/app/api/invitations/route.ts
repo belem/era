@@ -1,6 +1,7 @@
 import { createServerSupabase } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
 import { generalLimiter, checkRateLimit } from "@/lib/ratelimit";
+import { sendEmail } from "@/lib/email";
 
 export async function POST(request: Request) {
   const supabase = await createServerSupabase();
@@ -49,29 +50,20 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  // Send email via Resend (if configured and installed)
-  if (process.env.RESEND_API_KEY) {
-    try {
-      // Dynamic import: resend is an optional dependency
-      const resendModule = await import("resend" as string) as { Resend: new (key: string) => { emails: { send: (opts: Record<string, unknown>) => Promise<unknown> } } };
-      const resend = new resendModule.Resend(process.env.RESEND_API_KEY);
+  const acceptUrl = `${process.env.NEXT_PUBLIC_SITE_URL || "https://kuibu.app"}/invite/accept?token=${invitation.token}`;
 
-      const acceptUrl = `${process.env.NEXT_PUBLIC_SITE_URL || "https://kuibu.app"}/invite/accept?token=${invitation.token}`;
-
-      await resend.emails.send({
-        from: process.env.RESEND_FROM_EMAIL || "Kuibu <noreply@kuibu.app>",
-        to: email,
-        subject: "您已被邀请加入跬步",
-        html: `
-          <p>您已被邀请协助管理一位学生在跬步上的古诗词学习。</p>
-          <p><a href="${acceptUrl}">接受邀请</a></p>
-          <p>此链接将在 7 天后过期。</p>
-        `,
-      });
-    } catch {
-      // Email send failed or resend not installed — invitation still created
-    }
-  }
+  await sendEmail({
+    to: email,
+    subject: "您已被邀请加入跬步",
+    html: `
+      <p>您已被邀请协助管理一位学生在跬步上的古诗词学习。</p>
+      <p><a href="${acceptUrl}">接受邀请</a></p>
+      <p>此链接将在 7 天后过期。</p>
+    `,
+    text: `您已被邀请协助管理一位学生在跬步上的古诗词学习。\n\n接受邀请: ${acceptUrl}\n\n此链接将在 7 天后过期。`,
+  });
+  // Email failure is non-fatal — invitation row already exists, recipient
+  // can be reminded later from the family settings page.
 
   return NextResponse.json({ success: true });
 }
